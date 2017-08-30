@@ -60,7 +60,7 @@ function getZoneSet(zonename) {
     }
 }
 
-$(function () {
+(function () {
     "use strict";
 
     var southWest, northEast;
@@ -122,13 +122,16 @@ $(function () {
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-    $.ajax({
-        url: "https://api.guildwars2.com/v2/continents/1/floors/1",
-        success: function (data) {
+    var worldDataResult = fetch('https://api.guildwars2.com/v2/continents/1/floors/1');
+    worldDataResult.then(function(wdResponse) {
+            return wdResponse.text();
+    }).then(function(reponseBody) {
             var region, gameMap, poi;
 
-            for (region in data.regions) {
-                region = data.regions[region];
+            var worldData = JSON.parse(reponseBody);
+
+            for (region in worldData.regions) {
+                region = worldData.regions[region];
                 _.forEach(region.maps, function (gameMap) {
                     
                     var marker = null;
@@ -191,6 +194,8 @@ $(function () {
                     });
                 });
             }
-        }
-    });
-});
+        })
+        .catch(function(ex) {
+            console.log('failed', ex);
+        });
+})();
