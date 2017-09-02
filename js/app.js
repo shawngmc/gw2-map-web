@@ -47,7 +47,7 @@ function unproject(coord) {
 }
 
 function onMapClick(e) {
-    console.log("You clicked the map at " + map.project(e.latlng));
+    console.log("You clicked the map at " + map.project(e.latlng)   );
 }
 
 function getZoneSet(zonename) {
@@ -73,12 +73,14 @@ function getZoneSet(zonename) {
 
     southWest = unproject([0, 32768]);
     northEast = unproject([32768, 0]);
+    var maxBounds = new L.LatLngBounds(southWest, northEast)
 
-    map.setMaxBounds(new L.LatLngBounds(southWest, northEast));
+    map.setMaxBounds(maxBounds);
 
     var imageryLayer = L.tileLayer("https://tiles.guildwars2.com/1/1/{z}/{x}/{y}.jpg", {
         minZoom: 0,
         maxZoom: 7,
+        bounds: maxBounds,
         attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>'
     });
     map.addLayer(imageryLayer);
