@@ -47,16 +47,16 @@ function unproject(coord) {
 }
 
 function onMapClick(e) {
-    console.log("You clicked the map at " + map.project(e.latlng)   );
+    console.log("You clicked the map at " + map.project(e.latlng));
 }
 
 function getZoneSet(zonename) {
     if (_.includes(zones.maguuma, zonename)) {
-       return "Maguuma"; 
+        return "Maguuma";
     } else if (_.includes(zones.crystal, zonename)) {
-       return "Crystal"; 
+        return "Crystal";
     } else {
-       return "Tyria";
+        return "Tyria";
     }
 }
 
@@ -92,6 +92,7 @@ function getZoneSet(zonename) {
     var landmarkLayer = new L.LayerGroup();
     var waypointLayer = new L.LayerGroup();
     var masteryLayer = new L.LayerGroup();
+    var zoneLayer = new L.LayerGroup();
     var markersLayer = new L.LayerGroup([
         waypointLayer,
         landmarkLayer,
@@ -119,85 +120,121 @@ function getZoneSet(zonename) {
         "Landmarks": landmarkLayer,
         "Mastery Points": masteryLayer,
         "Vistas": vistaLayer,
-        "Waypoints": waypointLayer
+        "Waypoints": waypointLayer,
+        "Zones": zoneLayer
     };
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+    // Load World POIs
     var worldDataResult = fetch('https://api.guildwars2.com/v2/continents/1/floors/1');
-    worldDataResult.then(function(wdResponse) {
-            return wdResponse.text();
-    }).then(function(reponseBody) {
-            var region, gameMap, poi;
+    worldDataResult.then(function (wdResponse) {
+        return wdResponse.text();
+    }).then(function (reponseBody) {
+        var region, gameMap, poi;
 
-            var worldData = JSON.parse(reponseBody);
+        var worldData = JSON.parse(reponseBody);
 
-            for (region in worldData.regions) {
-                region = worldData.regions[region];
-                _.forEach(region.maps, function (gameMap) {
-                    
-                    var marker = null;
-                    // Process POIs (Landmarks, Vistas, Waypoints)                    
-                    _.forEach(gameMap.points_of_interest, function(poi) {
-                        if (poi.type === "waypoint") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: poi.name,
-                                icon: icons.waypoint,
-                                type: poi.type
-                            });
-                            marker.bindPopup(poi.name);
-                            waypointLayer.addLayer(marker);
-                        } else if (poi.type === "landmark") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: poi.name,
-                                icon: icons.landmark,
-                                type: poi.type
-                            });
-                            marker.bindPopup(poi.name);
-                            landmarkLayer.addLayer(marker);
-                        } else if (poi.type === "vista") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: 'Vista',
-                                icon: icons.vista,
-                                type: poi.type
-                            });
-                            vistaLayer.addLayer(marker);
-                        } else {
-                            console.log('unknown poi type: ' + poi.type);
-                        }
-                    });
+        for (region in worldData.regions) {
+            region = worldData.regions[region];
+            _.forEach(region.maps, function (gameMap) {
 
-                    // Process Mastery points
-                    _.forEach(gameMap.mastery_points, function(masteryPoint) {
-                        var zoneset = getZoneSet(region.name);
-                        if (zoneset === "Tyria") {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: 'Mastery Point (Tyria)',
-                                icon: icons.masterytyria,
-                                type: "mastery_point"
-                            });
-                            masteryLayer.addLayer(marker);
-                        } else if (zoneset === "Maguuma") {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: 'Mastery Point (Maguuma)',
-                                icon: icons.masterymaguuma,
-                                type: "mastery_point"
-                            });
-                            masteryLayer.addLayer(marker);
-                        } else {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: 'Mastery Point (???)',
-                                icon: icons.masterygeneric,
-                                type: "mastery_point"
-                            });
-                            masteryLayer.addLayer(marker);
-                            console.log('unknown mastery region: ' + region.name + "; displaying generic...");
-                        }
-                    });
+                var marker = null;
+                // Process POIs (Landmarks, Vistas, Waypoints)                    
+                _.forEach(gameMap.points_of_interest, function (poi) {
+                    if (poi.type === "waypoint") {
+                        marker = L.marker(unproject(poi.coord), {
+                            title: poi.name,
+                            icon: icons.waypoint,
+                            type: poi.type
+                        });
+                        marker.bindPopup(poi.name);
+                        waypointLayer.addLayer(marker);
+                    } else if (poi.type === "landmark") {
+                        marker = L.marker(unproject(poi.coord), {
+                            title: poi.name,
+                            icon: icons.landmark,
+                            type: poi.type
+                        });
+                        marker.bindPopup(poi.name);
+                        landmarkLayer.addLayer(marker);
+                    } else if (poi.type === "vista") {
+                        marker = L.marker(unproject(poi.coord), {
+                            title: 'Vista',
+                            icon: icons.vista,
+                            type: poi.type
+                        });
+                        vistaLayer.addLayer(marker);
+                    } else {
+                        console.log('unknown poi type: ' + poi.type);
+                    }
                 });
-            }
-        })
-        .catch(function(ex) {
+
+                // Process Mastery points
+                _.forEach(gameMap.mastery_points, function (masteryPoint) {
+                    var zoneset = getZoneSet(region.name);
+                    if (zoneset === "Tyria") {
+                        marker = L.marker(unproject(masteryPoint.coord), {
+                            title: 'Mastery Point (Tyria)',
+                            icon: icons.masterytyria,
+                            type: "mastery_point"
+                        });
+                        masteryLayer.addLayer(marker);
+                    } else if (zoneset === "Maguuma") {
+                        marker = L.marker(unproject(masteryPoint.coord), {
+                            title: 'Mastery Point (Maguuma)',
+                            icon: icons.masterymaguuma,
+                            type: "mastery_point"
+                        });
+                        masteryLayer.addLayer(marker);
+                    } else {
+                        marker = L.marker(unproject(masteryPoint.coord), {
+                            title: 'Mastery Point (???)',
+                            icon: icons.masterygeneric,
+                            type: "mastery_point"
+                        });
+                        masteryLayer.addLayer(marker);
+                        console.log('unknown mastery region: ' + region.name + "; displaying generic...");
+                    }
+                });
+            });
+        }
+    })
+        .catch(function (ex) {
             console.log('failed', ex);
         });
+
+    // Load World Zone Definitions
+    var allZoneResults = fetch('https://api.guildwars2.com/v2/maps');
+    allZoneResults.then(function (allZoneResponse) {
+        return allZoneResponse.text();
+    }).then(function (reponseBody) {
+
+        var zoneIdList = JSON.parse(reponseBody);
+
+        for (var zoneId in zoneIdList) {
+            var zoneResults = fetch('https://api.guildwars2.com/v2/maps/' + zoneId);
+            zoneResults.then(function (zoneResponse) {
+                return zoneResponse.text();
+            }).then(function (reponseBody) {
+
+                var zoneData = JSON.parse(reponseBody);
+                var baseBounds = zoneData['continent_rect'];
+                if (baseBounds !== undefined) {
+                    if (zoneData['continent_id'] !== 1) {
+                        console.log(zoneData['continent_id']);
+                    }
+                    console.log(baseBounds);
+                    var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                    console.log(bounds);
+                    var zonerect = L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
+                    zoneLayer.addLayer(zonerect);
+                }
+            }).catch(function (ex) {
+                console.log('failed', ex);
+            });
+        }
+    }).catch(function (ex) {
+        console.log('failed', ex);
+    });
 })();
