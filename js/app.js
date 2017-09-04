@@ -126,6 +126,8 @@ function getZoneSet(zonename) {
 
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
+
+    var zones = {};
     // Load World POIs
     var worldDataResult = fetch('https://api.guildwars2.com/v2/continents/1/floors/1');
     worldDataResult.then(function (wdResponse) {
@@ -197,17 +199,26 @@ function getZoneSet(zonename) {
                         console.log('unknown mastery region: ' + region.name + "; displaying generic...");
                     }
                 });
+
+                var name = region['name'];
+                var baseBounds = region['continent_rect'];
+                zones[name] = baseBounds;
             });
         }
-    })
-        .catch(function (ex) {
-            console.log('failed', ex);
-        });
+    }).catch(function (ex) {
+        console.log('failed', ex);
+    });
 
+
+    _.forOwn(zones, function(value, key) {
+        var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
+        zoneLayer.addLayer(zonerect);
+    });
+    
     var zones = {};
 
     // Load World Zone Definitions
-    var allZoneResults = fetch('https://api.guildwars2.com/v2/continents/1/');
+    /*var allZoneResults = fetch('https://api.guildwars2.com/v2/continents/1/');
     allZoneResults.then(function (allZoneResponse) {
         return allZoneResponse.text();
     }).then(function (reponseBody) {
@@ -235,7 +246,7 @@ function getZoneSet(zonename) {
                         var zonerect = L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
                         zoneLayer.addLayer(zonerect);
                     }
-                    return true;*/
+                    return true;***
 
                     zones[name] = baseBounds;
                 }
@@ -253,7 +264,7 @@ function getZoneSet(zonename) {
     _.forOwn(zones, function(value, key) {
         var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
         zoneLayer.addLayer(zonerect);
-    });
+    });*/
     
 
     /*var allZoneResults = fetch('https://api.guildwars2.com/v2/maps');
