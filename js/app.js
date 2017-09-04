@@ -209,13 +209,13 @@ function getZoneSet(zonename) {
         console.log('failed', ex);
     });
 
-
+    console.log(zones);
     _.forOwn(zones, function(value, key) {
         var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
         zoneLayer.addLayer(zonerect);
     });
     
-    var zones = {};
+    //var zones = {};
 
     // Load World Zone Definitions
     /*var allZoneResults = fetch('https://api.guildwars2.com/v2/continents/1/');
