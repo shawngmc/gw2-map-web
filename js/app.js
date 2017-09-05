@@ -200,13 +200,10 @@ function getZoneSet(zonename) {
                     }
                 });
 
-
-                for (regionmap in region.maps) {
-                    var name = regionmap['name'];
-                    var baseBounds = regionmap['continent_rect'];
-                    zones[name] = baseBounds;
-                    console.log('added region ' + name);
-                }
+                var name = gameMap['name'];
+                var baseBounds = gameMap['continent_rect'];
+                zones[name] = baseBounds;
+                console.log('added region ' + name);
             });
         }
     }).catch(function (ex) {
