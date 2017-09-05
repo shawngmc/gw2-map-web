@@ -202,7 +202,8 @@ function getZoneSet(zonename) {
 
                 var name = gameMap['name'];
                 var baseBounds = gameMap['continent_rect'];
-                zones[name] = baseBounds;
+                var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                zones[name] = bounds;
                 console.log('added region ' + name);
             });
         }
@@ -211,7 +212,7 @@ function getZoneSet(zonename) {
 
         console.log(zones); 
         _.forOwn(zones, function(value, key) {
-            var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
+            var zonerect = L.rectangle(value, {color: "#ff7800", weight: 1});
             zoneLayer.addLayer(zonerect);
         });
     }).catch(function (ex) {
