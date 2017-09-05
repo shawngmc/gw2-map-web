@@ -206,14 +206,16 @@ function getZoneSet(zonename) {
                 console.log('added region ' + name);
             });
         }
+
+
+
+        console.log(zones); 
+        _.forOwn(zones, function(value, key) {
+            var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
+            zoneLayer.addLayer(zonerect);
+        });
     }).catch(function (ex) {
         console.log('failed', ex);
-    });
-
-    console.log(zones); 
-    _.forOwn(zones, function(value, key) {
-        var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
-        zoneLayer.addLayer(zonerect);
     });
     
     //var zones = {};
