@@ -214,6 +214,7 @@ function getZoneSet(zonename) {
         _.forOwn(zones, function(value, key) {
             var zonerect = L.rectangle(value, {color: "#ff7800", weight: 1});
             zoneLayer.addLayer(zonerect);
+            console.log(key);
         });
     }).catch(function (ex) {
         console.log('failed', ex);
