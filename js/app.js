@@ -203,6 +203,7 @@ function getZoneSet(zonename) {
                 var name = gameMap['name'];
                 var baseBounds = gameMap['continent_rect'];
                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                console.log(gameMap);
                 if (_.size(gameMap.sectors) > 0) {
                     zones[name] = bounds;
                     console.log('added region ' + name);
