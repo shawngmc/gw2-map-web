@@ -201,7 +201,7 @@ function getZoneSet(zonename) {
                 });
 
 
-                for (map in region.map) {
+                for (map in region.maps) {
                     var name = map['name'];
                     var baseBounds = map['continent_rect'];
                     zones[name] = baseBounds;
