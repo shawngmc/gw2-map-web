@@ -1,56 +1,60 @@
 var map;
 
+var generateIconURL = function(type, subtype) {
+    return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
+}
+
 var icons = {};
 icons.waypoint = L.icon({
-    iconUrl: 'images/waypoint.png',
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
+    iconUrl: generateIconURL('waypoint'),
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
     popupAnchor: [-3, -3]
 });
 icons.landmark = L.icon({
-    iconUrl: 'images/landmark.png',
+    iconUrl: generateIconURL('landmark'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.vista = L.icon({
-    iconUrl: 'images/vista.png',
+    iconUrl: generateIconURL('vista'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.masterytyria = L.icon({
-    iconUrl: 'images/mastery_core.gif',
+    iconUrl: generateIconURL('mastery', 'core'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.masterymaguuma = L.icon({
-    iconUrl: 'images/mastery_maguuma.gif',
+    iconUrl: generateIconURL('mastery', 'maguuma'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.masterygeneric = L.icon({
-    iconUrl: 'images/mastery_unknown.png',
+    iconUrl: generateIconURL('mastery', 'unknown'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.skillcore = L.icon({
-    iconUrl: 'images/hero_point_core.png',
+    iconUrl: generateIconURL('hero_point', 'core'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.skillmaguuma = L.icon({
-    iconUrl: 'images/hero_point_meguuma.png',
+    iconUrl: generateIconURL('hero_point', 'advanced'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
 icons.task = L.icon({
-    iconUrl: 'images/task.png',
+    iconUrl: generateIconURL('task'),
     iconSize: [20, 20],
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
@@ -167,7 +171,7 @@ function getZoneSet(zonename) {
             _.forEach(region.maps, function (gameMap) {
                 if (_.indexOf(validMapIds, gameMap.id) !== -1) {
                     var marker = null;
-                    // Process POIs (Landmarks, Vistas, Waypoints)                    
+                    // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
                         if (poi.type === "waypoint") {
                             marker = L.marker(unproject(poi.coord), {
@@ -299,7 +303,7 @@ function getZoneSet(zonename) {
     }).catch(function (ex) {
         console.log('failed', ex);
     });
-    
+
     //var zones = {};
 
     // Load World Zone Definitions
@@ -350,7 +354,7 @@ function getZoneSet(zonename) {
         var zonerect = L.rectangle(value.bounds, {color: "#ff7800", weight: 1});
         zoneLayer.addLayer(zonerect);
     });*/
-    
+
 
     /*var allZoneResults = fetch('https://api.guildwars2.com/v2/maps');
     allZoneResults.then(function (allZoneResponse) {
