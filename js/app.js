@@ -6,6 +6,10 @@ var generateIconURL = function (type, subtype) {
     return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
 };
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 var getRandomColor = function () {
     return "#" + getRandomInt(0, 255) + getRandomInt(0, 255) + getRandomInt(0, 255);
 };
