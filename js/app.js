@@ -167,7 +167,9 @@ function generateYoutubeURL(title, type) {
                             type: poi.type
                         });
                         var popupHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
-                        marker.bindPopup(popupHTML);
+                        var span = document.createElement("span");
+                        span.innerHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
+                        marker.bindPopup(span);
                         console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
                     } else if (poi.type === "vista") {
