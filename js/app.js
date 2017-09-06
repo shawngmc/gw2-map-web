@@ -141,6 +141,8 @@ function getZoneSet(zonename) {
             region = worldData.regions[region];
             _.forEach(region.maps, function (gameMap) {
 
+                if (gameMap.id < 100) {
+
                 var marker = null;
                 // Process POIs (Landmarks, Vistas, Waypoints)                    
                 _.forEach(gameMap.points_of_interest, function (poi) {
@@ -217,6 +219,7 @@ function getZoneSet(zonename) {
                 if (_.size(gameMap['sectors']) > 0) {
                     zones[name] = bounds;
                     console.log('added region ' + name);
+                }
                 }
             });
         }
