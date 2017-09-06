@@ -43,7 +43,7 @@ icons.skillcore = L.icon({
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
-icons.skillmeguuma = L.icon({
+icons.skillmaguuma = L.icon({
     iconUrl: 'images/hero_point_meguuma.png',
     iconSize: [20, 20],
     iconAnchor: [10, 10],
@@ -244,21 +244,21 @@ function getZoneSet(zonename) {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (1x)',
                                 icon: icons.skillcore,
-                                type: "mastery_point"
+                                type: "hero_challenge"
                             });
                             heroLayer.addLayer(marker);
                         } else if (zoneset === "Maguuma") {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (10x)',
                                 icon: icons.skillmaguuma,
-                                type: "mastery_point"
+                                type: "hero_challenge"
                             });
                             heroLayer.addLayer(marker);
                         } else {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (???)',
                                 icon: icons.skillcore,
-                                type: "mastery_point"
+                                type: "hero_challenge"
                             });
                             heroLayer.addLayer(marker);
                             console.log('unknown skill challenge region: ' + region.name + "; displaying generic...");
