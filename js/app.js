@@ -282,20 +282,26 @@ function getZoneSet(zonename) {
                     var zoneName = gameMap.name;
                     var baseBounds = gameMap.continent_rect;
                     var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
-                    if (_.size(gameMap.sectors) > 0) {
+                    
+                    var zonerect = L.rectangle(bounds, {
+                        color: "#ff7800",
+                        weight: 1
+                    });
+                    zoneLayer.addLayer(zonerect);
+                    /*if (_.size(gameMap.sectors) > 0) {
                         zones[zoneName] = bounds;
-                    }
+                    }*/
                 }
             });
         });
 
-        _.forOwn(zones, function (value) {
+        /*_.forOwn(zones, function (value) {
             var zonerect = L.rectangle(value, {
                 color: "#ff7800",
                 weight: 1
             });
             zoneLayer.addLayer(zonerect);
-        });
+        });*/
     }).catch(function (ex) {
         console.log("failed", ex);
     });
