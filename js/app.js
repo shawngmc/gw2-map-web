@@ -21,12 +21,15 @@ var generatePopupWithSearchIcons = function (objDesc, objType) {
 
 var getMergedFloorData = function () {
     return Promise.all([fetch("https://api.guildwars2.com/v2/continents/1/floors/0"), fetch("https://api.guildwars2.com/v2/continents/1/floors/1")])
+        .then(function (floorDataRequestResponses) {
+           return Promise.all([floorDataRequestResponses[0].text(), floorDataRequestResponses[1].text()]);
+        })
         .then(function (floorDataRawResponses) {
            // Hack - Force Gilded Hollow Data in!
            var floorData = [];
            console.log(floorDataRawResponses);
-           floorData[0] = JSON.parse(floorDataRawResponses[0].text());
-           floorData[1] = JSON.parse(floorDataRawResponses[1].text());
+           floorData[0] = JSON.parse(floorDataRawResponses[0]);
+           floorData[1] = JSON.parse(floorDataRawResponses[1]);
            floorData[1].regions[10].maps[1015] = floorData[0].regions[10].maps[1015];
            return floorData[1];
         });
