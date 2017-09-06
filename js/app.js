@@ -139,9 +139,10 @@ function getZoneSet(zonename) {
 
         for (region in worldData.regions) {
             region = worldData.regions[region];
+            console.log('region: ' + region.id);
             _.forEach(region.maps, function (gameMap) {
 
-                console.log(gameMap.id);
+                console.log('gamemap: ' + gameMap.id);
 
                 var marker = null;
                 // Process POIs (Landmarks, Vistas, Waypoints)                    
