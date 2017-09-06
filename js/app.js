@@ -218,7 +218,6 @@ function getZoneSet(zonename) {
                 if (_.size(gameMap['sectors']) > 0) {
                     zones[name] = bounds;
                 }
-                }
             });
         }
 
