@@ -141,7 +141,7 @@ function getZoneSet(zonename) {
             region = worldData.regions[region];
             _.forEach(region.maps, function (gameMap) {
 
-                if (gameMap.id < 100 || gameMap.id > 1000) {
+                console.log(gameMap.id);
 
                 var marker = null;
                 // Process POIs (Landmarks, Vistas, Waypoints)                    
@@ -215,22 +215,16 @@ function getZoneSet(zonename) {
                 var name = gameMap['name'];
                 var baseBounds = gameMap['continent_rect'];
                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
-                console.log(gameMap);
                 if (_.size(gameMap['sectors']) > 0) {
                     zones[name] = bounds;
-                    console.log('added region ' + name);
                 }
                 }
             });
         }
 
-
-
-        console.log(zones); 
         _.forOwn(zones, function(value, key) {
             var zonerect = L.rectangle(value, {color: "#ff7800", weight: 1});
             zoneLayer.addLayer(zonerect);
-            console.log('"' + key + '",' + value);
         });
     }).catch(function (ex) {
         console.log('failed', ex);
