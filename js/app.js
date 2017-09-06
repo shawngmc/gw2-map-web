@@ -141,7 +141,7 @@ function getZoneSet(zonename) {
             region = worldData.regions[region];
             _.forEach(region.maps, function (gameMap) {
 
-                if (gameMap.id < 100) {
+                if (gameMap.id < 100 || gameMap.id > 1000) {
 
                 var marker = null;
                 // Process POIs (Landmarks, Vistas, Waypoints)                    
