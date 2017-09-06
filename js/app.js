@@ -75,7 +75,55 @@ icons.task = L.icon({
     popupAnchor: [-3, -3]
 });
 
-var validMapIds = [26, 27, 28, 29, 30, 31, 326, 19, 20, 21, 22, 25, 32, 218, 51, 62, 65, 1203, 15, 17, 18, 23, 24, 50, 73, 873, 1185, 34, 35, 54, 91, 139, 39, 53, 1041, 1043, 1045, 1052, 1062, 1069, 1165, 988, 1015, 1210, 1175, 1195];
+var maps = {
+	26: ""
+	27: ""
+	28: ""
+	29: ""
+	30: ""
+	31: ""
+	326: ""
+	19: ""
+	20: ""
+	21: ""
+	22: ""
+	25: ""
+	32: ""
+	218: ""
+	51: ""
+	62: ""
+	65: ""
+	1203: ""
+	15: ""
+	17: ""
+	18: ""
+	23: ""
+	24: ""
+	50: ""
+	73: ""
+	873: ""
+	1185: ""
+	34: ""
+	35: ""
+	54: ""
+	91: ""
+	139: ""
+	39: ""
+	53: ""
+	1041: ""
+	1043: ""
+	1045: ""
+	1052: ""
+	1068: ""
+	1069: ""
+	1165: ""
+	988: ""
+	1015: "Gilded Hollow"
+	1210: "Crystal Oasis"
+	1175: ""
+	1195: ""
+};
+var validMapIds = [26, 27, 28, 29, 30, 31, 326, 19, 20, 21, 22, 25, 32, 218, 51, 62, 65, 1203, 15, 17, 18, 23, 24, 50, 73, 873, 1185, 34, 35, 54, 91, 139, 39, 53, 1041, 1043, 1045, 1052, 1068, 1069, 1165, 988, 1015, 1210, 1175, 1195];
 
 
 var continents = {};
@@ -163,7 +211,7 @@ function getZoneSet(zonename) {
 
     // Load World Data
     var zones = {};
-    var worldDataResult = fetch("https://api.guildwars2.com/v2/continents/1/floors/1");
+    var worldDataResult = fetch("https://api.guildwars2.com/v2/continents/1/floors/0");
     worldDataResult.then(function (wdResponse) {
         return wdResponse.text();
     }).then(function (reponseBody) {
