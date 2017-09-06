@@ -24,6 +24,7 @@ var getMergedFloorData = function () {
         .then(function (floorDataRawResponses) {
            // Hack - Force Gilded Hollow Data in!
            var floorData = [];
+           console.log(floorDataRawResponses);
            floorData[0] = JSON.parse(floorDataRawResponses[0].text);
            floorData[1] = JSON.parse(floorDataRawResponses[1].text);
            floorData[1].regions[10].maps[1015] = floorData[0].regions[10].maps[1015];
