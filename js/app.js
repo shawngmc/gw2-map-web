@@ -63,7 +63,7 @@ function getZoneSet(zonename) {
 function generateYoutubeURL(title, type) {
     if (type === "poi") {
         var ytLinkURL = "https://www.youtube.com/results?search_query=gw2+" + title.replace(" ", "+") + "+poi";
-        return '<a href="' + ytLinkURL | '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a>'
+        return '<a href="' + ytLinkURL | '" target="_blank">Search Youtube</a>'
     }
     return "";
 }
