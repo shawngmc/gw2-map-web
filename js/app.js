@@ -164,7 +164,6 @@ function getZoneSet(zonename) {
                         links.google = "https://www.google.com/search?q=gw2+" + poi.name.replace(" ", "+") + "+poi";
                         span.innerHTML = '<span>' + poi.name + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
                         marker.bindPopup(span);
-                        console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
                     } else if (poi.type === "vista") {
                         marker = L.marker(unproject(poi.coord), {
