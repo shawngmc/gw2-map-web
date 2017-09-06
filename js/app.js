@@ -150,7 +150,12 @@ function getZoneSet(zonename) {
                             icon: icons.waypoint,
                             type: poi.type
                         });
-                        marker.bindPopup(poi.name);
+                         var span = document.createElement("span");
+                        var links = {};
+                        links.youtube = "https://www.youtube.com/results?search_query=gw2+" + poi.name.replace(" ", "+") + "+waypoint";
+                        links.google = "https://www.google.com/search?q=gw2+" + poi.name.replace(" ", "+") + "+waypoint";
+                        span.innerHTML = '<span>' + poi.name + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
+                        marker.bindPopup(span);
                         waypointLayer.addLayer(marker);
                     } else if (poi.type === "landmark") {
                         marker = L.marker(unproject(poi.coord), {
