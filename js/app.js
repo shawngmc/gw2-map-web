@@ -168,7 +168,8 @@ function generateYoutubeURL(title, type) {
                         });
                         var popupHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
                         var span = document.createElement("span");
-                        span.innerHTML = '<span>' + poi.name + '<img src="images/yt_icon_rgb.png" height="24" width="34" /></span>';
+                        var ytLinkURL = "https://www.youtube.com/results?search_query=gw2+" + poi.name.replace(" ", "+") + "+poi";
+                        span.innerHTML = '<span>' + poi.name + '<br><a href="' + ytLinkURL + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a></span>';
                         marker.bindPopup(span);
                         console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
