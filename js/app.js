@@ -60,14 +60,6 @@ function getZoneSet(zonename) {
     }
 }
 
-function generateYoutubeURL(title, type) {
-    if (type === "poi") {
-        var ytLinkURL = "https://www.youtube.com/results?search_query=gw2+" + title.replace(" ", "+") + "+poi";
-        return '<a href="' + ytLinkURL | '" target="_blank">Search Youtube</a>'
-    }
-    return "";
-}
-
 (function () {
     "use strict";
 
@@ -166,10 +158,11 @@ function generateYoutubeURL(title, type) {
                             icon: icons.landmark,
                             type: poi.type
                         });
-                        var popupHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
                         var span = document.createElement("span");
-                        var ytLinkURL = "https://www.youtube.com/results?search_query=gw2+" + poi.name.replace(" ", "+") + "+poi";
-                        span.innerHTML = '<span>' + poi.name + '<br><a href="' + ytLinkURL + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a></span>';
+                        var links = {};
+                        links.youtube = "https://www.youtube.com/results?search_query=gw2+" + poi.name.replace(" ", "+") + "+poi";
+                        links.google = "https://www.google.com/search?q=gw2+" + poi.name.replace(" ", "+") + "+poi";
+                        span.innerHTML = '<span>' + poi.name + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
                         marker.bindPopup(span);
                         console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
