@@ -136,7 +136,8 @@ function getZoneSet(zonename) {
         zoom: 7,
         marker: false,
         buildTip: function (text, val) {
-            return '<a href="#"><img src="images/' + val.layer.options.type + '.png" height=16 width=16 />' + text + '</a>';
+            var layerOpts = val.layer.options;
+            return '<a href="#"><img src="' + generateIconURL(layerOpts.type, layerOpts.subtype) + '" height=16 width=16 />' + text + '</a>';
         }
     });
     map.addControl(controlSearch);
@@ -219,21 +220,24 @@ function getZoneSet(zonename) {
                             marker = L.marker(unproject(masteryPoint.coord), {
                                 title: 'Mastery Point (Tyria)',
                                 icon: icons.masterytyria,
-                                type: "mastery_point"
+                                type: "mastery",
+                                subtype: "core"
                             });
                             masteryLayer.addLayer(marker);
                         } else if (zoneset === "Maguuma") {
                             marker = L.marker(unproject(masteryPoint.coord), {
                                 title: 'Mastery Point (Maguuma)',
                                 icon: icons.masterymaguuma,
-                                type: "mastery_point"
+                                type: "mastery",
+                                subtype: "maguuma"
                             });
                             masteryLayer.addLayer(marker);
                         } else {
                             marker = L.marker(unproject(masteryPoint.coord), {
                                 title: 'Mastery Point (???)',
                                 icon: icons.masterygeneric,
-                                type: "mastery_point"
+                                type: "mastery",
+                                subtype: "unknown"
                             });
                             masteryLayer.addLayer(marker);
                             console.log('unknown mastery region: ' + region.name + "; displaying generic...");
@@ -248,21 +252,24 @@ function getZoneSet(zonename) {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (1x)',
                                 icon: icons.skillcore,
-                                type: "hero_challenge"
+                                type: "hero_point",
+                                subtype: "core"
                             });
                             heroLayer.addLayer(marker);
                         } else if (zoneset === "Maguuma") {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (10x)',
                                 icon: icons.skillmaguuma,
-                                type: "hero_challenge"
+                                type: "hero_point",
+                                subtype: "advanced"
                             });
                             heroLayer.addLayer(marker);
                         } else {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: 'Hero Challenge (???)',
                                 icon: icons.skillcore,
-                                type: "hero_challenge"
+                                type: "hero_point",
+                                subtype: "core"
                             });
                             heroLayer.addLayer(marker);
                             console.log('unknown skill challenge region: ' + region.name + "; displaying generic...");
