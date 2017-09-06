@@ -137,8 +137,6 @@ function getZoneSet(zonename) {
     });
     map.addControl(controlSearch);
 
-
-
     var baseMaps = {};
 
     var overlayMaps = {
@@ -210,6 +208,7 @@ function getZoneSet(zonename) {
                     });
 
                     // Process Mastery points
+                    marker = null;
                     _.forEach(gameMap.mastery_points, function (masteryPoint) {
                         var zoneset = getZoneSet(region.name);
                         if (zoneset === "Tyria") {
@@ -238,6 +237,7 @@ function getZoneSet(zonename) {
                     });
 
                     // Process Skill / Hero Challenges
+                    marker = null;
                     _.forEach(gameMap.skill_challenges, function (skillChallenge) {
                         var zoneset = getZoneSet(region.name);
                         if (zoneset === "Tyria") {
@@ -266,6 +266,7 @@ function getZoneSet(zonename) {
                     });
 
                     // Process Hearts / Tasks
+                    marker = null;
                     _.forEach(gameMap.tasks, function (task) {
                         marker = L.marker(unproject(task.coord), {
                             title: task.objective,
