@@ -60,6 +60,14 @@ function getZoneSet(zonename) {
     }
 }
 
+function generateYoutubeURL(title, type) {
+    if (type === "poi") {
+        var ytLinkURL = "https://www.youtube.com/results?search_query=gw2+" + title.replace(" ", "+") + "+poi";
+        return '<a href="' + ytLinkURL | '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a>'
+    }
+    return "";
+}
+
 (function () {
     "use strict";
 
@@ -154,7 +162,7 @@ function getZoneSet(zonename) {
                         waypointLayer.addLayer(marker);
                     } else if (poi.type === "landmark") {
                         marker = L.marker(unproject(poi.coord), {
-                            title: poi.name,
+                            title: poi.name + " " + generateYoutubeURL(poi.name, 'poi'),
                             icon: icons.landmark,
                             type: poi.type
                         });
@@ -204,7 +212,7 @@ function getZoneSet(zonename) {
                 var baseBounds = gameMap['continent_rect'];
                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
                 console.log(gameMap);
-                if (_.size(gameMap.sectors) > 0) {
+                if (_.size(gameMap['sectors']) > 0) {
                     zones[name] = bounds;
                     console.log('added region ' + name);
                 }
