@@ -35,11 +35,15 @@ var getMergedFloorData = function () {
         .then(function (floorDataRawResponses) {
            // Hack - Force Gilded Hollow Data in!
            var floorData = [];
-           console.log(floorDataRawResponses);
            floorData[0] = JSON.parse(floorDataRawResponses[0]);
            floorData[1] = JSON.parse(floorDataRawResponses[1]);
+           
+           // Data fix - force Gilded Hollow into floor 1;
            floorData[1].regions[10].maps[1068] = floorData[0].regions[10].maps[1068];
-           console.log(floorData[1]);
+           
+           // Data fix - change top of Dry Top to Bottom of Silverwastes - there is MUCH less overlap than it thinks!
+           floorData[1].regions[11].maps[988].continent_rect[0][1] = floorData[1].regions[11].maps[1015].continent_rect[1][1];
+           
            return floorData[1];
         });
 };
@@ -240,7 +244,6 @@ function getZoneSet(zonename) {
             _.forEach(region.maps, function (gameMap) {
                 if (_.indexOf(validMapIds, gameMap.id) !== -1) {
                     var newColor = getRandomColor();
-                    console.log(gameMap.id + ": " + gameMap.name + " - " + gameMap.continent_rect + " " + newColor);
                     var marker = null;
                     // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
