@@ -30,7 +30,7 @@ var getMergedFloorData = function () {
            console.log(floorDataRawResponses);
            floorData[0] = JSON.parse(floorDataRawResponses[0]);
            floorData[1] = JSON.parse(floorDataRawResponses[1]);
-           floorData[1].regions[10].maps[1015] = floorData[0].regions[10].maps[1015];
+           floorData[1].regions[10].maps[1068] = floorData[0].regions[10].maps[1068];
            console.log(floorData[1]);
            return floorData[1];
         });
