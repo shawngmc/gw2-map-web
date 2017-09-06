@@ -19,6 +19,18 @@ var generatePopupWithSearchIcons = function (objDesc, objType) {
     return span;   
 };
 
+var getMergedFloorData = function () {
+    return Promise.all([fetch("https://api.guildwars2.com/v2/continents/1/floors/0"), fetch("https://api.guildwars2.com/v2/continents/1/floors/1")])
+        .then(function (floorDataRawResponses) {
+           // Hack - Force Gilded Hollow Data in!
+           var floorData = [];
+           floorData[0] = JSON.parse(floorDataRawResponses[0].text);
+           floorData[1] = JSON.parse(floorDataRawResponses[1].text);
+           floorData[1].regions[10].maps[1015] = floorData[0].regions[10].maps[1015];
+           return floorData[1];
+        });
+};
+
 var icons = {};
 icons.waypoint = L.icon({
     iconUrl: generateIconURL("waypoint"),
@@ -210,16 +222,17 @@ function getZoneSet(zonename) {
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
     // Load World Data
-    var zones = {};
-    var worldDataResult = fetch("https://api.guildwars2.com/v2/continents/1/floors/0");
+    /*var worldDataResult = fetch("https://api.guildwars2.com/v2/continents/1/floors/0");
     worldDataResult.then(function (wdResponse) {
         return wdResponse.text();
     }).then(function (reponseBody) {
-        var worldData = JSON.parse(reponseBody);
+        var worldData = JSON.parse(reponseBody);*/
+    getMergedFloorData().then(function (worldData) {
 
         _.forEach(worldData.regions, function (region) {
             _.forEach(region.maps, function (gameMap) {
                 if (_.indexOf(validMapIds, gameMap.id) !== -1) {
+                    console.log(gameMap.id + ": " + gameMap.name);
                     var marker = null;
                     // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
