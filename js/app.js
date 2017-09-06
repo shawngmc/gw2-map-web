@@ -168,7 +168,7 @@ function generateYoutubeURL(title, type) {
                         });
                         var popupHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
                         var span = document.createElement("span");
-                        span.innerHTML = '<span><img src="images/yt_icon_rgb.png" /></span>';
+                        span.innerHTML = '<span>' + poi.name + '<img src="images/yt_icon_rgb.png" height="24" width="34" /></span>';
                         marker.bindPopup(span);
                         console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
