@@ -166,7 +166,8 @@ function generateYoutubeURL(title, type) {
                             icon: icons.landmark,
                             type: poi.type
                         });
-                        marker.bindPopup("<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>");
+                        var popupHTML = "<span>" + poi.name + " " + generateYoutubeURL(poi.name, 'poi') + "</span>";
+                        marker.bindPopup(L.popup().setContent(popupHTML));
                         console.log(generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
                     } else if (poi.type === "vista") {
