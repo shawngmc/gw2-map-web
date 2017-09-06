@@ -11,7 +11,7 @@ function getRandomInt(min, max) {
 }
 
 var getRandomColor = function () {
-    return "#" + getRandomInt(0, 255).toString(16) + getRandomInt(0, 255).toString(16) + getRandomInt(0, 255).toString(16);
+    return "#" + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16);
 };
 
 var generatePopupWithSearchIcons = function (objDesc, objType) {
