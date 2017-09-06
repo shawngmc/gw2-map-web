@@ -6,6 +6,10 @@ var generateIconURL = function (type, subtype) {
     return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
 };
 
+var getRandomColor = function () {
+    return "#" + getRandomInt(0, 255) + getRandomInt(0, 255) + getRandomInt(0, 255);
+};
+
 var generatePopupWithSearchIcons = function (objDesc, objType) {
     var span = document.createElement("span");
     var links = {};
@@ -170,7 +174,7 @@ function getZoneSet(zonename) {
 
     var southWest = unproject([0, 32768]);
     var northEast = unproject([32768, 0]);
-    var maxBounds = new L.LatLngBounds(southWest, northEast)
+    var maxBounds = new L.LatLngBounds(southWest, northEast);
 
     map.setMaxBounds(maxBounds);
 
@@ -227,17 +231,12 @@ function getZoneSet(zonename) {
     L.control.layers(baseMaps, overlayMaps).addTo(map);
 
     // Load World Data
-    /*var worldDataResult = fetch("https://api.guildwars2.com/v2/continents/1/floors/0");
-    worldDataResult.then(function (wdResponse) {
-        return wdResponse.text();
-    }).then(function (reponseBody) {
-        var worldData = JSON.parse(reponseBody);*/
     getMergedFloorData().then(function (worldData) {
-
         _.forEach(worldData.regions, function (region) {
             _.forEach(region.maps, function (gameMap) {
                 if (_.indexOf(validMapIds, gameMap.id) !== -1) {
-                    console.log(gameMap.id + ": " + gameMap.name + " - " + gameMap.continent_rect);
+                    var newColor = getRandomColor();
+                    console.log(gameMap.id + ": " + gameMap.name + " - " + gameMap.continent_rect + " " + newColor);
                     var marker = null;
                     // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
@@ -349,7 +348,7 @@ function getZoneSet(zonename) {
                     var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
                     
                     var zonerect = L.rectangle(bounds, {
-                        color: "#ff7800",
+                        color: newColor,
                         weight: 1
                     });
                     zoneLayer.addLayer(zonerect);
