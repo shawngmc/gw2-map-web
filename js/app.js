@@ -162,11 +162,11 @@ function generateYoutubeURL(title, type) {
                         waypointLayer.addLayer(marker);
                     } else if (poi.type === "landmark") {
                         marker = L.marker(unproject(poi.coord), {
-                            title: poi.name + " " + generateYoutubeURL(poi.name, 'poi'),
+                            title: poi.name,
                             icon: icons.landmark,
                             type: poi.type
                         });
-                        marker.bindPopup(poi.name);
+                        marker.bindPopup(poi.name + " " + generateYoutubeURL(poi.name, 'poi'));
                         landmarkLayer.addLayer(marker);
                     } else if (poi.type === "vista") {
                         marker = L.marker(unproject(poi.coord), {
