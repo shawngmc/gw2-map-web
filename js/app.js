@@ -37,6 +37,24 @@ icons.masterygeneric = L.icon({
     iconAnchor: [10, 10],
     popupAnchor: [-3, -3]
 });
+icons.skillcore = L.icon({
+    iconUrl: 'images/hero_point_core.png',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [-3, -3]
+});
+icons.skillmeguuma = L.icon({
+    iconUrl: 'images/hero_point_meguuma.png',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [-3, -3]
+});
+icons.task = L.icon({
+    iconUrl: 'images/task.png',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [-3, -3]
+});
 
 var validMapIds = [26, 27, 28, 29, 30, 31, 326, 19, 20, 21, 22, 25, 32, 218, 51, 62, 65, 1203, 15, 17, 18, 23, 24, 50, 73, 873, 1185, 34, 35, 54, 91, 139, 39, 53, 1041, 1043, 1045, 1052, 1069, 1095, 1165, 988, 1015, 1210, 1175, 1195];
 
@@ -96,11 +114,15 @@ function getZoneSet(zonename) {
     var waypointLayer = new L.LayerGroup();
     var masteryLayer = new L.LayerGroup();
     var zoneLayer = new L.LayerGroup();
+    var taskLayer = new L.LayerGroup();
+    var heroLayer = new L.LayerGroup();
     var markersLayer = new L.LayerGroup([
         waypointLayer,
         landmarkLayer,
         masteryLayer,
-        vistaLayer
+        vistaLayer,
+        taskLayer,
+        heroLayer
     ]);
 
     var controlSearch = new L.Control.Search({
@@ -120,8 +142,10 @@ function getZoneSet(zonename) {
     var baseMaps = {};
 
     var overlayMaps = {
+        "Hero Challenges": heroLayer,
         "Landmarks": landmarkLayer,
         "Mastery Points": masteryLayer,
+        "Tasks": taskLayer,
         "Vistas": vistaLayer,
         "Waypoints": waypointLayer,
         "Zones": zoneLayer
@@ -211,6 +235,44 @@ function getZoneSet(zonename) {
                             masteryLayer.addLayer(marker);
                             console.log('unknown mastery region: ' + region.name + "; displaying generic...");
                         }
+                    });
+
+                    // Process Skill / Hero Challenges
+                    _.forEach(gameMap.skill_challenges, function (skillChallenge) {
+                        var zoneset = getZoneSet(region.name);
+                        if (zoneset === "Tyria") {
+                            marker = L.marker(unproject(skillChallenge.coord), {
+                                title: 'Hero Challenge (1x)',
+                                icon: icons.skillcore,
+                                type: "mastery_point"
+                            });
+                            heroLayer.addLayer(marker);
+                        } else if (zoneset === "Maguuma") {
+                            marker = L.marker(unproject(skillChallenge.coord), {
+                                title: 'Hero Challenge (10x)',
+                                icon: icons.skillmaguuma,
+                                type: "mastery_point"
+                            });
+                            heroLayer.addLayer(marker);
+                        } else {
+                            marker = L.marker(unproject(skillChallenge.coord), {
+                                title: 'Hero Challenge (???)',
+                                icon: icons.skillcore,
+                                type: "mastery_point"
+                            });
+                            heroLayer.addLayer(marker);
+                            console.log('unknown skill challenge region: ' + region.name + "; displaying generic...");
+                        }
+                    });
+
+                    // Process Hearts / Tasks
+                    _.forEach(gameMap.tasks, function (task) {
+                        marker = L.marker(unproject(task.coord), {
+                            title: task.objective,
+                            icon: icons.skillcore,
+                            type: "mastery_point"
+                        });
+                        taskLayer.addLayer(marker);
                     });
 
                     var name = gameMap['name'];
