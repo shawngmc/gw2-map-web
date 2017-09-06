@@ -93,52 +93,52 @@ icons.task = L.icon({
 });
 
 var maps = {
-	26: "",
-	27: "",
-	28: "",
-	29: "",
-	30: "",
-	31: "",
-	326: "",
-	19: "",
-	20: "",
-	21: "",
-	22: "",
-	25: "",
-	32: "",
-	218: "",
-	51: "",
-	62: "",
-	65: "",
-	1203: "",
-	15: "",
-	17: "",
-	18: "",
-	23: "",
-	24: "",
-	50: "",
-	73: "",
-	873: "",
-	1185: "",
-	34: "",
-	35: "",
-	54: "",
-	91: "",
-	139: "",
-	39: "",
-	53: "",
-	1041: "",
-	1043: "",
-	1045: "",
-	1052: "",
-	1068: "",
-	1069: "",
-	1165: "",
-	988: "",
-	1015: "Gilded Hollow",
-	1210: "Crystal Oasis",
-	1175: "",
-	1195: ""
+    26: "Dredgehaunt Cliffs",
+    27: "Lornar's Pass",
+    28: "Wayfarer Foothills",
+    29: "Timberline Falls",
+    30: "Frostgorge Sound",
+    31: "Snowden Drifts",
+    326: "Hoelbrak",
+    19: "Plains of Ashford",
+    20: "Blazeridge Steppes",
+    21: "Fields of Ruin",
+    22: "Fireheart Rise",
+    25: "Iron Marches",
+    32: "Diessa Plateau",
+    218: "Black Citadel",
+    51: "Straits of Devastation",
+    62: "Cursed Shore",
+    65: "Malchor's Leap",
+    1203: "Siren's Landing",
+    15: "Queensdale",
+    17: "Harathi Hinterlands",
+    18: "Divinity's Reach",
+    23: "Kessex Hills",
+    24: "Gendarran Fields",
+    50: "Lion's Arch",
+    73: "Bloodtide Coast",
+    873: "Southsun Cove",
+    1185: "Lake Doric",
+    34: "Caledon Forest",
+    35: "Metrica Province",
+    54: "Brisban Wildlands",
+    91: "The Grove",
+    139: "Rata Sum",
+    39: "Mount Maelstrom",
+    53: "Sparkfly Fen",
+    1041: "Dragon's Stand",
+    1043: "Auric Basin",
+    1045: "Tangled Depths",
+    1052: "Verdant Brink",
+    1068: "Gilded Hollow",
+    1069: "Lost Precipice",
+    1165: "Bloodstone Fen",
+    988: "Dry Top",
+    1015: "The Silverwastes",
+    1210: "Crystal Oasis",
+    1175: "Ember Bay",
+    1195: "Draconis Mons"
 };
 var validMapIds = [26, 27, 28, 29, 30, 31, 326, 19, 20, 21, 22, 25, 32, 218, 51, 62, 65, 1203, 15, 17, 18, 23, 24, 50, 73, 873, 1185, 34, 35, 54, 91, 139, 39, 53, 1041, 1043, 1045, 1052, 1068, 1069, 1165, 988, 1015, 1210, 1175, 1195];
 
@@ -237,7 +237,7 @@ function getZoneSet(zonename) {
         _.forEach(worldData.regions, function (region) {
             _.forEach(region.maps, function (gameMap) {
                 if (_.indexOf(validMapIds, gameMap.id) !== -1) {
-                    console.log(gameMap.id + ": " + gameMap.name);
+                    console.log(gameMap.id + ": " + gameMap.name + " - " + gameMap.continent_rect);
                     var marker = null;
                     // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
@@ -345,7 +345,6 @@ function getZoneSet(zonename) {
                         taskLayer.addLayer(marker);
                     });
 
-                    var zoneName = gameMap.name;
                     var baseBounds = gameMap.continent_rect;
                     var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
                     
@@ -354,20 +353,9 @@ function getZoneSet(zonename) {
                         weight: 1
                     });
                     zoneLayer.addLayer(zonerect);
-                    /*if (_.size(gameMap.sectors) > 0) {
-                        zones[zoneName] = bounds;
-                    }*/
                 }
             });
         });
-
-        /*_.forOwn(zones, function (value) {
-            var zonerect = L.rectangle(value, {
-                color: "#ff7800",
-                weight: 1
-            });
-            zoneLayer.addLayer(zonerect);
-        });*/
     }).catch(function (ex) {
         console.log("failed", ex);
     });
