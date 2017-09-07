@@ -236,7 +236,7 @@ function getZoneSet(zonename) {
         "Zones": zoneLayer
     };
 
-    L.control.layers(baseMaps, overlayMaps).addTo(map);
+    L.control.layers(baseMaps, overlayMaps, {collapsed: false}).addTo(map);
 
     // Load World Data
     getMergedFloorData().then(function (worldData) {
