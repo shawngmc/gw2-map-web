@@ -183,8 +183,7 @@ function unproject(coord) {
     var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
     // Force in Upper Level, Surface, Underground, Depths order :)
     _.forEach([2, 1, 0, 3], function(floorId) {
-        var currFloor = floorOrderCleanup[floorId];
-        var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorOrderCleanup[floorId] + "/{z}/{x}/{y}.jpg";
+        var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorId + "/{z}/{x}/{y}.jpg";
         var imageryLayer = L.tileLayer(baseLayerURL, {
             minZoom: 0,
             maxZoom: 7,
@@ -192,7 +191,7 @@ function unproject(coord) {
             attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
             subdomains: [1, 2, 3, 4]
         });
-        baseMaps[floorNames[floorOrderCleanup[floorId]]] = imageryLayer;
+        baseMaps[floorNames[floorId]] = imageryLayer;
     });
     map.addLayer(baseMaps.Surface);
 
