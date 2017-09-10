@@ -208,8 +208,7 @@ function unproject(coord) {
         masteryLayer,
         vistaLayer,
         taskLayer,
-        heroLayer,
-        zoneLayer
+        heroLayer
     ]);
 
     var controlSearch = new L.Control.Search({
