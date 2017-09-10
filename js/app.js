@@ -208,7 +208,8 @@ function unproject(coord) {
         masteryLayer,
         vistaLayer,
         taskLayer,
-        heroLayer
+        heroLayer,
+        zoneLayer
     ]);
 
     var controlSearch = new L.Control.Search({
@@ -354,7 +355,12 @@ function unproject(coord) {
 
                     var zonerect = L.rectangle(bounds, {
                         color: localZoneData.assignedColor,
-                        weight: 1
+                        weight: 1,
+                        feature: {
+                          properties: {
+                            name = localZoneData.name;
+                          }
+                        }
                     });
                     zoneLayer.addLayer(zonerect);
                 }
