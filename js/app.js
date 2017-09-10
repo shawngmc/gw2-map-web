@@ -105,40 +105,40 @@ icons.task = L.icon({
 });
 
 var worldZones = {
-    26: { "name": "Dredgehaunt Cliffs", "type":  "Story", "zoneCategory": "GW2" },
-    27: { "name": "Lornar's Pass", "type":  "Story", "zoneCategory": "GW2" },
-    28: { "name": "Wayfarer Foothills", "type":  "Story", "zoneCategory": "GW2" },
-    29: { "name": "Timberline Falls", "type":  "Story", "zoneCategory": "GW2" },
-    30: { "name": "Frostgorge Sound", "type":  "Story", "zoneCategory": "GW2" },
-    31: { "name": "Snowden Drifts", "type":  "Story", "zoneCategory": "GW2" },
+    26: { "name": "Dredgehaunt Cliffs", "type": "Story", "zoneCategory": "GW2" },
+    27: { "name": "Lornar's Pass", "type": "Story", "zoneCategory": "GW2" },
+    28: { "name": "Wayfarer Foothills", "type": "Story", "zoneCategory": "GW2" },
+    29: { "name": "Timberline Falls", "type": "Story", "zoneCategory": "GW2" },
+    30: { "name": "Frostgorge Sound", "type": "Story", "zoneCategory": "GW2" },
+    31: { "name": "Snowden Drifts", "type": "Story", "zoneCategory": "GW2" },
     326: { "name": "Hoelbrak", "type": "City", "zoneCategory": "GW2" },
-    19: { "name": "Plains of Ashford", "type":  "Story", "zoneCategory": "GW2" },
-    20: { "name": "Blazeridge Steppes", "type":  "Story", "zoneCategory": "GW2" },
-    21: { "name": "Fields of Ruin", "type":  "Story", "zoneCategory": "GW2" },
-    22: { "name": "Fireheart Rise", "type":  "Story", "zoneCategory": "GW2" },
-    25: { "name": "Iron Marches", "type":  "Story", "zoneCategory": "GW2" },
-    32: { "name": "Diessa Plateau", "type":  "Story", "zoneCategory": "GW2" },
+    19: { "name": "Plains of Ashford", "type": "Story", "zoneCategory": "GW2" },
+    20: { "name": "Blazeridge Steppes", "type": "Story", "zoneCategory": "GW2" },
+    21: { "name": "Fields of Ruin", "type": "Story", "zoneCategory": "GW2" },
+    22: { "name": "Fireheart Rise", "type": "Story", "zoneCategory": "GW2" },
+    25: { "name": "Iron Marches", "type": "Story", "zoneCategory": "GW2" },
+    32: { "name": "Diessa Plateau", "type": "Story", "zoneCategory": "GW2" },
     218: { "name": "Black Citadel", "type": "City", "zoneCategory": "GW2" },
-    51: { "name": "Straits of Devastation", "type":  "Story", "zoneCategory": "GW2" },
-    62: { "name": "Cursed Shore", "type":  "Story", "zoneCategory": "GW2" },
-    65: { "name": "Malchor's Leap", "type":  "Story", "zoneCategory": "GW2" },
-    15: { "name": "Queensdale", "type":  "Story", "zoneCategory": "GW2" },
-    17: { "name": "Harathi Hinterlands", "type":  "Story", "zoneCategory": "GW2" },
+    51: { "name": "Straits of Devastation", "type": "Story", "zoneCategory": "GW2" },
+    62: { "name": "Cursed Shore", "type": "Story", "zoneCategory": "GW2" },
+    65: { "name": "Malchor's Leap", "type": "Story", "zoneCategory": "GW2" },
+    15: { "name": "Queensdale", "type": "Story", "zoneCategory": "GW2" },
+    17: { "name": "Harathi Hinterlands", "type": "Story", "zoneCategory": "GW2" },
     18: { "name": "Divinity's Reach", "type": "City", "zoneCategory": "GW2" },
-    23: { "name": "Kessex Hills", "type":  "Story", "zoneCategory": "GW2" },
-    24: { "name": "Gendarran Fields", "type":  "Story", "zoneCategory": "GW2" },
+    23: { "name": "Kessex Hills", "type": "Story", "zoneCategory": "GW2" },
+    24: { "name": "Gendarran Fields", "type": "Story", "zoneCategory": "GW2" },
     50: { "name": "Lion's Arch", "type": "City", "zoneCategory": "GW2" },
-    73: { "name": "Bloodtide Coast", "type":  "Story", "zoneCategory": "GW2" },
-    873: { "name": "Southsun Cove", "type":  "Story", "zoneCategory": "GW2" },
-    34: { "name": "Caledon Forest", "type":  "Story", "zoneCategory": "GW2" },
-    35: { "name": "Metrica Province", "type":  "Story", "zoneCategory": "GW2" },
-    54: { "name": "Brisban Wildlands", "type":  "Story", "zoneCategory": "GW2" },
+    73: { "name": "Bloodtide Coast", "type": "Story", "zoneCategory": "GW2" },
+    873: { "name": "Southsun Cove", "type": "Story", "zoneCategory": "GW2" },
+    34: { "name": "Caledon Forest", "type": "Story", "zoneCategory": "GW2" },
+    35: { "name": "Metrica Province", "type": "Story", "zoneCategory": "GW2" },
+    54: { "name": "Brisban Wildlands", "type": "Story", "zoneCategory": "GW2" },
     91: { "name": "The Grove", "type": "City", "zoneCategory": "GW2" },
     139: { "name": "Rata Sum", "type": "City", "zoneCategory": "GW2" },
-    39: { "name": "Mount Maelstrom", "type":  "Story", "zoneCategory": "GW2" },
-    53: { "name": "Sparkfly Fen", "type":  "Story", "zoneCategory": "GW2" },
-    988: { "name": "Dry Top", "type":  "Story", "zoneCategory": "GW2" },
-    1015: { "name": "The Silverwastes", "type":  "Story", "zoneCategory": "HoT" },
+    39: { "name": "Mount Maelstrom", "type": "Story", "zoneCategory": "GW2" },
+    53: { "name": "Sparkfly Fen", "type": "Story", "zoneCategory": "GW2" },
+    988: { "name": "Dry Top", "type": "Story", "zoneCategory": "GW2" },
+    1015: { "name": "The Silverwastes", "type": "Story", "zoneCategory": "HoT" },
 
     // Heart of Thorns
     1041: { "name": "Dragon's Stand", "type": "Story", "zoneCategory": "HoT" },
@@ -161,21 +161,8 @@ var worldZones = {
 };
 
 
-var continents = {};
-continents.maguuma = ["Heart of Maguuma", "Ring of Fire"];
-continents.crystal = ["Crystal Desert"];
-
 function unproject(coord) {
     return map.unproject(coord, map.getMaxZoom());
-}
-
-function getZoneSet(zonename) {
-    if (_.includes(continents.maguuma, zonename)) {
-        return "Maguuma";
-    } else if (_.includes(continents.crystal, zonename)) {
-        return "Crystal";
-    }
-    return "Tyria";
 }
 
 (function () {
@@ -192,11 +179,12 @@ function getZoneSet(zonename) {
 
     map.setMaxBounds(maxBounds);
 
-    var imageryLayer = L.tileLayer("https://tiles.guildwars2.com/1/1/{z}/{x}/{y}.jpg", {
+    var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/1/{z}/{x}/{y}.jpg", {
         minZoom: 0,
         maxZoom: 7,
         bounds: maxBounds,
-        attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>'
+        attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
+        subdomains: [1, 2, 3, 4 ]
     });
     map.addLayer(imageryLayer);
 
@@ -251,7 +239,7 @@ function getZoneSet(zonename) {
                 var localZoneData = worldZones[gameMap.id];
                 if (localZoneData !== undefined) {
                     localZoneData.apiData = gameMap;
-                    var newColor = getRandomColor();
+                    localZoneData.assignedColor = getRandomColor();
                     var marker = null;
                     // Process POIs (Landmarks, Vistas, Waypoints)
                     _.forEach(gameMap.points_of_interest, function (poi) {
@@ -286,8 +274,7 @@ function getZoneSet(zonename) {
                     // Process Mastery points
                     marker = null;
                     _.forEach(gameMap.mastery_points, function (masteryPoint) {
-                        var zoneset = getZoneSet(region.name);
-                        if (zoneset === "Tyria") {
+                        if (localZoneData.zoneCategory === "GW2") {
                             marker = L.marker(unproject(masteryPoint.coord), {
                                 title: "Mastery Point (Tyria)",
                                 icon: icons.masterytyria,
@@ -295,7 +282,7 @@ function getZoneSet(zonename) {
                                 subtype: "core"
                             });
                             masteryLayer.addLayer(marker);
-                        } else if (zoneset === "Maguuma") {
+                        } else if (localZoneData.zoneCategory === "HoT") {
                             marker = L.marker(unproject(masteryPoint.coord), {
                                 title: "Mastery Point (Maguuma)",
                                 icon: icons.masterymaguuma,
@@ -318,8 +305,7 @@ function getZoneSet(zonename) {
                     // Process Skill / Hero Challenges
                     marker = null;
                     _.forEach(gameMap.skill_challenges, function (skillChallenge) {
-                        var zoneset = getZoneSet(region.name);
-                        if (zoneset === "Tyria") {
+                        if (localZoneData.zoneCategory === "GW2") {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: "Hero Challenge (1x)",
                                 icon: icons.skillcore,
@@ -327,7 +313,7 @@ function getZoneSet(zonename) {
                                 subtype: "core"
                             });
                             heroLayer.addLayer(marker);
-                        } else if (zoneset === "Maguuma") {
+                        } else if (localZoneData.zoneCategory === "HoT") {
                             marker = L.marker(unproject(skillChallenge.coord), {
                                 title: "Hero Challenge (10x)",
                                 icon: icons.skillmaguuma,
@@ -363,7 +349,7 @@ function getZoneSet(zonename) {
                     var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
 
                     var zonerect = L.rectangle(bounds, {
-                        color: newColor,
+                        color: localZoneData.assignedColor,
                         weight: 1
                     });
                     zoneLayer.addLayer(zonerect);
