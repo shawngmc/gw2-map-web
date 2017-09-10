@@ -182,7 +182,8 @@ function unproject(coord) {
     var baseMaps = {};
     var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
     for (var floorId = 0; floorId <=3; floorId++) {
-        var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/0/{z}/{x}/{y}.jpg", {
+        var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorId + "/{z}/{x}/{y}.jpg";
+        var imageryLayer = L.tileLayer(baseLayerURL, {
             minZoom: 0,
             maxZoom: 7,
             bounds: maxBounds,
