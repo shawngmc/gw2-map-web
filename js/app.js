@@ -181,7 +181,7 @@ function unproject(coord) {
 
     var baseMaps = {};
     var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
-    v// Force in Upper Level, Surface, Underground, Depths order :)
+    // Force in Upper Level, Surface, Underground, Depths order :)
     _.forEach([2, 1, 0, 3], function(floorId) {
         var currFloor = floorOrderCleanup[floorId];
         var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorOrderCleanup[floorId] + "/{z}/{x}/{y}.jpg";
