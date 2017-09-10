@@ -358,7 +358,7 @@ function unproject(coord) {
                         weight: 1,
                         feature: {
                           properties: {
-                            name = localZoneData.name
+                            name: localZoneData.name
                           }
                         }
                     });
