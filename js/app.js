@@ -189,7 +189,7 @@ function unproject(coord) {
             attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
             subdomains: [1, 2, 3, 4]
         });
-        baseMaps[floorName] = imageryLayer;
+        baseMaps[floorName[floorId]] = imageryLayer;
     }
     map.addLayer(baseMaps.Surface);
 
