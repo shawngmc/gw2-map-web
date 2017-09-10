@@ -179,7 +179,7 @@ function unproject(coord) {
 
     map.setMaxBounds(maxBounds);
 
-    var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/1/{z}/{x}/{y}.jpg", {
+    var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/0/{z}/{x}/{y}.jpg", {
         minZoom: 0,
         maxZoom: 7,
         bounds: maxBounds,
