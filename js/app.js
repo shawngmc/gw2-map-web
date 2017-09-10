@@ -179,15 +179,19 @@ function unproject(coord) {
 
     map.setMaxBounds(maxBounds);
 
-    var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/0/{z}/{x}/{y}.jpg", {
-        minZoom: 0,
-        maxZoom: 7,
-        bounds: maxBounds,
-        attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
-        subdomains: [1, 2, 3, 4 ]
-    });
-    map.addLayer(imageryLayer);
-
+    var baseMaps = {};
+    var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
+    for (var floorId = 0; floorId <=3; floorId++) {
+        var imageryLayer = L.tileLayer("https://tiles{s}.guildwars2.com/1/0/{z}/{x}/{y}.jpg", {
+            minZoom: 0,
+            maxZoom: 7,
+            bounds: maxBounds,
+            attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
+            subdomains: [1, 2, 3, 4]
+        });
+        baseMaps[floorName] = imageryLayer;
+    }
+    map.addLayer(baseMaps.Surface);
 
     var vistaLayer = new L.LayerGroup();
     var landmarkLayer = new L.LayerGroup();
@@ -202,7 +206,8 @@ function unproject(coord) {
         masteryLayer,
         vistaLayer,
         taskLayer,
-        heroLayer
+        heroLayer,
+        zoneLayer
     ]);
 
     var controlSearch = new L.Control.Search({
@@ -217,8 +222,6 @@ function unproject(coord) {
         }
     });
     map.addControl(controlSearch);
-
-    var baseMaps = {};
 
     var overlayMaps = {
         "Hero Challenges": heroLayer,
