@@ -253,6 +253,7 @@ function unproject(coord) {
                 {
                     "name": "Surface",
                     "layer": createWebImageryLayer(1)
+                    "default": true
                 },
                 {
                     "name": "Underground",
@@ -320,12 +321,10 @@ function unproject(coord) {
         },
         _map: null,
         _zoom: null,
-        options: {
-            layers: []
-        },
+        options: {},
         initialize: function(layerData) {
             L.Util.setOptions(this, options);
-            this._layers = layerData;
+            this._layerGroups = layerData;
         },
         onAdd: function(map) {
             this._initLayout();
@@ -357,29 +356,94 @@ function unproject(coord) {
                 L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
             }
 
-            this._form = L.DomUtil.create('form', className + '-list');
-            container.appendChild(this._form);
+            var form = this._form = L.DomUtil.create('form', className + '-list');
+            container.appendChild(form);
 
-            // TODO: Create layout components
-            // For each group
-                // Create a group element
-                // For each layer in group
-                    // Create a layer element
-                    // Add the layer element
-                // Add the group element
+            var createTitle = function(name) {
+                var titleDiv = L.DomUtil.create('div', 'classname + '-list-group-title'');
+                titleDiv.textContent = name;
+                return titleDiv;
+            }
+
+            var createOptionGroup = function(group) {
+                var groupElement = L.DomUtil.create('div', classname + '-list-group');
+                groupElement.appendChild(createTitle(group.name));
+                _.forEach(layerGroup.layers, function(layer) {
+                    layer.trackingId = guid();
+                    var layerOption = L.DomUtil.create('input', classname + '-list-group-checkbox');
+                    layerOption.type = "radio";
+                    layerOption.name = group.name;
+                    layerOption.id = layer.trackingId;
+                    layerOption.value = layer.name;
+                    if (layer.default) {
+                        layerOption.checked = true;
+                    }
+                    groupElement.appendChild(layerOption);
+                    
+                    var layerLabel = L.DomUtil.create('label', classname + '-list-group-label');
+                    layerLabel.for = layer.trackingId;
+                    layerLabel.textContent = layer.name;
+                    groupElement.appendChild(layerLabel);
+                });
+            };
+            
+            var createCheckboxGroup = function(group) {
+                var groupElement = L.DomUtil.create('div', classname + '-list-group');
+                groupElement.appendChild(createTitle(group.name));
+                 _.forEach(layerGroup.layers, function(layer) {
+                    layer.trackingId = guid();
+                    var layerCheckbox = L.DomUtil.create('input', classname + '-list-group-checkbox');
+                    layerCheckbox.type = "checkbox";
+                    layerCheckbox.name = group.name;
+                    layerCheckbox.id = layer.trackingId;
+                    layerCheckbox.value = layer.name;
+                    if (layer.default) {
+                        layerCheckbox.checked = true;
+                    }
+                    groupElement.appendChild(layerCheckbox);
+                    
+                    var layerLabel = L.DomUtil.create('label', classname + '-list-group-label');
+                    layerLabel.for = layer.trackingId;
+                    layerLabel.textContent = layer.name;
+                    groupElement.appendChild(layerLabel);
+                });
+            };
+
+            _.forEach(this._layerGroups, function(layerGroup) {
+                // Create/add a group element
+                if (layerGroup.type === "checkbox") {
+                    form.appendChild(createCheckboxGroup(layerGroup));
+                } else if (layerGroup.type === "option") {
+                    form.appendChild(createOptionGroup(layerGroup));
+                } else {
+                    console.log ("Group " + layerGroup.name + " has unknown type " + layerGroup.type + "; skipping...");
+                }
+                form.appendChild(L.DomUtil.create('hr'));
+            });
 
             this._updateLayout();
         },
         _updateLayout: function() {
             // TODO: Update layout components
-            // For each group
+            _.forEach(this._layerGroups, function(layerGroup) {
                 // Find the group element
-                // For each layer in group
+                _.forEach(layerGroup.layers, function(layer) {
                     // Find the layer element
                     // Update as appropriate
+                });
+                // Update the group element
+            });
         },
         _updateLayerVisibility: function() {
-
+            // TODO: Update visibility
+            _.forEach(this._layerGroups, function(layerGroup) {
+                _.forEach(layerGroup.layers, function(layer) {
+                    // Find the layer element
+                    // If layer is checked and rules are passed, enable it
+                    // Else disable it
+                    
+                });
+            });
         }
     });
 
