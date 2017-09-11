@@ -167,6 +167,7 @@ function unproject(coord) {
 
 (function () {
     "use strict";
+
     map = L.map("map", {
         minZoom: 0,
         maxZoom: 7,
@@ -179,10 +180,7 @@ function unproject(coord) {
 
     map.setMaxBounds(maxBounds);
 
-    var baseMaps = {};
-    var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
-    // Force in Upper Level, Surface, Underground, Depths order :)
-    _.forEach([2, 1, 0, 3], function(floorId) {
+    var createWebImageryLayer = function(floor) {
         var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorId + "/{z}/{x}/{y}.jpg";
         var imageryLayer = L.tileLayer(baseLayerURL, {
             minZoom: 0,
@@ -191,17 +189,25 @@ function unproject(coord) {
             attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
             subdomains: [1, 2, 3, 4]
         });
-        baseMaps[floorNames[floorId]] = imageryLayer;
+        return imageryLayer;
+    }
+
+    var baseMaps = {};
+    var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
+    // Force in Upper Level, Surface, Underground, Depths order :)
+    _.forEach([2, 1, 0, 3], function(floorId) {
+        var layer = createWebImageryLayer(floorId);
+        baseMaps[floorNames[floorId]] = layer;
     });
     map.addLayer(baseMaps.Surface);
 
-    var vistaLayer = new L.markerClusterGroup();
-    var landmarkLayer = new L.markerClusterGroup();
-    var waypointLayer = new L.markerClusterGroup();
-    var masteryLayer = new L.markerClusterGroup();
+    var vistaLayer = new L.LayerGroup();
+    var landmarkLayer = new L.LayerGroup();
+    var waypointLayer = new L.LayerGroup();
+    var masteryLayer = new L.LayerGroup();
     var zoneLayer = new L.LayerGroup();
-    var taskLayer = new L.markerClusterGroup();
-    var heroLayer = new L.markerClusterGroup();
+    var taskLayer = new L.LayerGroup();
+    var heroLayer = new L.LayerGroup();
     var markersLayer = new L.LayerGroup([
         waypointLayer,
         landmarkLayer,
@@ -233,6 +239,153 @@ function unproject(coord) {
         "Waypoints": waypointLayer,
         "Zones": zoneLayer
     };
+
+/*
+    var layers = [
+        {
+            "groupName": "Imagery",
+            "type": "option",
+            "layers": [
+                {
+                    "name": "Upper Level",
+                    "layer": createWebImageryLayer(2)
+                },
+                {
+                    "name": "Surface",
+                    "layer": createWebImageryLayer(1)
+                },
+                {
+                    "name": "Underground",
+                    "layer": createWebImageryLayer(0)
+                },
+                {
+                    "name": "Depths",
+                    "layer": createWebImageryLayer(3)
+                }
+            ]
+        },
+        {
+            "groupName": "Features",
+            "type": "checkbox",
+            "layers": [
+                {
+                    "name": "Waypoints",
+                    "layer": waypointLayer,
+                    "minZoom": 2
+                },
+                {
+                    "name": "Vistas",
+                    "layer": vistaLayer,
+                    "minZoom": 3
+                },
+                {
+                    "name": "Landmarks",
+                    "layer": landmarkLayer,
+                    "minZoom": 3
+                },
+                {
+                    "name": "Mastery Points",
+                    "layer": masteryLayer,
+                    "minZoom": 4,
+                    "default": false
+                },
+                {
+                    "name": "Hero Challenges",
+                    "layer": heroLayer,
+                    "minZoom": 4,
+                    "default": false
+                },
+                {
+                    "name": "Tasks",
+                    "layer": taskLayer,
+                    "minZoom": 4,
+                    "default": false
+                },
+                {
+                    "name": "Zones",
+                    "layer": zoneLayer,
+                    "default": false
+                }
+            ]
+        }
+    ];
+
+    var improvedLayerControl = L.Control.extend({
+        _zoomListener: function() {
+            var currZoom = map.getZoom();
+            if (this._zoom === null || this._zoom != currZoom) {
+                _zoom = currZoom;
+                this._update();
+            }
+        },
+        _map: null,
+        _zoom: null,
+        options: {
+            layers: []
+        },
+        initialize: function(layerData) {
+            L.Util.setOptions(this, options);
+            this._layers = layerData;
+        },
+        onAdd: function(map) {
+            this._initLayout();
+
+            this._map = map;
+            map.addListener(_zoomListener);
+
+            return this._container;
+        },
+        onRemove: function(map) {
+            map.removeListener(_zoomListener);
+            this._map = null;
+        },
+        _update: function() {
+            this._updateLayerVisibility();
+            this._updateLayerControls();
+        },
+        _initLayout: function() {
+            var className = 'leaflet-smart-layer-control';
+            container = this._container = L.DomUtil.create('div', className);
+
+            // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
+            container.setAttribute('aria-haspopup', true);
+
+            if (L.Browser.touch) {
+                L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
+            } else {
+                L.DomEvent.disableClickPropagation(container);
+                L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
+            }
+
+            this._form = L.DomUtil.create('form', className + '-list');
+            container.appendChild(this._form);
+
+            // TODO: Create layout components
+            // For each group
+                // Create a group element
+                // For each layer in group
+                    // Create a layer element
+                    // Add the layer element
+                // Add the group element
+
+            this._updateLayout();
+        },
+        _updateLayout: function() {
+            // TODO: Update layout components
+            // For each group
+                // Find the group element
+                // For each layer in group
+                    // Find the layer element
+                    // Update as appropriate
+        },
+        _updateLayerVisibility: function() {
+
+        }
+    });
+
+
+*/
+
 
     L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
