@@ -180,7 +180,7 @@ function unproject(coord) {
 
     map.setMaxBounds(maxBounds);
 
-    var createWebImageryLayer = function(floor) {
+    var createWebImageryLayer = function(floorId) {
         var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorId + "/{z}/{x}/{y}.jpg";
         var imageryLayer = L.tileLayer(baseLayerURL, {
             minZoom: 0,
