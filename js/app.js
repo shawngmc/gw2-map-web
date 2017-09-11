@@ -195,13 +195,13 @@ function unproject(coord) {
     });
     map.addLayer(baseMaps.Surface);
 
-    var vistaLayer = new L.MarkerClusterGroup();
-    var landmarkLayer = new L.MarkerClusterGroup();
-    var waypointLayer = new L.MarkerClusterGroup();
-    var masteryLayer = new L.MarkerClusterGroup();
+    var vistaLayer = new L.markerClusterGroup();
+    var landmarkLayer = new L.markerClusterGroup();
+    var waypointLayer = new L.markerClusterGroup();
+    var masteryLayer = new L.markerClusterGroup();
     var zoneLayer = new L.LayerGroup();
-    var taskLayer = new L.MarkerClusterGroup();
-    var heroLayer = new L.MarkerClusterGroup();
+    var taskLayer = new L.markerClusterGroup();
+    var heroLayer = new L.markerClusterGroup();
     var markersLayer = new L.LayerGroup([
         waypointLayer,
         landmarkLayer,
