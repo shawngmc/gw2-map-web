@@ -352,24 +352,39 @@
         _updateLayout: function() {
             // TODO: Update layout components
             _.forEach(this._layerGroups, function(layerGroup) {
-                // Find the group element
                 _.forEach(layerGroup.layers, function(layer) {
                     // Find the layer element
                     // Update as appropriate
                 });
-                // Update the group element
             });
         },
         _updateLayerVisibility: function() {
-            // TODO: Update visibility
             _.forEach(this._layerGroups, function(layerGroup) {
-                _.forEach(layerGroup.layers, function(layer) {
-                    // Find the layer element
-                    // If layer is checked and rules are passed, enable it
-                    // Else disable it
+                _.forEach(layerGroup.layers, function(layerWrapper) {
+                    var layerElement = document.getElementById('layerWrapper.trackingId');
+                    var layerBlockRule = _getLayerBLockRule(layerWrapper);
+                    var applyLayer = (layerElement.checked && layerBlockRule === null);
+                    var layerOnMap = map.hasLayer(layerWrapper.layer);
                     
+                    if (applyLayer && !layerOnMap) {
+                        // The layer should apply and is not on the map, add it
+                        map.addLayer(layerWrapper.layer);
+                    } else if (!applyLayer && layerOnMap) {
+                        // The layer shoulf not apply to the map, but is already on there, remove it
+                        map.removeLayer(layerWrapper.layer);
+                    }
+                    // Otherwise, no action is necessary
                 });
             });
+        },
+        _getLayerBlockRule: function(layer) {
+            if (layer.minZoom !== undefined && layer.minZoom <= _zoom) {
+                return "Zoom in to use."
+            } else if (layer.maxZoom !== undefined && layer.maxZoom >= _zoom) {
+                return "Zoom out to use."
+            } else {
+                return null;
+            }
         }
     });
 
