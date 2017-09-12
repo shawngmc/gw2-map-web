@@ -6,14 +6,6 @@ var generateIconURL = function (type, subtype) {
     return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
 };
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-var getRandomColor = function () {
-    return "#" + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16);
-};
-
 var generatePopupWithSearchIcons = function (objDesc, objType) {
     var span = document.createElement("span");
     var links = {};
@@ -35,27 +27,6 @@ var getWorldData = function() {
         .then(function(worldDataRaw) {
             return JSON.parse(worldDataRaw);
         })
-};
-
-var getMergedFloorData = function () {
-    return Promise.all([fetch("https://api.guildwars2.com/v2/continents/1/floors/0"), fetch("https://api.guildwars2.com/v2/continents/1/floors/1")])
-        .then(function (floorDataRequestResponses) {
-            return Promise.all([floorDataRequestResponses[0].text(), floorDataRequestResponses[1].text()]);
-        })
-        .then(function (floorDataRawResponses) {
-            // Hack - Force Gilded Hollow Data in!
-            var floorData = [];
-            floorData[0] = JSON.parse(floorDataRawResponses[0]);
-            floorData[1] = JSON.parse(floorDataRawResponses[1]);
-
-            // Data fix - force Gilded Hollow into floor 1;
-            floorData[1].regions[10].maps[1068] = floorData[0].regions[10].maps[1068];
-
-            // Data fix - change top of Dry Top to Bottom of Silverwastes - there is MUCH less overlap than it thinks!
-            floorData[1].regions[11].maps[988].continent_rect[0][1] = floorData[1].regions[11].maps[1015].continent_rect[1][1];
-
-            return floorData[1];
-        });
 };
 
 var icons = {};
@@ -588,137 +559,4 @@ function unproject(coord) {
     }).catch(function (ex) {
         console.log("failed", ex);
     });
-
-    // // Load World Data
-    // getMergedFloorData().then(function (worldData) {
-    //     _.forEach(worldData.regions, function (region) {
-    //         _.forEach(region.maps, function (gameMap) {
-    //             var localZoneData = worldZones[gameMap.id];
-    //             if (localZoneData !== undefined) {
-    //                 localZoneData.apiData = gameMap;
-    //                 localZoneData.assignedColor = getRandomColor();
-    //                 var marker = null;
-    //                 // Process POIs (Landmarks, Vistas, Waypoints)
-    //                 _.forEach(gameMap.points_of_interest, function (poi) {
-    //                     if (poi.type === "waypoint") {
-    //                         marker = L.marker(unproject(poi.coord), {
-    //                             title: poi.name,
-    //                             icon: icons.waypoint,
-    //                             type: poi.type
-    //                         });
-    //                         marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint"));
-    //                         waypointLayer.addLayer(marker);
-    //                     } else if (poi.type === "landmark") {
-    //                         marker = L.marker(unproject(poi.coord), {
-    //                             title: poi.name,
-    //                             icon: icons.landmark,
-    //                             type: poi.type
-    //                         });
-    //                         marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi"));
-    //                         landmarkLayer.addLayer(marker);
-    //                     } else if (poi.type === "vista") {
-    //                         marker = L.marker(unproject(poi.coord), {
-    //                             title: "Vista",
-    //                             icon: icons.vista,
-    //                             type: poi.type
-    //                         });
-    //                         vistaLayer.addLayer(marker);
-    //                     } else {
-    //                         console.log("unknown poi type: " + poi.type);
-    //                     }
-    //                 });
-
-    //                 // Process Mastery points
-    //                 marker = null;
-    //                 _.forEach(gameMap.mastery_points, function (masteryPoint) {
-    //                     if (localZoneData.zoneCategory === "GW2") {
-    //                         marker = L.marker(unproject(masteryPoint.coord), {
-    //                             title: "Mastery Point (Tyria)",
-    //                             icon: icons.masterytyria,
-    //                             type: "mastery",
-    //                             subtype: "core"
-    //                         });
-    //                         masteryLayer.addLayer(marker);
-    //                     } else if (localZoneData.zoneCategory === "HoT") {
-    //                         marker = L.marker(unproject(masteryPoint.coord), {
-    //                             title: "Mastery Point (Maguuma)",
-    //                             icon: icons.masterymaguuma,
-    //                             type: "mastery",
-    //                             subtype: "maguuma"
-    //                         });
-    //                         masteryLayer.addLayer(marker);
-    //                     } else {
-    //                         marker = L.marker(unproject(masteryPoint.coord), {
-    //                             title: "Mastery Point (???)",
-    //                             icon: icons.masterygeneric,
-    //                             type: "mastery",
-    //                             subtype: "unknown"
-    //                         });
-    //                         masteryLayer.addLayer(marker);
-    //                         console.log("unknown mastery region: " + region.name + "; displaying generic...");
-    //                     }
-    //                 });
-
-    //                 // Process Skill / Hero Challenges
-    //                 marker = null;
-    //                 _.forEach(gameMap.skill_challenges, function (skillChallenge) {
-    //                     if (localZoneData.zoneCategory === "GW2") {
-    //                         marker = L.marker(unproject(skillChallenge.coord), {
-    //                             title: "Hero Challenge (1x)",
-    //                             icon: icons.skillcore,
-    //                             type: "hero_point",
-    //                             subtype: "core"
-    //                         });
-    //                         heroLayer.addLayer(marker);
-    //                     } else if (localZoneData.zoneCategory === "HoT") {
-    //                         marker = L.marker(unproject(skillChallenge.coord), {
-    //                             title: "Hero Challenge (10x)",
-    //                             icon: icons.skillmaguuma,
-    //                             type: "hero_point",
-    //                             subtype: "advanced"
-    //                         });
-    //                         heroLayer.addLayer(marker);
-    //                     } else {
-    //                         marker = L.marker(unproject(skillChallenge.coord), {
-    //                             title: "Hero Challenge (???)",
-    //                             icon: icons.skillcore,
-    //                             type: "hero_point",
-    //                             subtype: "core"
-    //                         });
-    //                         heroLayer.addLayer(marker);
-    //                         console.log("unknown skill challenge region: " + region.name + "; displaying generic...");
-    //                     }
-    //                 });
-
-    //                 // Process Hearts / Tasks
-    //                 marker = null;
-    //                 _.forEach(gameMap.tasks, function (task) {
-    //                     marker = L.marker(unproject(task.coord), {
-    //                         title: "Task: " + task.objective,
-    //                         icon: icons.task,
-    //                         type: "task"
-    //                     });
-    //                     marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
-    //                     taskLayer.addLayer(marker);
-    //                 });
-
-    //                 var baseBounds = gameMap.continent_rect;
-    //                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
-
-    //                 var zonerect = L.rectangle(bounds, {
-    //                     color: localZoneData.assignedColor,
-    //                     weight: 1,
-    //                     feature: {
-    //                       properties: {
-    //                         name: localZoneData.name
-    //                       }
-    //                     }
-    //                 });
-    //                 zoneLayer.addLayer(zonerect);
-    //             }
-    //         });
-    //     });
-    // }).catch(function (ex) {
-    //     console.log("failed", ex);
-    // });
 })();
