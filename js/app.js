@@ -95,7 +95,7 @@
     }
 
     map = L.map("map", {
-        minZoom: 0,
+        minZoom: 1,
         maxZoom: 7,
         crs: L.CRS.Simple
     }).setView([0, 0], 0);
