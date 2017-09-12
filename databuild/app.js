@@ -89,7 +89,9 @@ var getMergedFloorData = function () {
                 _.forEach(region.maps, function (gameMap) {
                     if (_.has(worldZones, gameMap.id)) {
                         gameMap.customData = worldZones[gameMap.id];
-                        gameMap.customData.region = region.id;
+                        gameMap.customData.region = {};
+                        gameMap.customData.region.id = region.id;
+                        gameMap.customData.region.name = region.name;
                         slimdata[gameMap.id] = gameMap;
                     }
                 });
