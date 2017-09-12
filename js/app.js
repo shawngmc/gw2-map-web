@@ -27,6 +27,16 @@ var generatePopupWithSearchIcons = function (objDesc, objType) {
     return span;
 };
 
+var getWorldData = function() {
+    return fetch("./js/zonedata.json")
+        .then(function(worldDataRequestResponse) {
+            return worldDataRequestResponse.text();
+        })
+        .then(function(worldDataRaw) {
+            return JSON.parse(worldDataRaw);
+        })
+};
+
 var getMergedFloorData = function () {
     return Promise.all([fetch("https://api.guildwars2.com/v2/continents/1/floors/0"), fetch("https://api.guildwars2.com/v2/continents/1/floors/1")])
         .then(function (floorDataRequestResponses) {
@@ -454,135 +464,261 @@ function unproject(coord) {
     L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
     // Load World Data
-    getMergedFloorData().then(function (worldData) {
-        _.forEach(worldData.regions, function (region) {
-            _.forEach(region.maps, function (gameMap) {
-                var localZoneData = worldZones[gameMap.id];
-                if (localZoneData !== undefined) {
-                    localZoneData.apiData = gameMap;
-                    localZoneData.assignedColor = getRandomColor();
-                    var marker = null;
-                    // Process POIs (Landmarks, Vistas, Waypoints)
-                    _.forEach(gameMap.points_of_interest, function (poi) {
-                        if (poi.type === "waypoint") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: poi.name,
-                                icon: icons.waypoint,
-                                type: poi.type
-                            });
-                            marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint"));
-                            waypointLayer.addLayer(marker);
-                        } else if (poi.type === "landmark") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: poi.name,
-                                icon: icons.landmark,
-                                type: poi.type
-                            });
-                            marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi"));
-                            landmarkLayer.addLayer(marker);
-                        } else if (poi.type === "vista") {
-                            marker = L.marker(unproject(poi.coord), {
-                                title: "Vista",
-                                icon: icons.vista,
-                                type: poi.type
-                            });
-                            vistaLayer.addLayer(marker);
-                        } else {
-                            console.log("unknown poi type: " + poi.type);
-                        }
+    getWorldData().then(function (worldData) {
+        _.forOwn(worldData, function (gameMap) {
+            var marker = null;
+            // Process POIs (Landmarks, Vistas, Waypoints)
+            _.forEach(gameMap.points_of_interest, function (poi) {
+                if (poi.type === "waypoint") {
+                    marker = L.marker(unproject(poi.coord), {
+                        title: poi.name,
+                        icon: icons.waypoint,
+                        type: poi.type
                     });
-
-                    // Process Mastery points
-                    marker = null;
-                    _.forEach(gameMap.mastery_points, function (masteryPoint) {
-                        if (localZoneData.zoneCategory === "GW2") {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: "Mastery Point (Tyria)",
-                                icon: icons.masterytyria,
-                                type: "mastery",
-                                subtype: "core"
-                            });
-                            masteryLayer.addLayer(marker);
-                        } else if (localZoneData.zoneCategory === "HoT") {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: "Mastery Point (Maguuma)",
-                                icon: icons.masterymaguuma,
-                                type: "mastery",
-                                subtype: "maguuma"
-                            });
-                            masteryLayer.addLayer(marker);
-                        } else {
-                            marker = L.marker(unproject(masteryPoint.coord), {
-                                title: "Mastery Point (???)",
-                                icon: icons.masterygeneric,
-                                type: "mastery",
-                                subtype: "unknown"
-                            });
-                            masteryLayer.addLayer(marker);
-                            console.log("unknown mastery region: " + region.name + "; displaying generic...");
-                        }
+                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint"));
+                    waypointLayer.addLayer(marker);
+                } else if (poi.type === "landmark") {
+                    marker = L.marker(unproject(poi.coord), {
+                        title: poi.name,
+                        icon: icons.landmark,
+                        type: poi.type
                     });
-
-                    // Process Skill / Hero Challenges
-                    marker = null;
-                    _.forEach(gameMap.skill_challenges, function (skillChallenge) {
-                        if (localZoneData.zoneCategory === "GW2") {
-                            marker = L.marker(unproject(skillChallenge.coord), {
-                                title: "Hero Challenge (1x)",
-                                icon: icons.skillcore,
-                                type: "hero_point",
-                                subtype: "core"
-                            });
-                            heroLayer.addLayer(marker);
-                        } else if (localZoneData.zoneCategory === "HoT") {
-                            marker = L.marker(unproject(skillChallenge.coord), {
-                                title: "Hero Challenge (10x)",
-                                icon: icons.skillmaguuma,
-                                type: "hero_point",
-                                subtype: "advanced"
-                            });
-                            heroLayer.addLayer(marker);
-                        } else {
-                            marker = L.marker(unproject(skillChallenge.coord), {
-                                title: "Hero Challenge (???)",
-                                icon: icons.skillcore,
-                                type: "hero_point",
-                                subtype: "core"
-                            });
-                            heroLayer.addLayer(marker);
-                            console.log("unknown skill challenge region: " + region.name + "; displaying generic...");
-                        }
+                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi"));
+                    landmarkLayer.addLayer(marker);
+                } else if (poi.type === "vista") {
+                    marker = L.marker(unproject(poi.coord), {
+                        title: "Vista",
+                        icon: icons.vista,
+                        type: poi.type
                     });
-
-                    // Process Hearts / Tasks
-                    marker = null;
-                    _.forEach(gameMap.tasks, function (task) {
-                        marker = L.marker(unproject(task.coord), {
-                            title: "Task: " + task.objective,
-                            icon: icons.task,
-                            type: "task"
-                        });
-                        marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
-                        taskLayer.addLayer(marker);
-                    });
-
-                    var baseBounds = gameMap.continent_rect;
-                    var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
-
-                    var zonerect = L.rectangle(bounds, {
-                        color: localZoneData.assignedColor,
-                        weight: 1,
-                        feature: {
-                          properties: {
-                            name: localZoneData.name
-                          }
-                        }
-                    });
-                    zoneLayer.addLayer(zonerect);
+                    vistaLayer.addLayer(marker);
+                } else {
+                    console.log("unknown poi type: " + poi.type);
                 }
             });
+
+            // Process Mastery points
+            marker = null;
+            _.forEach(gameMap.mastery_points, function (masteryPoint) {
+                if (gameMap.customData.zoneCategory === "GW2") {
+                    marker = L.marker(unproject(masteryPoint.coord), {
+                        title: "Mastery Point (Tyria)",
+                        icon: icons.masterytyria,
+                        type: "mastery",
+                        subtype: "core"
+                    });
+                    masteryLayer.addLayer(marker);
+                } else if (gameMap.customData.zoneCategory === "HoT") {
+                    marker = L.marker(unproject(masteryPoint.coord), {
+                        title: "Mastery Point (Maguuma)",
+                        icon: icons.masterymaguuma,
+                        type: "mastery",
+                        subtype: "maguuma"
+                    });
+                    masteryLayer.addLayer(marker);
+                } else {
+                    marker = L.marker(unproject(masteryPoint.coord), {
+                        title: "Mastery Point (???)",
+                        icon: icons.masterygeneric,
+                        type: "mastery",
+                        subtype: "unknown"
+                    });
+                    masteryLayer.addLayer(marker);
+                    console.log("unknown mastery region: " + region.name + "; displaying generic...");
+                }
+            });
+
+            // Process Skill / Hero Challenges
+            marker = null;
+            _.forEach(gameMap.skill_challenges, function (skillChallenge) {
+                if (gameMap.customData.zoneCategory === "GW2") {
+                    marker = L.marker(unproject(skillChallenge.coord), {
+                        title: "Hero Challenge (1x)",
+                        icon: icons.skillcore,
+                        type: "hero_point",
+                        subtype: "core"
+                    });
+                    heroLayer.addLayer(marker);
+                } else if (gameMap.customData.zoneCategory === "HoT") {
+                    marker = L.marker(unproject(skillChallenge.coord), {
+                        title: "Hero Challenge (10x)",
+                        icon: icons.skillmaguuma,
+                        type: "hero_point",
+                        subtype: "advanced"
+                    });
+                    heroLayer.addLayer(marker);
+                } else {
+                    marker = L.marker(unproject(skillChallenge.coord), {
+                        title: "Hero Challenge (???)",
+                        icon: icons.skillcore,
+                        type: "hero_point",
+                        subtype: "core"
+                    });
+                    heroLayer.addLayer(marker);
+                    console.log("unknown skill challenge region: " + region.name + "; displaying generic...");
+                }
+            });
+
+            // Process Hearts / Tasks
+            marker = null;
+            _.forEach(gameMap.tasks, function (task) {
+                marker = L.marker(unproject(task.coord), {
+                    title: "Task: " + task.objective,
+                    icon: icons.task,
+                    type: "task"
+                });
+                marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
+                taskLayer.addLayer(marker);
+            });
+
+            var baseBounds = gameMap.continent_rect;
+            var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+
+            var zonerect = L.rectangle(bounds, {
+                color: gameMap.customData.assignedColor,
+                weight: 1,
+                feature: {
+                    properties: {
+                    name: gameMap.customData.name
+                    }
+                }
+            });
+            zoneLayer.addLayer(zonerect);
         });
     }).catch(function (ex) {
         console.log("failed", ex);
     });
+
+    // // Load World Data
+    // getMergedFloorData().then(function (worldData) {
+    //     _.forEach(worldData.regions, function (region) {
+    //         _.forEach(region.maps, function (gameMap) {
+    //             var localZoneData = worldZones[gameMap.id];
+    //             if (localZoneData !== undefined) {
+    //                 localZoneData.apiData = gameMap;
+    //                 localZoneData.assignedColor = getRandomColor();
+    //                 var marker = null;
+    //                 // Process POIs (Landmarks, Vistas, Waypoints)
+    //                 _.forEach(gameMap.points_of_interest, function (poi) {
+    //                     if (poi.type === "waypoint") {
+    //                         marker = L.marker(unproject(poi.coord), {
+    //                             title: poi.name,
+    //                             icon: icons.waypoint,
+    //                             type: poi.type
+    //                         });
+    //                         marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint"));
+    //                         waypointLayer.addLayer(marker);
+    //                     } else if (poi.type === "landmark") {
+    //                         marker = L.marker(unproject(poi.coord), {
+    //                             title: poi.name,
+    //                             icon: icons.landmark,
+    //                             type: poi.type
+    //                         });
+    //                         marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi"));
+    //                         landmarkLayer.addLayer(marker);
+    //                     } else if (poi.type === "vista") {
+    //                         marker = L.marker(unproject(poi.coord), {
+    //                             title: "Vista",
+    //                             icon: icons.vista,
+    //                             type: poi.type
+    //                         });
+    //                         vistaLayer.addLayer(marker);
+    //                     } else {
+    //                         console.log("unknown poi type: " + poi.type);
+    //                     }
+    //                 });
+
+    //                 // Process Mastery points
+    //                 marker = null;
+    //                 _.forEach(gameMap.mastery_points, function (masteryPoint) {
+    //                     if (localZoneData.zoneCategory === "GW2") {
+    //                         marker = L.marker(unproject(masteryPoint.coord), {
+    //                             title: "Mastery Point (Tyria)",
+    //                             icon: icons.masterytyria,
+    //                             type: "mastery",
+    //                             subtype: "core"
+    //                         });
+    //                         masteryLayer.addLayer(marker);
+    //                     } else if (localZoneData.zoneCategory === "HoT") {
+    //                         marker = L.marker(unproject(masteryPoint.coord), {
+    //                             title: "Mastery Point (Maguuma)",
+    //                             icon: icons.masterymaguuma,
+    //                             type: "mastery",
+    //                             subtype: "maguuma"
+    //                         });
+    //                         masteryLayer.addLayer(marker);
+    //                     } else {
+    //                         marker = L.marker(unproject(masteryPoint.coord), {
+    //                             title: "Mastery Point (???)",
+    //                             icon: icons.masterygeneric,
+    //                             type: "mastery",
+    //                             subtype: "unknown"
+    //                         });
+    //                         masteryLayer.addLayer(marker);
+    //                         console.log("unknown mastery region: " + region.name + "; displaying generic...");
+    //                     }
+    //                 });
+
+    //                 // Process Skill / Hero Challenges
+    //                 marker = null;
+    //                 _.forEach(gameMap.skill_challenges, function (skillChallenge) {
+    //                     if (localZoneData.zoneCategory === "GW2") {
+    //                         marker = L.marker(unproject(skillChallenge.coord), {
+    //                             title: "Hero Challenge (1x)",
+    //                             icon: icons.skillcore,
+    //                             type: "hero_point",
+    //                             subtype: "core"
+    //                         });
+    //                         heroLayer.addLayer(marker);
+    //                     } else if (localZoneData.zoneCategory === "HoT") {
+    //                         marker = L.marker(unproject(skillChallenge.coord), {
+    //                             title: "Hero Challenge (10x)",
+    //                             icon: icons.skillmaguuma,
+    //                             type: "hero_point",
+    //                             subtype: "advanced"
+    //                         });
+    //                         heroLayer.addLayer(marker);
+    //                     } else {
+    //                         marker = L.marker(unproject(skillChallenge.coord), {
+    //                             title: "Hero Challenge (???)",
+    //                             icon: icons.skillcore,
+    //                             type: "hero_point",
+    //                             subtype: "core"
+    //                         });
+    //                         heroLayer.addLayer(marker);
+    //                         console.log("unknown skill challenge region: " + region.name + "; displaying generic...");
+    //                     }
+    //                 });
+
+    //                 // Process Hearts / Tasks
+    //                 marker = null;
+    //                 _.forEach(gameMap.tasks, function (task) {
+    //                     marker = L.marker(unproject(task.coord), {
+    //                         title: "Task: " + task.objective,
+    //                         icon: icons.task,
+    //                         type: "task"
+    //                     });
+    //                     marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
+    //                     taskLayer.addLayer(marker);
+    //                 });
+
+    //                 var baseBounds = gameMap.continent_rect;
+    //                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+
+    //                 var zonerect = L.rectangle(bounds, {
+    //                     color: localZoneData.assignedColor,
+    //                     weight: 1,
+    //                     feature: {
+    //                       properties: {
+    //                         name: localZoneData.name
+    //                       }
+    //                     }
+    //                 });
+    //                 zoneLayer.addLayer(zonerect);
+    //             }
+    //         });
+    //     });
+    // }).catch(function (ex) {
+    //     console.log("failed", ex);
+    // });
 })();
