@@ -244,7 +244,7 @@
         }
     ];
 
-    L.Control.improvedLayerControl = L.Control.extend({
+    L.Control.ImprovedLayerControl = L.Control.extend({
         _zoomListener: function() {
             var currZoom = map.getZoom();
             if (this._zoom === null || this._zoom != currZoom) {
@@ -254,10 +254,9 @@
         },
         _map: null,
         _zoom: null,
-        options: {},
-        initialize: function(layerData) {
-            L.Util.setOptions(this, this.options);
-            this._layerGroups = layerData;
+        initialize: function(options) {
+          this._layerData = options.layerData;
+          // Continue initializing the layer plugin here.
         },
         onAdd: function(map) {
             this._initLayout();
@@ -365,7 +364,7 @@
             }
         },
         _updateLayout: function() {
-            _.forEach(this._layerGroups, function(layerGroup) {
+            _.forEach(this._layerData, function(layerGroup) {
                 _.forEach(layerGroup.layers, function(layerWrapper) {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
@@ -374,7 +373,7 @@
             });
         },
         _updateLayerVisibility: function() {
-            _.forEach(this._layerGroups, function(layerGroup) {
+            _.forEach(this._layerData, function(layerGroup) {
                 _.forEach(layerGroup.layers, function(layerWrapper) {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
@@ -393,8 +392,11 @@
             });
         }
     });
-    L.Control.improvedLayerControl(layers).addTo(map);
-
+    
+    L.control.improvedLayerControl = function(opts) {
+        return new L.Control.ImprovedLayerControl(opts);
+    }
+    L.control.improvedLayerControl({ "layerData" : layers }).addTo(map);
 
 
    // L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
