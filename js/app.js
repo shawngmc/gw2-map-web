@@ -524,7 +524,7 @@ function unproject(coord) {
                         subtype: "unknown"
                     });
                     masteryLayer.addLayer(marker);
-                    console.log("unknown mastery region: " + region.name + "; displaying generic...");
+                    console.log("unknown mastery region: " + gameMap.customData.region.name + "; displaying generic...");
                 }
             });
 
@@ -555,7 +555,7 @@ function unproject(coord) {
                         subtype: "core"
                     });
                     heroLayer.addLayer(marker);
-                    console.log("unknown skill challenge region: " + region.name + "; displaying generic...");
+                    console.log("unknown skill challenge region: " + gameMap.customData.region.name + "; displaying generic...");
                 }
             });
 
