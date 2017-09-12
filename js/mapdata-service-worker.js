@@ -1,8 +1,7 @@
 // A list of local resources we always want to be cached.
 var CACHE_NAME = 'mapdata-cache';
 const PRECACHE_URLS = [
-  '../data/zonedata.json',
-  '../images'
+  '../data/zonedata.json'
 ];
 
 self.addEventListener('install', function(event) {
