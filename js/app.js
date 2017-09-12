@@ -25,7 +25,7 @@
     };
     
     var getWorldData = function() {
-        return fetch("./data/zonedata.json")
+        return fetch("../data/zonedata.json")
             .then(function(worldDataRequestResponse) {
                 return worldDataRequestResponse.text();
             })
