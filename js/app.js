@@ -4,7 +4,7 @@
     var map;
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('mapdata-service-worker.js');
+      navigator.serviceWorker.register('./js/mapdata-service-worker.js');
     }
     
     var generateIconURL = function (type, subtype) {
