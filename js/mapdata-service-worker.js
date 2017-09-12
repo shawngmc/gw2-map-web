@@ -26,12 +26,14 @@ self.addEventListener('fetch', function(evt) {
 // Open a cache and use addAll() with an array of assets to add all of them to the cache. Return a promise resolving when all the assets are added.
 function precache() {
   return caches.open(CACHE).then(function (cache) {
+      console.log('precaching');
     return cache.addAll(PRECACHE_URLS);
   });
 }
 
 //  Open the cache where the assets were stored and search for the requested resource. Notice that in case of no matching, the promise still resolves but it does with undefined as value.
 function fromCache(request) {
+      console.log('fromCache');
   return caches.open(CACHE).then(function (cache) {
     return cache.match(request).then(function (matching) {
       return matching || Promise.reject('no-match');
@@ -41,6 +43,7 @@ function fromCache(request) {
 
 // Update consists in opening the cache, performing a network request and storing the new response data.
 function update(request) {
+      console.log('update');
   return caches.open(CACHE).then(function (cache) {
     return fetch(request).then(function (response) {
       return cache.put(request, response);
