@@ -1,153 +1,98 @@
 /*globals L _ fetch console*/
-"use strict";
-var map;
-
-var generateIconURL = function (type, subtype) {
-    return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
-};
-
-var generatePopupWithSearchIcons = function (objDesc, objType) {
-    var span = document.createElement("span");
-    var links = {};
-    links.youtube = "https://www.youtube.com/results?search_query=gw2+" + objDesc.replace(" ", "+");
-    links.google = "https://www.google.com/search?q=gw2+" + objDesc.replace(" ", "+");
-    if (objType !== undefined) {
-        links.youtube = links.youtube + "+" + objType.replace(" ", "+");
-        links.google = links.google + "+" + objType.replace(" ", "+");
-    }
-    span.innerHTML = '<span>Task: ' + objDesc + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
-    return span;
-};
-
-var getWorldData = function() {
-    return fetch("./js/zonedata.json")
-        .then(function(worldDataRequestResponse) {
-            return worldDataRequestResponse.text();
-        })
-        .then(function(worldDataRaw) {
-            return JSON.parse(worldDataRaw);
-        })
-};
-
-var icons = {};
-icons.waypoint = L.icon({
-    iconUrl: generateIconURL("waypoint"),
-    iconSize: [24, 24],
-    iconAnchor: [12, 12],
-    popupAnchor: [-3, -3]
-});
-icons.landmark = L.icon({
-    iconUrl: generateIconURL("landmark"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.vista = L.icon({
-    iconUrl: generateIconURL("vista"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.masterytyria = L.icon({
-    iconUrl: generateIconURL("mastery", "core"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.masterymaguuma = L.icon({
-    iconUrl: generateIconURL("mastery", "maguuma"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.masterygeneric = L.icon({
-    iconUrl: generateIconURL("mastery", "unknown"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.skillcore = L.icon({
-    iconUrl: generateIconURL("hero_point", "core"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.skillmaguuma = L.icon({
-    iconUrl: generateIconURL("hero_point", "advanced"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-icons.task = L.icon({
-    iconUrl: generateIconURL("task"),
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [-3, -3]
-});
-
-var worldZones = {
-    26: { "name": "Dredgehaunt Cliffs", "type": "Story", "zoneCategory": "GW2" },
-    27: { "name": "Lornar's Pass", "type": "Story", "zoneCategory": "GW2" },
-    28: { "name": "Wayfarer Foothills", "type": "Story", "zoneCategory": "GW2" },
-    29: { "name": "Timberline Falls", "type": "Story", "zoneCategory": "GW2" },
-    30: { "name": "Frostgorge Sound", "type": "Story", "zoneCategory": "GW2" },
-    31: { "name": "Snowden Drifts", "type": "Story", "zoneCategory": "GW2" },
-    326: { "name": "Hoelbrak", "type": "City", "zoneCategory": "GW2" },
-    19: { "name": "Plains of Ashford", "type": "Story", "zoneCategory": "GW2" },
-    20: { "name": "Blazeridge Steppes", "type": "Story", "zoneCategory": "GW2" },
-    21: { "name": "Fields of Ruin", "type": "Story", "zoneCategory": "GW2" },
-    22: { "name": "Fireheart Rise", "type": "Story", "zoneCategory": "GW2" },
-    25: { "name": "Iron Marches", "type": "Story", "zoneCategory": "GW2" },
-    32: { "name": "Diessa Plateau", "type": "Story", "zoneCategory": "GW2" },
-    218: { "name": "Black Citadel", "type": "City", "zoneCategory": "GW2" },
-    51: { "name": "Straits of Devastation", "type": "Story", "zoneCategory": "GW2" },
-    62: { "name": "Cursed Shore", "type": "Story", "zoneCategory": "GW2" },
-    65: { "name": "Malchor's Leap", "type": "Story", "zoneCategory": "GW2" },
-    15: { "name": "Queensdale", "type": "Story", "zoneCategory": "GW2" },
-    17: { "name": "Harathi Hinterlands", "type": "Story", "zoneCategory": "GW2" },
-    18: { "name": "Divinity's Reach", "type": "City", "zoneCategory": "GW2" },
-    23: { "name": "Kessex Hills", "type": "Story", "zoneCategory": "GW2" },
-    24: { "name": "Gendarran Fields", "type": "Story", "zoneCategory": "GW2" },
-    50: { "name": "Lion's Arch", "type": "City", "zoneCategory": "GW2" },
-    73: { "name": "Bloodtide Coast", "type": "Story", "zoneCategory": "GW2" },
-    873: { "name": "Southsun Cove", "type": "Story", "zoneCategory": "GW2" },
-    34: { "name": "Caledon Forest", "type": "Story", "zoneCategory": "GW2" },
-    35: { "name": "Metrica Province", "type": "Story", "zoneCategory": "GW2" },
-    54: { "name": "Brisban Wildlands", "type": "Story", "zoneCategory": "GW2" },
-    91: { "name": "The Grove", "type": "City", "zoneCategory": "GW2" },
-    139: { "name": "Rata Sum", "type": "City", "zoneCategory": "GW2" },
-    39: { "name": "Mount Maelstrom", "type": "Story", "zoneCategory": "GW2" },
-    53: { "name": "Sparkfly Fen", "type": "Story", "zoneCategory": "GW2" },
-    988: { "name": "Dry Top", "type": "Story", "zoneCategory": "GW2" },
-    1015: { "name": "The Silverwastes", "type": "Story", "zoneCategory": "HoT" },
-
-    // Heart of Thorns
-    1041: { "name": "Dragon's Stand", "type": "Story", "zoneCategory": "HoT" },
-    1043: { "name": "Auric Basin", "type": "Story", "zoneCategory": "HoT" },
-    1045: { "name": "Tangled Depths", "type": "Story", "zoneCategory": "HoT" },
-    1052: { "name": "Verdant Brink", "type": "Story", "zoneCategory": "HoT" },
-    1068: { "name": "Gilded Hollow", "type": "Guild Hall", "zoneCategory": "HoT" },
-    1069: { "name": "Lost Precipice", "type": "Guild Hall", "zoneCategory": "HoT" },
-
-    // Living World Season 3
-    1165: { "name": "Bloodstone Fen", "type": "Living World: Season 3, Chapter 1", "zoneCategory": "HoT" },
-    1175: { "name": "Ember Bay", "type": "Living World: Season 3, Chapter 2", "zoneCategory": "HoT" },
-    1178: { "name": "Bitterfrost Frontier", "type": "Living World: Season 3, Chapter 3", "zoneCategory": "HoT" },
-    1185: { "name": "Lake Doric", "type": "Living World: Season 3, Chapter 4", "zoneCategory": "HoT" },
-    1195: { "name": "Draconis Mons", "type": "Living World: Season 3, Chapter 5", "zoneCategory": "HoT" },
-    1203: { "name": "Siren's Landing", "type": "Living World: Season 3, Chapter 6", "zoneCategory": "HoT" },
-
-    // Path of Fire
-    1210: { "name": "Crystal Oasis", "type": "Story", "zoneCategory": "PoF" },
-};
-
-
-function unproject(coord) {
-    return map.unproject(coord, map.getMaxZoom());
-}
-
 (function () {
     "use strict";
+    var map;
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('mapdata-service-worker.js');
+    }
+    
+    var generateIconURL = function (type, subtype) {
+        return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
+    };
+    
+    var generatePopupWithSearchIcons = function (objDesc, objType) {
+        var span = document.createElement("span");
+        var links = {};
+        links.youtube = "https://www.youtube.com/results?search_query=gw2+" + objDesc.replace(" ", "+");
+        links.google = "https://www.google.com/search?q=gw2+" + objDesc.replace(" ", "+");
+        if (objType !== undefined) {
+            links.youtube = links.youtube + "+" + objType.replace(" ", "+");
+            links.google = links.google + "+" + objType.replace(" ", "+");
+        }
+        span.innerHTML = '<span>Task: ' + objDesc + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
+        return span;
+    };
+    
+    var getWorldData = function() {
+        return fetch("./data/zonedata.json")
+            .then(function(worldDataRequestResponse) {
+                return worldDataRequestResponse.text();
+            })
+            .then(function(worldDataRaw) {
+                return JSON.parse(worldDataRaw);
+            })
+    };
+    
+    var icons = {};
+    icons.waypoint = L.icon({
+        iconUrl: generateIconURL("waypoint"),
+        iconSize: [24, 24],
+        iconAnchor: [12, 12],
+        popupAnchor: [-3, -3]
+    });
+    icons.landmark = L.icon({
+        iconUrl: generateIconURL("landmark"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.vista = L.icon({
+        iconUrl: generateIconURL("vista"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.masterytyria = L.icon({
+        iconUrl: generateIconURL("mastery", "core"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.masterymaguuma = L.icon({
+        iconUrl: generateIconURL("mastery", "maguuma"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.masterygeneric = L.icon({
+        iconUrl: generateIconURL("mastery", "unknown"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.skillcore = L.icon({
+        iconUrl: generateIconURL("hero_point", "core"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.skillmaguuma = L.icon({
+        iconUrl: generateIconURL("hero_point", "advanced"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    icons.task = L.icon({
+        iconUrl: generateIconURL("task"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
+    
+    function unproject(coord) {
+        return map.unproject(coord, map.getMaxZoom());
+    }
 
     map = L.map("map", {
         minZoom: 0,
