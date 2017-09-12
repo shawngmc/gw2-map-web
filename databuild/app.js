@@ -100,7 +100,7 @@ var getMergedFloorData = function () {
             document.getElementById('builddata').textContent = JSON.stringify(slimdata, null, 0);
         });
 };
-
+ 
 (function () {
     "use strict";
 
