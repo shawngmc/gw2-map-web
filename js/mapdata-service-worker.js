@@ -1,6 +1,7 @@
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
-  '../data/zonedata.json'
+  '../data/zonedata.json',
+  '../images'
 ];
 
 var CACHE = 'cache-and-update';
