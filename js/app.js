@@ -244,7 +244,7 @@
         }
     ];
 
-    var improvedLayerControl = L.Control.extend({
+    L.Control.improvedLayerControl = L.Control.extend({
         _zoomListener: function() {
             var currZoom = map.getZoom();
             if (this._zoom === null || this._zoom != currZoom) {
@@ -393,7 +393,7 @@
             });
         }
     });
-    improvedLayerControl(layers).addTo(map);
+    L.Control.improvedLayerControl(layers).addTo(map);
 
 
 
