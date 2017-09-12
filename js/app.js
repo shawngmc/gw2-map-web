@@ -350,12 +350,11 @@
             this._updateLayout();
         },
         _updateLayout: function() {
-            // TODO: Update layout components
             _.forEach(this._layerGroups, function(layerGroup) {
-                _.forEach(layerGroup.layers, function(layer) {
-                    // Find the layer element
-                    // Update as appropriate
-                });
+                _.forEach(layerGroup.layers, function(layerWrapper) {
+                    var layerElement = document.getElementById('layerWrapper.trackingId');
+                    var layerBlockRule = _getLayerBLockRule(layerWrapper);
+                    layerElement.disabled = (layerBlockRule !== null);
             });
         },
         _updateLayerVisibility: function() {
