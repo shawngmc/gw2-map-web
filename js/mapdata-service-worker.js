@@ -5,8 +5,6 @@ const PRECACHE_URLS = [
   '../images'
 ];
 
-
-
 self.addEventListener('install', function(event) {
   console.log('The service worker is being installed.');
   // Ask the service worker to keep installing until the returning promise resolves.
