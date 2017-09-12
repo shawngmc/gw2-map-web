@@ -24,6 +24,13 @@
         return span;
     };
     
+    var uuidv4 = function() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+    
     var getWorldData = function() {
         return fetch("../data/zonedata.json")
             .then(function(worldDataRequestResponse) {
@@ -166,7 +173,7 @@
         "Zones": zoneLayer
     };
 
-/*
+
     var layers = [
         {
             "groupName": "Imagery",
@@ -178,7 +185,7 @@
                 },
                 {
                     "name": "Surface",
-                    "layer": createWebImageryLayer(1)
+                    "layer": createWebImageryLayer(1),
                     "default": true
                 },
                 {
@@ -236,12 +243,12 @@
             ]
         }
     ];
-
+/*
     var improvedLayerControl = L.Control.extend({
         _zoomListener: function() {
             var currZoom = map.getZoom();
             if (this._zoom === null || this._zoom != currZoom) {
-                _zoom = currZoom;
+                this._zoom = currZoom;
                 this._update();
             }
         },
@@ -249,19 +256,18 @@
         _zoom: null,
         options: {},
         initialize: function(layerData) {
-            L.Util.setOptions(this, options);
+            L.Util.setOptions(this, this.options);
             this._layerGroups = layerData;
         },
         onAdd: function(map) {
             this._initLayout();
 
             this._map = map;
-            map.addListener(_zoomListener);
-
+            map.addListener(this._zoomListener);
             return this._container;
         },
         onRemove: function(map) {
-            map.removeListener(_zoomListener);
+            map.removeListener(this._zoomListener);
             this._map = null;
         },
         _update: function() {
@@ -270,7 +276,7 @@
         },
         _initLayout: function() {
             var className = 'leaflet-smart-layer-control';
-            container = this._container = L.DomUtil.create('div', className);
+            var container = this._container = L.DomUtil.create('div', className);
 
             // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
             container.setAttribute('aria-haspopup', true);
@@ -286,19 +292,19 @@
             container.appendChild(form);
 
             var createTitle = function(name) {
-                var titleDiv = L.DomUtil.create('div', 'classname + '-list-group-title'');
+                var titleDiv = L.DomUtil.create('div', className + "-list-group-title");
                 titleDiv.textContent = name;
                 return titleDiv;
             }
 
-            var createOptionGroup = function(group) {
-                var groupElement = L.DomUtil.create('div', classname + '-list-group');
-                groupElement.appendChild(createTitle(group.name));
+            var createOptionGroup = function(layerGroup) {
+                var groupElement = L.DomUtil.create('div', className + '-list-group');
+                groupElement.appendChild(createTitle(layerGroup.name));
                 _.forEach(layerGroup.layers, function(layer) {
-                    layer.trackingId = guid();
-                    var layerOption = L.DomUtil.create('input', classname + '-list-group-checkbox');
+                    layer.trackingId = uuidv4();
+                    var layerOption = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerOption.type = "radio";
-                    layerOption.name = group.name;
+                    layerOption.name = layerGroup.name;
                     layerOption.id = layer.trackingId;
                     layerOption.value = layer.name;
                     if (layer.default) {
@@ -306,21 +312,21 @@
                     }
                     groupElement.appendChild(layerOption);
                     
-                    var layerLabel = L.DomUtil.create('label', classname + '-list-group-label');
+                    var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
                     layerLabel.for = layer.trackingId;
                     layerLabel.textContent = layer.name;
                     groupElement.appendChild(layerLabel);
                 });
             };
             
-            var createCheckboxGroup = function(group) {
-                var groupElement = L.DomUtil.create('div', classname + '-list-group');
-                groupElement.appendChild(createTitle(group.name));
+            var createCheckboxGroup = function(layerGroup) {
+                var groupElement = L.DomUtil.create('div', className + '-list-group');
+                groupElement.appendChild(createTitle(layerGroup.name));
                  _.forEach(layerGroup.layers, function(layer) {
-                    layer.trackingId = guid();
-                    var layerCheckbox = L.DomUtil.create('input', classname + '-list-group-checkbox');
+                    layer.trackingId = uuidv4();
+                    var layerCheckbox = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerCheckbox.type = "checkbox";
-                    layerCheckbox.name = group.name;
+                    layerCheckbox.name = layerGroup.name;
                     layerCheckbox.id = layer.trackingId;
                     layerCheckbox.value = layer.name;
                     if (layer.default) {
@@ -328,7 +334,7 @@
                     }
                     groupElement.appendChild(layerCheckbox);
                     
-                    var layerLabel = L.DomUtil.create('label', classname + '-list-group-label');
+                    var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
                     layerLabel.for = layer.trackingId;
                     layerLabel.textContent = layer.name;
                     groupElement.appendChild(layerLabel);
@@ -349,19 +355,29 @@
 
             this._updateLayout();
         },
+        _getLayerBlockRule: function(layer) {
+            if (layer.minZoom !== undefined && layer.minZoom <= this._zoom) {
+                return "Zoom in to use."
+            } else if (layer.maxZoom !== undefined && layer.maxZoom >= this._zoom) {
+                return "Zoom out to use."
+            } else {
+                return null;
+            }
+        },
         _updateLayout: function() {
             _.forEach(this._layerGroups, function(layerGroup) {
                 _.forEach(layerGroup.layers, function(layerWrapper) {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
-                    var layerBlockRule = _getLayerBLockRule(layerWrapper);
+                    var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     layerElement.disabled = (layerBlockRule !== null);
+                });
             });
         },
         _updateLayerVisibility: function() {
             _.forEach(this._layerGroups, function(layerGroup) {
                 _.forEach(layerGroup.layers, function(layerWrapper) {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
-                    var layerBlockRule = _getLayerBLockRule(layerWrapper);
+                    var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     var applyLayer = (layerElement.checked && layerBlockRule === null);
                     var layerOnMap = map.hasLayer(layerWrapper.layer);
                     
@@ -375,19 +391,9 @@
                     // Otherwise, no action is necessary
                 });
             });
-        },
-        _getLayerBlockRule: function(layer) {
-            if (layer.minZoom !== undefined && layer.minZoom <= _zoom) {
-                return "Zoom in to use."
-            } else if (layer.maxZoom !== undefined && layer.maxZoom >= _zoom) {
-                return "Zoom out to use."
-            } else {
-                return null;
-            }
         }
     });
-
-
+    improvedLayerControl(layers).addTo(map);
 */
 
 
