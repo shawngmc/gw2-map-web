@@ -243,7 +243,7 @@
             ]
         }
     ];
-/*
+
     var improvedLayerControl = L.Control.extend({
         _zoomListener: function() {
             var currZoom = map.getZoom();
@@ -394,10 +394,10 @@
         }
     });
     improvedLayerControl(layers).addTo(map);
-*/
 
 
-    L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+   // L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
     // Load World Data
     getWorldData().then(function (worldData) {
