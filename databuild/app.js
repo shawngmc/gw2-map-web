@@ -95,7 +95,7 @@ var getMergedFloorData = function () {
                 });
             });
 
-            document.getElementById('builddata').textContent = JSON.stringify(slimdata, null, 4);
+            document.getElementById('builddata').textContent = JSON.stringify(slimdata, null, 0);
         });
 };
 
