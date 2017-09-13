@@ -150,7 +150,7 @@
         heroLayer
     ]);
 
-    var controlSearch = new L.Control.Search({
+    /*var controlSearch = new L.Control.Search({
         position: 'topleft',
         layer: markersLayer,
         initial: false,
@@ -161,7 +161,7 @@
             return "<a href=\"#\"><img src=\"" + generateIconURL(layerOpts.type, layerOpts.subtype) + "\" height=16 width=16 />" + text + "</a>";
         }
     });
-    map.addControl(controlSearch);
+    map.addControl(controlSearch);*/
 
     var overlayMaps = {
         "Hero Challenges": heroLayer,
