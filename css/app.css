@@ -47,7 +47,3 @@
   -webkit-background-size: auto auto;
   background-size: auto auto;
 }
-
-input[type="checkbox"][id^="hiddencheckbox-"] {
-    opacity: 0;
-}
