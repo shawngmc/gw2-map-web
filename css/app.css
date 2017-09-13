@@ -47,3 +47,43 @@
   -webkit-background-size: auto auto;
   background-size: auto auto;
 }
+
+.layermanager-list-group-checkbox {
+    opacity: 0;
+    position: absolute;   
+}
+
+.layermanager-list-group-checkbox, .layermanager-list-group-iconlabel {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.layermanager-list-group-iconlabel {
+    position: relative;
+}
+
+.layermanager-list-group-checkbox+ .layermanager-list-group-iconlabel :before {
+    content: '';
+    background: #fff;
+    border: 2px solid #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.layermanager-list-group-checkbox:checked + .clayermanager-list-group-iconlabel:before {
+    content: "\f00c";
+    font-family: 'FontAwesome';
+    background: rebeccapurple;
+    color: #fff;
+}
+
+.layermanager-list-group-checkbox:focus + .layermanager-list-group-iconlabel {
+  outline: 1px solid #ddd; /* focus style */
+}
