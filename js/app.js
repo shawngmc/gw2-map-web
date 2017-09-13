@@ -339,7 +339,6 @@
                     groupElement.appendChild(layerControlElement);
                     
                     var layerLabel = null;
-                    layerLabel.for = layerWrapper.trackingId;
                     if (layerWrapper.display === "iconOnly") {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
                         layerLabel.for = layerWrapper.trackingId;
