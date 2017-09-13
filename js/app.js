@@ -280,7 +280,7 @@
         },
         _initLayout: function() {
             var className = 'leaflet-smart-layer-control';
-            var container = this._container = L.DomUtil.create('div', className);
+            var container = this._container = L.DomUtil.create('div', className + ' leaflet-bar leaflet-control leaflet-control-custom');
 
             // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
             container.setAttribute('aria-haspopup', true);
