@@ -252,11 +252,13 @@
                 this._update();
             }
         },
+        _changeListener: function(event) {
+            this._updateLayerVisibility();
+        },
         _map: null,
         _zoom: null,
         initialize: function(options) {
           this._layerData = options.layerData;
-          // Continue initializing the layer plugin here.
         },
         onAdd: function(map) {
             this._initLayout();
@@ -310,6 +312,7 @@
                         layerOption.checked = true;
                     }
                     layerWrapper.element = layerOption;
+                    layerOption.addEventListener('onchange', this._changeListener);
                     groupElement.appendChild(layerOption);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
@@ -335,6 +338,7 @@
                         layerCheckbox.checked = true;
                     }
                     layerWrapper.element = layerCheckbox;
+                    layerCheckbox.addEventListener('onchange', this._changeListener);
                     groupElement.appendChild(layerCheckbox);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
