@@ -77,9 +77,8 @@
     text-align: center;
 }
 
-.layermanager-list-group-checkbox:checked + .clayermanager-list-group-iconlabel:before {
-    content: "\f00c";
-    font-family: 'FontAwesome';
+.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel:before {
+    content: "\2713";
     background: rebeccapurple;
     color: #fff;
 }
