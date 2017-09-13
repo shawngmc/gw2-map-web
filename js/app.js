@@ -322,10 +322,10 @@
                     layerWrapper.trackingId = uuidv4();
                     var layerControlElement = null;
                     if (layerGroup.type === "checkbox") {
-                        layerControlElement = L.DomUtil.create('input', className + '-list-group-checkbox');
+                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
                         layerControlElement.type = "checkbox";
                     } else if (layerGroup.type === "option") {
-                        layerControlElement = L.DomUtil.create('input', className + '-list-group-radio');
+                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-radio');
                         layerControlElement.type = "radio";
                     }                  
                     layerControlElement.name = layerGroup.name;
@@ -338,9 +338,11 @@
                     layerControlElement.addEventListener('change', (event) => {console.log('listening'); this._changeListener(event);});
                     groupElement.appendChild(layerControlElement);
                     
-                    var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
+                    var layerLabel = null;
                     layerLabel.for = layerWrapper.trackingId;
                     if (layerWrapper.display === "iconOnly") {
+                        layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
+                        layerLabel.for = layerWrapper.trackingId;
                         var iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
                         iconElement.height = 32;
@@ -349,6 +351,8 @@
                         iconElement.alt = layerWrapper.name;
                         layerLabel.appendChild(iconElement);
                     } else {
+                        layerLabel = L.DomUtil.create('label', 'layermanager-list-textlabel');
+                        layerLabel.for = layerWrapper.trackingId;
                         layerLabel.textContent = layerWrapper.name;
                     }
                     layerWrapper.label = layerLabel;
