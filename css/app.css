@@ -56,7 +56,7 @@ li {
   display: inline-block;
 }
 
-input[type="checkbox"].layermanager-list-group-checkbox {
+input[type="checkbox"][id^="hiddencheckbox-"] {
   display: none;
 }
 
