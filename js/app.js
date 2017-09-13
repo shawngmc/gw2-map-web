@@ -276,7 +276,7 @@
         },
         _update: function() {
             this._updateLayerVisibility();
-            this._updateLayerControls();
+            this._updateLayout();
         },
         _initLayout: function() {
             var className = 'leaflet-smart-layer-control';
