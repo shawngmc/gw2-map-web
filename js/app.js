@@ -262,11 +262,11 @@
             this._initLayout();
 
             this._map = map;
-            map.on(this._zoomListener);
+            map.on('zoomend', this._zoomListener);
             return this._container;
         },
         onRemove: function(map) {
-            map.off(this._zoomListener);
+            map.off('zoomend', this._zoomListener);
             this._map = null;
         },
         _update: function() {
