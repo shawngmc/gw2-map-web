@@ -329,13 +329,13 @@
                     layerLabel.textContent = layerWrapper.name;
                     layerWrapper.label = layerLabel;
                     groupElement.appendChild(layerLabel);
+                    groupElement.appendChild(L.DomUtil.create('br'));
                 });
                 return groupElement;
             };
 
             _.forEach(this._layerData, (layerGroup) => {
                 form.appendChild(createGroupElements(layerGroup));
-                form.appendChild(L.DomUtil.create('br'));
             });
 
             this._updateLayout();
