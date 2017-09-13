@@ -52,19 +52,16 @@ input[type="checkbox"].layermanager-list-group-checkbox {
   display: none;
 }
 
-label {
-  border: 1px solid #fff;
+label.layermanager-list-group-iconlabel {
   padding: 10px;
-  display: block;
   position: relative;
   margin: 10px;
   cursor: pointer;
 }
 
-label:before {
+label.layermanager-list-group-iconlabel:before {
   color: white;
   content: " ";
-  display: block;
   border-radius: 50%;
   position: absolute;
   top: -5px;
@@ -77,12 +74,12 @@ label:before {
   transform: scale(0);
 }
 
-:checked + label:before {
+:checked + label.layermanager-list-group-iconlabel:before {
   content: "✓";
   color: red;
   transform: scale(1);
 }
 
-:checked + label img {
+:checked + label.layermanager-list-group-iconlabel img {
   z-index: -1;
 }
