@@ -295,54 +295,34 @@
             var form = this._form = L.DomUtil.create('form', className + '-list');
             container.appendChild(form);
 
-            var createTitle = function(name) {
+            var createTitle = (name) => {
                 var titleDiv = L.DomUtil.create('div', className + "-list-group-title");
                 titleDiv.textContent = name;
                 return titleDiv;
             }
 
-            var createOptionGroup = function(layerGroup) {
+            var createGroupElements = (layerGroup) => {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.name));
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
-                    var layerOption = L.DomUtil.create('input', className + '-list-group-checkbox');
-                    layerOption.type = "radio";
-                    layerOption.name = layerGroup.name;
-                    layerOption.id = layerWrapper.trackingId;
-                    layerOption.value = layerWrapper.name;
+                    var layerControlElement = null;
+                    if (layerGroup.type === "checkbox") {
+                        layerControlElement = L.DomUtil.create('input', className + '-list-group-checkbox');
+                        layerControlElement.type = "checkbox";
+                    } else if (layerGroup.type === "option") {
+                        layerControlElement = L.DomUtil.create('input', className + '-list-group-radio');
+                        layerControlElement.type = "radio";
+                    }                  
+                    layerControlElement.name = layerGroup.name;
+                    layerControlElement.id = layerWrapper.trackingId;
+                    layerControlElement.value = layerWrapper.name;
                     if (layerWrapper.defaultState === true) {
-                        layerOption.checked = true;
+                        layerControlElement.checked = true;
                     }
-                    layerWrapper.element = layerOption;
-                    layerOption.addEventListener('onchange', this._changeListener);
-                    groupElement.appendChild(layerOption);
-                    
-                    var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
-                    layerLabel.for = layerWrapper.trackingId;
-                    layerLabel.textContent = layerWrapper.name;
-                    layerWrapper.label = layerLabel;
-                    groupElement.appendChild(layerLabel);
-                });
-                return groupElement;
-            };
-            
-            var createCheckboxGroup = function(layerGroup) {
-                var groupElement = L.DomUtil.create('div', className + '-list-group');
-                groupElement.appendChild(createTitle(layerGroup.name));
-                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    layerWrapper.trackingId = uuidv4();
-                    var layerCheckbox = L.DomUtil.create('input', className + '-list-group-checkbox');
-                    layerCheckbox.type = "checkbox";
-                    layerCheckbox.name = layerGroup.name;
-                    layerCheckbox.id = layerWrapper.trackingId;
-                    layerCheckbox.value = layerWrapper.name;
-                    if (layerWrapper.defaultState === true) {
-                        layerCheckbox.checked = true;
-                    }
-                    layerWrapper.element = layerCheckbox;
-                    layerCheckbox.addEventListener('onchange', this._changeListener);
-                    groupElement.appendChild(layerCheckbox);
+                    layerWrapper.element = layerControlElement;
+                    layerControlElement.addEventListener('onchange', this._changeListener);
+                    groupElement.appendChild(layerControlElement);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
                     layerLabel.for = layerWrapper.trackingId;
@@ -354,14 +334,7 @@
             };
 
             _.forEach(this._layerData, (layerGroup) => {
-                // Create/add a group element
-                if (layerGroup.type === "checkbox") {
-                    form.appendChild(createCheckboxGroup(layerGroup));
-                } else if (layerGroup.type === "option") {
-                    form.appendChild(createOptionGroup(layerGroup));
-                } else {
-                    console.log ("Group " + layerGroup.name + " has unknown type " + layerGroup.type + "; skipping...");
-                }
+                form.appendChild(createGroupElements(layerGroup));
                 form.appendChild(L.DomUtil.create('hr'));
             });
 
