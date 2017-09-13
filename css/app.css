@@ -48,16 +48,10 @@
   background-size: auto auto;
 }
 
-ul {
-  list-style-type: none;
-}
-
-li {
-  display: inline-block;
-}
-
 input[type="checkbox"][id^="hiddencheckbox-"] {
-  display: none;
+    opacity: 0;
+    float: left;
+    width: 18px;
 }
 
 label {
