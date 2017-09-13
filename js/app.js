@@ -205,6 +205,8 @@
                 {
                     "name": "Waypoints",
                     "layer": waypointLayer,
+                    "icon": generateIconURL("waypoint"),
+                    "display": "iconOnly",
                     "minZoom": 2,
                     "defaultState": true
                 },
@@ -326,7 +328,14 @@
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
                     layerLabel.for = layerWrapper.trackingId;
-                    layerLabel.textContent = layerWrapper.name;
+                    if (layerWrapper.display === "iconOnly") {
+                        var iconElement = L.DomUtil.create('img');
+                        iconElement.src = layerWrapper.icon;
+                        iconElement.alt = layerWrapper.name;
+                        layerLabel.appendChild(iconElement);
+                    } else {
+                        layerLabel.textContent = layerWrapper.name;
+                    }
                     layerWrapper.label = layerLabel;
                     groupElement.appendChild(layerLabel);
                     groupElement.appendChild(L.DomUtil.create('br'));
