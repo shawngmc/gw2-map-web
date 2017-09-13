@@ -20,3 +20,7 @@
 	float: left;
 	padding: 0px;
 }
+
+.leaflet-smart-layer-control {
+    background: #FFF
+}
