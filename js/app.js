@@ -368,7 +368,7 @@
         _updateLayout: function() {
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerElement = document.getElementById('layerWrapper.trackingId');
+                    var layerElement = document.getElementById(layerWrapper.trackingId);
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     layerElement.disabled = (layerBlockRule !== null);
                 });
@@ -377,7 +377,7 @@
         _updateLayerVisibility: function() {
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerElement = document.getElementById('layerWrapper.trackingId');
+                    var layerElement = document.getElementById(layerWrapper.trackingId);
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     var applyLayer = (layerElement.checked && layerBlockRule === null);
                     var layerOnMap = map.hasLayer(layerWrapper.layer);
