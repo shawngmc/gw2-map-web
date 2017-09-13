@@ -186,7 +186,7 @@
                 {
                     "name": "Surface",
                     "layer": createWebImageryLayer(1),
-                    "default": true
+                    "defaultState": true
                 },
                 {
                     "name": "Underground",
@@ -205,40 +205,43 @@
                 {
                     "name": "Waypoints",
                     "layer": waypointLayer,
-                    "minZoom": 2
+                    "minZoom": 2,
+                    "defaultState": true
                 },
                 {
                     "name": "Vistas",
                     "layer": vistaLayer,
-                    "minZoom": 3
+                    "minZoom": 3,
+                    "defaultState": true
                 },
                 {
                     "name": "Landmarks",
                     "layer": landmarkLayer,
-                    "minZoom": 3
+                    "minZoom": 3,
+                    "defaultState": true
                 },
                 {
                     "name": "Mastery Points",
                     "layer": masteryLayer,
                     "minZoom": 4,
-                    "default": false
+                    "defaultState": false
                 },
                 {
                     "name": "Hero Challenges",
                     "layer": heroLayer,
                     "minZoom": 4,
-                    "default": false
+                    "defaultState": false
                 },
                 {
                     "name": "Tasks",
                     "layer": taskLayer,
                     "minZoom": 4,
-                    "default": false
+                    "defaultState": false
                 },
                 {
                     "name": "Zones",
                     "layer": zoneLayer,
-                    "default": false
+                    "defaultState": false
                 }
             ]
         }
@@ -308,7 +311,7 @@
                     layerOption.name = layerGroup.name;
                     layerOption.id = layerWrapper.trackingId;
                     layerOption.value = layerWrapper.name;
-                    if (layerWrapper.default) {
+                    if (layerWrapper.defaultState === true) {
                         layerOption.checked = true;
                     }
                     layerWrapper.element = layerOption;
@@ -334,7 +337,7 @@
                     layerCheckbox.name = layerGroup.name;
                     layerCheckbox.id = layerWrapper.trackingId;
                     layerCheckbox.value = layerWrapper.name;
-                    if (layerWrapper.default) {
+                    if (layerWrapper.defaultState === true) {
                         layerCheckbox.checked = true;
                     }
                     layerWrapper.element = layerCheckbox;
