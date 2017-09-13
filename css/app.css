@@ -48,20 +48,34 @@
   background-size: auto auto;
 }
 
+ul {
+  list-style-type: none;
+}
+
+li {
+  display: inline-block;
+}
+
 input[type="checkbox"].layermanager-list-group-checkbox {
   display: none;
 }
 
-label.layermanager-list-group-iconlabel {
-  display: inline-block;
+label {
+  border: 1px solid #fff;
+  padding: 10px;
+  display: block;
   position: relative;
+  margin: 10px;
   cursor: pointer;
 }
 
-label.layermanager-list-group-iconlabel :before {
+label:before {
+  background-color: white;
   color: white;
   content: " ";
+  display: block;
   border-radius: 50%;
+  border: 1px solid grey;
   position: absolute;
   top: -5px;
   left: -5px;
@@ -73,12 +87,24 @@ label.layermanager-list-group-iconlabel :before {
   transform: scale(0);
 }
 
-input[type="checkbox"].layermanager-list-group-checkbox + label.layermanager-list-group-iconlabel :before {
+label img {
+  height: 100px;
+  width: 100px;
+  transition-duration: 0.2s;
+  transform-origin: 50% 50%;
+}
+
+:checked + label {
+  border-color: #ddd;
+}
+
+:checked + label:before {
   content: "✓";
   color: red;
   transform: scale(1);
 }
 
-input[type="checkbox"].layermanager-list-group-checkbox + label.layermanager-list-group-iconlabel img {
+:checked + label img {
+  transform: scale(0.9);
   z-index: -1;
 }
