@@ -21,5 +21,29 @@
 }
 
 .leaflet-smart-layer-control {
-    background: #FFF
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 160px;
+  padding: 20px;
+  overflow: hidden;
+  border: none;
+  -webkit-border-radius: 0 0 0 21px;
+  border-radius: 0 0 0 21px;
+  font: normal 16px/1 "Menomonia", Times, serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  background: -webkit-linear-gradient(-96.34019174590992deg, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
+  background: -moz-linear-gradient(186.34019174590992deg, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
+  background: linear-gradient(186.34019174590992deg, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
+  background-repeat: no-repeat;
+  background-position: 15% 50%;
+  -webkit-background-origin: padding-box;
+  background-origin: padding-box;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-size: auto auto;
+  background-size: auto auto;
 }
