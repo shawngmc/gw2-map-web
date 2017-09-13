@@ -213,36 +213,48 @@
                 {
                     "name": "Vistas",
                     "layer": vistaLayer,
+                    "icon": generateIconURL("vista"),
+                    "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
                 },
                 {
                     "name": "Landmarks",
                     "layer": landmarkLayer,
+                    "icon": generateIconURL("landmark"),
+                    "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
                 },
                 {
                     "name": "Mastery Points",
                     "layer": masteryLayer,
+                    "icon": generateIconURL("mastery", "core"),
+                    "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
                 },
                 {
                     "name": "Hero Challenges",
                     "layer": heroLayer,
+                    "icon": generateIconURL("hero_point", "core"),
+                    "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
                 },
                 {
                     "name": "Tasks",
                     "layer": taskLayer,
+                    "icon": generateIconURL("task"),
+                    "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
                 },
                 {
                     "name": "Zones",
                     "layer": zoneLayer,
+                    "icon": generateIconURL("zone"),
+                    "display": "iconOnly",
                     "defaultState": false
                 }
             ]
@@ -331,6 +343,7 @@
                     if (layerWrapper.display === "iconOnly") {
                         var iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
+                        iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
                         layerLabel.appendChild(iconElement);
                     } else {
