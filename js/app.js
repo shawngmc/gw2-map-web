@@ -303,7 +303,7 @@
 
             var createGroupElements = (layerGroup) => {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
-                groupElement.appendChild(createTitle(layerGroup.name));
+                groupElement.appendChild(createTitle(layerGroup.groupName));
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
                     var layerControlElement = null;
@@ -335,7 +335,7 @@
 
             _.forEach(this._layerData, (layerGroup) => {
                 form.appendChild(createGroupElements(layerGroup));
-                form.appendChild(L.DomUtil.create('hr'));
+                form.appendChild(L.DomUtil.create('br'));
             });
 
             this._updateLayout();
