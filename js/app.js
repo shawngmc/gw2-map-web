@@ -338,7 +338,7 @@
                 form.appendChild(createGroupElements(layerGroup));
             });
 
-            this._updateLayout();
+            this._zoomListener();
         },
         _getLayerBlockRule: function(layer) {
             if (layer.minZoom !== undefined && layer.minZoom <= this._zoom) {
