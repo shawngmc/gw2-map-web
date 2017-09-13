@@ -316,6 +316,7 @@
                     layerLabel.textContent = layer.name;
                     groupElement.appendChild(layerLabel);
                 });
+                return groupElement;
             };
             
             var createCheckboxGroup = function(layerGroup) {
@@ -338,6 +339,7 @@
                     layerLabel.textContent = layer.name;
                     groupElement.appendChild(layerLabel);
                 });
+                return groupElement;
             };
 
             _.forEach(this._layerData, (layerGroup) => {
