@@ -299,21 +299,23 @@
             var createOptionGroup = function(layerGroup) {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.name));
-                _.forEach(layerGroup.layers, (layer) => {
-                    layer.trackingId = uuidv4();
+                _.forEach(layerGroup.layers, (layerWrapper) => {
+                    layerWrapper.trackingId = uuidv4();
                     var layerOption = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerOption.type = "radio";
                     layerOption.name = layerGroup.name;
-                    layerOption.id = layer.trackingId;
-                    layerOption.value = layer.name;
-                    if (layer.default) {
+                    layerOption.id = layerWrapper.trackingId;
+                    layerOption.value = layerWrapper.name;
+                    if (layerWrapper.default) {
                         layerOption.checked = true;
                     }
+                    layerWrapper.element = layerOption;
                     groupElement.appendChild(layerOption);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
-                    layerLabel.for = layer.trackingId;
-                    layerLabel.textContent = layer.name;
+                    layerLabel.for = layerWrapper.trackingId;
+                    layerLabel.textContent = layerWrapper.name;
+                    layerWrapper.label = layerLabel;
                     groupElement.appendChild(layerLabel);
                 });
                 return groupElement;
@@ -322,21 +324,23 @@
             var createCheckboxGroup = function(layerGroup) {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.name));
-                 _.forEach(layerGroup.layers, (layer) => {
-                    layer.trackingId = uuidv4();
+                 _.forEach(layerGroup.layers, (layerWrapper) => {
+                    layerWrapper.trackingId = uuidv4();
                     var layerCheckbox = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerCheckbox.type = "checkbox";
                     layerCheckbox.name = layerGroup.name;
-                    layerCheckbox.id = layer.trackingId;
-                    layerCheckbox.value = layer.name;
-                    if (layer.default) {
+                    layerCheckbox.id = layerWrapper.trackingId;
+                    layerCheckbox.value = layerWrapper.name;
+                    if (layerWrapper.default) {
                         layerCheckbox.checked = true;
                     }
+                    layerWrapper.element = layerCheckbox;
                     groupElement.appendChild(layerCheckbox);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
-                    layerLabel.for = layer.trackingId;
-                    layerLabel.textContent = layer.name;
+                    layerLabel.for = layerWrapper.trackingId;
+                    layerLabel.textContent = layerWrapper.name;
+                    layerWrapper.label = layerLabel;
                     groupElement.appendChild(layerLabel);
                 });
                 return groupElement;
@@ -368,18 +372,16 @@
         _updateLayout: function() {
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerElement = document.getElementById(layerWrapper.trackingId);
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
-                    layerElement.disabled = (layerBlockRule !== null);
+                    layerWrapper.element.disabled = (layerBlockRule !== null);
                 });
             });
         },
         _updateLayerVisibility: function() {
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerElement = document.getElementById(layerWrapper.trackingId);
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
-                    var applyLayer = (layerElement.checked && layerBlockRule === null);
+                    var applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
                     var layerOnMap = map.hasLayer(layerWrapper.layer);
                     
                     if (applyLayer && !layerOnMap) {
