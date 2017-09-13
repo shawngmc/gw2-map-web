@@ -321,7 +321,7 @@
                         layerControlElement.checked = true;
                     }
                     layerWrapper.element = layerControlElement;
-                    layerControlElement.addEventListener('onchange', (event) => {console.log('listening'); this._changeListener(event);});
+                    layerControlElement.addEventListener('change', (event) => {console.log('listening'); this._changeListener(event);});
                     groupElement.appendChild(layerControlElement);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
