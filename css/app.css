@@ -58,7 +58,7 @@ label.layermanager-list-group-iconlabel {
   cursor: pointer;
 }
 
-label.layermanager-list-group-iconlabel:before {
+label.layermanager-list-group-iconlabel :before {
   color: white;
   content: " ";
   border-radius: 50%;
@@ -73,12 +73,12 @@ label.layermanager-list-group-iconlabel:before {
   transform: scale(0);
 }
 
-:checked + label.layermanager-list-group-iconlabel:before {
+input[type="checkbox"].layermanager-list-group-checkbox + label.layermanager-list-group-iconlabel :before {
   content: "✓";
   color: red;
   transform: scale(1);
 }
 
-:checked + label.layermanager-list-group-iconlabel img {
+input[type="checkbox"].layermanager-list-group-checkbox + label.layermanager-list-group-iconlabel img {
   z-index: -1;
 }
