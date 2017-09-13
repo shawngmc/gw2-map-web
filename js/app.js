@@ -321,7 +321,7 @@
                         layerControlElement.checked = true;
                     }
                     layerWrapper.element = layerControlElement;
-                    layerControlElement.addEventListener('onchange', this._changeListener);
+                    layerControlElement.addEventListener('onchange', (event) => this._changeListener(event));
                     groupElement.appendChild(layerControlElement);
                     
                     var layerLabel = L.DomUtil.create('label', className + '-list-group-label');
@@ -358,6 +358,7 @@
             });
         },
         _updateLayerVisibility: function() {
+            console.log('Updating layer visibility...');
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
@@ -366,9 +367,11 @@
                     
                     if (applyLayer && !layerOnMap) {
                         // The layer should apply and is not on the map, add it
+                        console.log('adding layer: ' + layerWrapper.name);
                         map.addLayer(layerWrapper.layer);
                     } else if (!applyLayer && layerOnMap) {
                         // The layer shoulf not apply to the map, but is already on there, remove it
+                        console.log('removing layer: ' + layerWrapper.name);
                         map.removeLayer(layerWrapper.layer);
                     }
                     // Otherwise, no action is necessary
