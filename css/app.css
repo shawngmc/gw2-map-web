@@ -48,16 +48,13 @@
   background-size: auto auto;
 }
 
-input[type="checkbox"][id^="layermanager-list-group-checkbox"] {
+input[type="checkbox"].layermanager-list-group-checkbox {
   display: none;
 }
 
 label.layermanager-list-iconlabel {
-  border: 1px solid #fff;
-  padding: 10px;
   display: block;
   position: relative;
-  margin: 10px;
   cursor: pointer;
 }
 
