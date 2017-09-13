@@ -340,7 +340,7 @@
                 });
             };
 
-            _.forEach(this._layerGroups, (layerGroup) => {
+            _.forEach(this._layerData, (layerGroup) => {
                 // Create/add a group element
                 if (layerGroup.type === "checkbox") {
                     form.appendChild(createCheckboxGroup(layerGroup));
