@@ -25,7 +25,7 @@
     };
     
     var uuidv4 = function() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
@@ -33,10 +33,10 @@
     
     var getWorldData = function() {
         return fetch("../data/zonedata.json")
-            .then(function(worldDataRequestResponse) {
+            .then((worldDataRequestResponse) => {
                 return worldDataRequestResponse.text();
             })
-            .then(function(worldDataRaw) {
+            .then((worldDataRaw) => {
                 return JSON.parse(worldDataRaw);
             })
     };
@@ -97,7 +97,7 @@
         popupAnchor: [-3, -3]
     });
     
-    function unproject(coord) {
+    var unproject = function(coord) {
         return map.unproject(coord, map.getMaxZoom());
     }
 
@@ -128,7 +128,7 @@
     var baseMaps = {};
     var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
     // Force in Upper Level, Surface, Underground, Depths order :)
-    _.forEach([2, 1, 0, 3], function(floorId) {
+    _.forEach([2, 1, 0, 3], (floorId) => {
         var layer = createWebImageryLayer(floorId);
         baseMaps[floorNames[floorId]] = layer;
     });
@@ -156,7 +156,7 @@
         initial: false,
         zoom: 7,
         marker: false,
-        buildTip: function (text, val) {
+        buildTip: (text, val) => {
             var layerOpts = val.layer.options;
             return "<a href=\"#\"><img src=\"" + generateIconURL(layerOpts.type, layerOpts.subtype) + "\" height=16 width=16 />" + text + "</a>";
         }
@@ -299,7 +299,7 @@
             var createOptionGroup = function(layerGroup) {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.name));
-                _.forEach(layerGroup.layers, function(layer) {
+                _.forEach(layerGroup.layers, (layer) => {
                     layer.trackingId = uuidv4();
                     var layerOption = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerOption.type = "radio";
@@ -321,7 +321,7 @@
             var createCheckboxGroup = function(layerGroup) {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.name));
-                 _.forEach(layerGroup.layers, function(layer) {
+                 _.forEach(layerGroup.layers, (layer) => {
                     layer.trackingId = uuidv4();
                     var layerCheckbox = L.DomUtil.create('input', className + '-list-group-checkbox');
                     layerCheckbox.type = "checkbox";
@@ -340,7 +340,7 @@
                 });
             };
 
-            _.forEach(this._layerGroups, function(layerGroup) {
+            _.forEach(this._layerGroups, (layerGroup) => {
                 // Create/add a group element
                 if (layerGroup.type === "checkbox") {
                     form.appendChild(createCheckboxGroup(layerGroup));
@@ -364,8 +364,8 @@
             }
         },
         _updateLayout: function() {
-            _.forEach(this._layerData, function(layerGroup) {
-                _.forEach(layerGroup.layers, function(layerWrapper) {
+            _.forEach(this._layerData, (layerGroup) => {
+                _.forEach(layerGroup.layers, (layerWrapper) => {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     layerElement.disabled = (layerBlockRule !== null);
@@ -373,8 +373,8 @@
             });
         },
         _updateLayerVisibility: function() {
-            _.forEach(this._layerData, function(layerGroup) {
-                _.forEach(layerGroup.layers, function(layerWrapper) {
+            _.forEach(this._layerData, (layerGroup) => {
+                _.forEach(layerGroup.layers, (layerWrapper) => {
                     var layerElement = document.getElementById('layerWrapper.trackingId');
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     var applyLayer = (layerElement.checked && layerBlockRule === null);
@@ -406,7 +406,7 @@
         _.forOwn(worldData, function (gameMap) {
             var marker = null;
             // Process POIs (Landmarks, Vistas, Waypoints)
-            _.forEach(gameMap.points_of_interest, function (poi) {
+            _.forEach(gameMap.points_of_interest, (poi) => {
                 if (poi.type === "waypoint") {
                     marker = L.marker(unproject(poi.coord), {
                         title: poi.name,
@@ -437,7 +437,7 @@
 
             // Process Mastery points
             marker = null;
-            _.forEach(gameMap.mastery_points, function (masteryPoint) {
+            _.forEach(gameMap.mastery_points, (masteryPoint) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Tyria)",
@@ -468,7 +468,7 @@
 
             // Process Skill / Hero Challenges
             marker = null;
-            _.forEach(gameMap.skill_challenges, function (skillChallenge) {
+            _.forEach(gameMap.skill_challenges, (skillChallenge) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (1x)",
@@ -499,7 +499,7 @@
 
             // Process Hearts / Tasks
             marker = null;
-            _.forEach(gameMap.tasks, function (task) {
+            _.forEach(gameMap.tasks, (task) => {
                 marker = L.marker(unproject(task.coord), {
                     title: "Task: " + task.objective,
                     icon: icons.task,
