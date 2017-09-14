@@ -64,14 +64,14 @@
     position: relative;
 }
 
-.layermanager-list-group-checkbox+ .layermanager-list-group-iconlabel :before {
+.layermanager-list-group-checkbox + .layermanager-list-group-iconlabel :before {
     content: '';
     background: #fff;
     border: 2px solid #ddd;
     display: inline-block;
     vertical-align: middle;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     padding: 2px;
     margin-right: 10px;
     text-align: center;
