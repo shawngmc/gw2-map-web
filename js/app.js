@@ -262,7 +262,7 @@
     ];
 
     L.Control.ImprovedLayerControl = L.Control.extend({
-        _zoomListener: function() {
+        _zoomListener: (event) => {
             console.log("event: " + event);
             console.log("this._zoom:" + this._zoom);
             this._zoom = map.getZoom();
