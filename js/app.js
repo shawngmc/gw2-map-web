@@ -365,9 +365,9 @@
             this._zoomListener();
         },
         _getLayerBlockRule: function(layer) {
-            if (layer.minZoom !== undefined && layer.minZoom <= this._zoom) {
+            if (layer.minZoom !== undefined && layer.minZoom > this._zoom) {
                 return "Zoom in to use."
-            } else if (layer.maxZoom !== undefined && layer.maxZoom >= this._zoom) {
+            } else if (layer.maxZoom !== undefined && layer.maxZoom < this._zoom) {
                 return "Zoom out to use."
             } else {
                 return null;
