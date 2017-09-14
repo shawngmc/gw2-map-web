@@ -263,6 +263,9 @@
 
     L.Control.ImprovedLayerControl = L.Control.extend({
         _zoomListener: function() {
+            console.log("event: " + event);
+            console.log("currzoom: " + currZoom);
+            console.log("this._zoom:" + this._zoom);
             var currZoom = map.getZoom();
             if (this._zoom === null || this._zoom != currZoom) {
                 this._zoom = currZoom;
@@ -282,10 +285,14 @@
 
             this._map = map;
             map.on('zoomstart', this._zoomListener);
+            map.on('zoom', this._zoomListener);
+            map.on('zoomend', this._zoomListener);
             return this._container;
         },
         onRemove: function(map) {
             map.off('zoomstart', this._zoomListener);
+            map.off('zoom', this._zoomListener);
+            map.off('zoomend', this._zoomListener);
             this._map = null;
         },
         _update: function() {
