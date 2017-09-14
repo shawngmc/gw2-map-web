@@ -59,7 +59,7 @@
 .layermanager-list-group-checkbox, .layermanager-list-group-iconlabel {
     display: inline-block;
     vertical-align: middle;
-    margin: 5px;
+    margin: 0px;
     cursor: pointer;
 }
 
