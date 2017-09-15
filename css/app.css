@@ -59,6 +59,3 @@
     cursor: pointer;
     filter: opacity(25%);
 }
-.layermanager-list-group-checkbox:checked {
-    filter: opacity(100%);
-}
