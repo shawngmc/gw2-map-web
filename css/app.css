@@ -68,12 +68,12 @@
     opacity: 1.0;
 }
 
-.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:before {
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:after {
     content: ' ';
 }
 
 
-.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:before {
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:after {
     content: 'X';
     color: red;
 }
