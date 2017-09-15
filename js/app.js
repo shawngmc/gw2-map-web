@@ -327,7 +327,7 @@
                     var layerLabel = null;
                     if (layerWrapper.display === "iconOnly") {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
-                        layerLabel.for = layerWrapper.trackingId;
+                        layerLabel.htmlFor = layerWrapper.trackingId;
                         var iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
                         iconElement.height = 32;
@@ -337,7 +337,7 @@
                         layerLabel.appendChild(iconElement);
                     } else {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-textlabel');
-                        layerLabel.for = layerWrapper.trackingId;
+                        layerLabel.htmlFor = layerWrapper.trackingId;
                         layerLabel.textContent = layerWrapper.name;
                     }
                     layerWrapper.label = layerLabel;
