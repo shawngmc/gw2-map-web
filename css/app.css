@@ -80,10 +80,10 @@
     text-align: center;
 }
 
-.layermanager-list-group-checkbox:checked + .layermanager-list-iconlabel > img {
+.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel > img {
     filter: opacity(100%);
 }
 
-.layermanager-list-group-checkbox:checked + .layermanager-list-iconlabel > img {
+.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel > img {
     filter: opacity(100%);
 }
