@@ -315,7 +315,7 @@
                         layerControlElement.type = "radio";
                     }                  
                     layerControlElement.name = layerGroup.name;
-                    layerControlElement.id = "hiddencheckbox-" + layerWrapper.trackingId;
+                    layerControlElement.id = layerWrapper.trackingId;
                     layerControlElement.value = layerWrapper.name;
                     if (layerWrapper.defaultState === true) {
                         layerControlElement.checked = true;
