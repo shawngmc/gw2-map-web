@@ -86,6 +86,6 @@
     color: #fff;
 }
 
-.layermanager-list-group-checkbox:focus + .layermanager-list-group-iconlabel {
+.layermanager-list-group-checkbox:focus + .layermanager-list-iconlabel {
   outline: 1px solid #ddd; /* focus style */
 }
