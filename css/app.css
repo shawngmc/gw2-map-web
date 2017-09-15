@@ -61,11 +61,11 @@
 
 
 .layermanager-list-group-checkbox + .layermanager-list-iconlabel > img {
-    opacity: 25%;
+    opacity: 0.25;
 }
 
 .layermanager-list-group-checkbox:checked + .layermanager-list-iconlabel > img {
-    opacity: 100%;
+    opacity: 1.0;
 }
 
 .layermanager-list-group-title {
