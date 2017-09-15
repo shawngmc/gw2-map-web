@@ -66,26 +66,3 @@
 .layermanager-list-group-iconlabel {
     position: relative;
 }
-
-.layermanager-list-group-checkbox + .layermanager-list-group-iconlabel :before {
-    content: '';
-    background: #fff;
-    border: 2px solid #ddd;
-    display: inline-block;
-    vertical-align: middle;
-    width: 32px;
-    height: 32px;
-    padding: 2px;
-    margin-right: 10px;
-    text-align: center;
-}
-
-.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel:before {
-    content: "\2713";
-    background: rebeccapurple;
-    color: #fff;
-}
-
-.layermanager-list-group-checkbox:focus + .layermanager-list-iconlabel {
-  outline: 1px solid #ddd; /* focus style */
-}
