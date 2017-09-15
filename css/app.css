@@ -58,3 +58,11 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
+
+.layermanager-list-group-checkbox :after {
+    content: ' ';
+}
+.layermanager-list-group-checkbox:checked :after {
+    content: '&#x2714;';
+}
