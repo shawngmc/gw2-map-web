@@ -163,17 +163,6 @@
     });
     map.addControl(controlSearch);
 
-    var overlayMaps = {
-        "Hero Challenges": heroLayer,
-        "Landmarks": landmarkLayer,
-        "Mastery Points": masteryLayer,
-        "Tasks": taskLayer,
-        "Vistas": vistaLayer,
-        "Waypoints": waypointLayer,
-        "Zones": zoneLayer
-    };
-
-
     var layers = [
         {
             "groupName": "Imagery",
@@ -341,8 +330,8 @@
                         layerLabel.for = layerWrapper.trackingId;
                         var iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
-                        iconElement.height = 32;
-                        iconElement.width = 32;
+                        iconElement.height = 20;
+                        iconElement.width = 20;
                         iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
                         layerLabel.appendChild(iconElement);
