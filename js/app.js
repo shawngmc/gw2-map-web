@@ -367,6 +367,11 @@
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     layerWrapper.element.disabled = (layerBlockRule !== null);
+                    var titleString = layer.name;
+                    if (layerBlockRule !== null) {
+                        titleString = titleString + "Disabled: " + layerBlockRule;
+                    }
+                    layerWrapper.element.title = layerBlockRule
                 });
             });
         },
