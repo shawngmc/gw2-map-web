@@ -330,8 +330,8 @@
                         layerLabel.for = layerWrapper.trackingId;
                         var iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
-                        iconElement.height = 20;
-                        iconElement.width = 20;
+                        iconElement.height = 32;
+                        iconElement.width = 32;
                         iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
                         layerLabel.appendChild(iconElement);
