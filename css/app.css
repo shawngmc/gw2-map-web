@@ -54,12 +54,8 @@
     width: 32px;
     height: 32px;
     margin: 0px;
-}
-
-.layermanager-list-group-checkbox, .layermanager-list-iconlabel {
     display: inline-block;
     vertical-align: middle;
-    margin: 0px;
     cursor: pointer;
 }
 
