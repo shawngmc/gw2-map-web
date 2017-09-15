@@ -67,7 +67,7 @@
     position: relative;
 }
 
-.layermanager-list-group-checkbox + .layermanager-list-group-iconlabel :before {
+.layermanager-list-group-checkbox + .layermanager-list-group-iconlabel {
     content: '';
     background: #fff;
     border: 2px solid #ddd;
@@ -78,14 +78,18 @@
     padding: 2px;
     margin-right: 10px;
     text-align: center;
+    filter: opacity(25%);
 }
-
-.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel:before {
-    content: "\2713";
-    background: rebeccapurple;
-    color: #fff;
-}
-
-.layermanager-list-group-checkbox:focus + .layermanager-list-group-iconlabel {
-  outline: 1px solid #ddd; /* focus style */
+.layermanager-list-group-checkbox:checked + .layermanager-list-group-iconlabel {
+    content: '';
+    background: #fff;
+    border: 2px solid #ddd;
+    display: inline-block;
+    vertical-align: middle;
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    margin-right: 10px;
+    text-align: center;
+    filter: opacity(100%);
 }
