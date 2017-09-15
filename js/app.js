@@ -369,7 +369,7 @@
                     layerWrapper.element.disabled = (layerBlockRule !== null);
                     var titleString = layerWrapper.name;
                     if (layerBlockRule !== null) {
-                        titleString = titleString + "Disabled: " + layerBlockRule;
+                        titleString = titleString + ": Disabled - " + layerBlockRule;
                     }
                     layerWrapper.element.title = titleString;
                     layerWrapper.label.title = titleString;
