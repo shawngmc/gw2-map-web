@@ -60,10 +60,10 @@
 }
 
 
-.layermanager-list-group-checkbox + .layermanager-list-iconlabel {
+.layermanager-list-group-checkbox {
     filter: opacity(25%);
 }
 
-.layermanager-list-group-checkbox:checked + .layermanager-list-iconlabel {
+.layermanager-list-group-checkbox:checked {
     filter: opacity(100%);
 }
