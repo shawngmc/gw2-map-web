@@ -68,6 +68,16 @@
     opacity: 1.0;
 }
 
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:before {
+    content: ' ';
+}
+
+
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel > img:before {
+    content: 'X';
+    color: red;
+}
+
 .layermanager-list-group-title {
     font-size: 125%;
 }
