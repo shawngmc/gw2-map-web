@@ -68,14 +68,18 @@
     opacity: 1.0;
 }
 
-.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel {
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel:before {
     content: ' ';
 }
 
 
-.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel{
-    content: 'X';
+.layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel:before {
+    content: '\f00d';
     color: red;
+    display: inline-block;
+    position: absolute;
+    font-size: 32px;
+    font-family: FontAwesome;
 }
 
 .layermanager-list-group-title {
