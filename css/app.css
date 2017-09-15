@@ -58,3 +58,12 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
+
+.layermanager-list-group-checkbox + .layermanager-list-checkbox > img {
+    filter: opacity(25%);
+}
+
+.layermanager-list-group-checkbox:checked + .layermanager-list-checkbox > img {
+    filter: opacity(100%);
+}
