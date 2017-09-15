@@ -58,3 +58,7 @@
     vertical-align: middle;
     cursor: pointer;
 }
+
+.layermanager-list-iconlabel>img {
+    opacity: 25%;
+}
