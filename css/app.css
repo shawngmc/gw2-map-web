@@ -67,19 +67,6 @@
     position: relative;
 }
 
-.layermanager-list-group-checkbox + .layermanager-list-iconlabel {
-    content: '';
-    background: #fff;
-    border: 2px solid #ddd;
-    display: inline-block;
-    vertical-align: middle;
-    width: 32px;
-    height: 32px;
-    padding: 2px;
-    margin-right: 10px;
-    text-align: center;
-}
-
 .layermanager-list-group-checkbox + .layermanager-list-iconlabel > img {
     filter: opacity(25%);
 }
