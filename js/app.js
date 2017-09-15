@@ -296,7 +296,7 @@
             container.appendChild(form);
 
             var createTitle = (name) => {
-                var titleDiv = L.DomUtil.create('div', className + "-list-group-title");
+                var titleDiv = L.DomUtil.create('div', 'layermanager-list-group-title');
                 titleDiv.textContent = name;
                 return titleDiv;
             }
