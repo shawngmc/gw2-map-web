@@ -76,6 +76,7 @@
 .layermanager-list-group-checkbox:disabled + .layermanager-list-iconlabel:after{
     content: 'X';
     color: red;
+    position: absolute;
 }
 
 .layermanager-list-group-title {
