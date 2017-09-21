@@ -548,7 +548,7 @@
             })
             .then((readmeMarkdown) => {
                 var converter = new showdown.Converter();
-                var html = converter.makeHtml(readmeMarkdown);
+                var html = converter.makeHtml("<p>" + readmeMarkdown + "</p>");
                 var readmeDialog = L.control.dialog({
                         initOpen: false
                     })
