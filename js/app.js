@@ -47,7 +47,7 @@
     };
     
     var prepReadme = function() {
-        return fetch("../user-readme.md")
+        fetch("../user-readme.md")
             .then((readmeRequestResponse) => {
                 return readmeRequestResponse.text();
             })
