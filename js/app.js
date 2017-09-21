@@ -46,23 +46,6 @@
             })
     };
     
-    var prepReadme = function() {
-        fetch("../user-readme.md")
-            .then((readmeRequestResponse) => {
-                return readmeRequestResponse.text();
-            })
-            .then((readmeMarkdown) => {
-                var converter = new showdown.Converter();
-                var html = converter.makeHtml(readmeMarkdown);
-                return L.control.dialog({
-                        initOpen: false,
-                        size: [300, 300]
-                    })
-                  .setContent(html)
-                  .addTo(map);
-            })
-    };
-    
     var icons = {};
     icons.waypoint = L.icon({
         iconUrl: generateIconURL("waypoint"),
@@ -557,9 +540,26 @@
         console.log("failed", ex);
     }); 
     
-    var readmeDialog = prepReadme();
+    
+    var prepReadme = function() {
+        return fetch("../user-readme.md")
+            .then((readmeRequestResponse) => {
+                return readmeRequestResponse.text();
+            })
+            .then((readmeMarkdown) => {
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(readmeMarkdown);
+                var readmeDialog = L.control.dialog({
+                        initOpen: false,
+                        size: [300, 300]
+                    })
+                  .setContent(html)
+                  .addTo(map);
 
-    L.easyButton("&quest;", function(btn, map){
-        readmeDialog.open();
-    }).addTo(map);
+                L.easyButton("&quest;", function(btn, map){
+                    readmeDialog.open();
+                }).addTo(map);
+            })
+    };
+    prepReadme();
 })();
