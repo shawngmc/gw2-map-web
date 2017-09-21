@@ -1,7 +1,6 @@
-/*globals L _ fetch console*/
+/*globals L _ fetch console showdown*/
 (function () {
     "use strict";
-    var map;
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
@@ -11,7 +10,7 @@
         return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
     };
     
-    var generatePopupWithSearchIcons = function (objDesc, objType) {
+    var generatePopupWithSearchIcons = function (objDesc, objType, objChatLink) {
         var span = document.createElement("span");
         var links = {};
         links.youtube = "https://www.youtube.com/results?search_query=gw2+" + objDesc.replace(" ", "+");
@@ -20,7 +19,13 @@
             links.youtube = links.youtube + "+" + objType.replace(" ", "+");
             links.google = links.google + "+" + objType.replace(" ", "+");
         }
-        span.innerHTML = '<span>Task: ' + objDesc + '<br><a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="24" width="34" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="24" width="24" /></a></span>';
+        var popupContents = '';
+        popupContents += '<span>Task: ' + objDesc + '<br>';
+        if (objChatLink !== undefined && objChatLink !== null) {
+            popupContents += '<input type="text" value="' + objChatLink +'" class="linkarea" readonly><i class="fa fa-clipboard" aria-hidden="true" onClick=></i>';
+        }
+        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="16" width="22" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="16" width="16" /></a></span>';
+        span.innerHTML = popupContents;
         return span;
     };
     
@@ -38,6 +43,23 @@
             })
             .then((worldDataRaw) => {
                 return JSON.parse(worldDataRaw);
+            })
+    };
+    
+    var prepReadme = function() {
+        return fetch("../user-readme.md")
+            .then((readmeRequestResponse) => {
+                return readmeRequestResponse.text();
+            })
+            .then((readmeMarkdown) => {
+                var converter = new showdown.Converter();
+                var html = converter.makeHtml(readmeMarkdown);
+                return L.control.dialog({
+                        initOpen: false,
+                        size: [300, 300]
+                    })
+                  .setContent(html)
+                  .addTo(map);
             })
     };
     
@@ -101,6 +123,7 @@
         return map.unproject(coord, map.getMaxZoom());
     }
 
+    var map;
     map = L.map("map", {
         minZoom: 1,
         maxZoom: 7,
@@ -369,7 +392,7 @@
                     layerWrapper.element.disabled = (layerBlockRule !== null);
                     var titleString = layerWrapper.name;
                     if (layerBlockRule !== null) {
-                        titleString = titleString + ": Disabled - " + layerBlockRule;
+                        titleString = titleString + ": Disabled -1 " + layerBlockRule;
                     }
                     layerWrapper.element.title = titleString;
                     layerWrapper.label.title = titleString;
@@ -419,7 +442,7 @@
                         icon: icons.waypoint,
                         type: poi.type
                     });
-                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint"));
+                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint", poi.chat_link));
                     waypointLayer.addLayer(marker);
                 } else if (poi.type === "landmark") {
                     marker = L.marker(unproject(poi.coord), {
@@ -427,7 +450,7 @@
                         icon: icons.landmark,
                         type: poi.type
                     });
-                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi"));
+                    marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi", poi.chat_link));
                     landmarkLayer.addLayer(marker);
                 } else if (poi.type === "vista") {
                     marker = L.marker(unproject(poi.coord), {
@@ -435,6 +458,7 @@
                         icon: icons.vista,
                         type: poi.type
                     });
+                    marker.bindPopup(generatePopupWithSearchIcons(gameMap.name + " Vista", "vista", poi.chat_link));
                     vistaLayer.addLayer(marker);
                 } else {
                     console.log("unknown poi type: " + poi.type);
@@ -531,5 +555,11 @@
         });
     }).catch(function (ex) {
         console.log("failed", ex);
-    });
+    }); 
+    
+    var readmeDialog = prepReadme();
+
+    L.easyButton("&quest;", function(btn, map){
+        readmeDialog.open();
+    }).addTo(map);
 })();
