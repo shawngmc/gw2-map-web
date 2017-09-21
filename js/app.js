@@ -548,11 +548,11 @@
             })
             .then((readmeMarkdown) => {
                 var converter = new showdown.Converter();
-                var html = converter.makeHtml("<p>" + readmeMarkdown + "</p>");
+                var html = converter.makeHtml(readmeMarkdown);
                 var readmeDialog = L.control.dialog({
                         initOpen: false
                     })
-                  .setContent(html)
+                  .setContent("<p>" + html + "</p>")
                   .addTo(map);
 
                 L.easyButton("&quest;", function(btn, map){
