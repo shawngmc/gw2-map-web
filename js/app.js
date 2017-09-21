@@ -550,8 +550,7 @@
                 var converter = new showdown.Converter();
                 var html = converter.makeHtml(readmeMarkdown);
                 var readmeDialog = L.control.dialog({
-                        initOpen: false,
-                        size: [300, 300]
+                        initOpen: false
                     })
                   .setContent(html)
                   .addTo(map);
