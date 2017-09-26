@@ -5,11 +5,11 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
     }
-    
+
     var generateIconURL = function (type, subtype) {
         return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
     };
-    
+
     var generatePopupWithSearchIcons = function (objDesc, objType, objChatLink) {
         var span = document.createElement("span");
         var links = {};
@@ -28,14 +28,14 @@
         span.innerHTML = popupContents;
         return span;
     };
-    
+
     var uuidv4 = function() {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
       });
     }
-    
+
     var getWorldData = function() {
         return fetch("../data/zonedata.json")
             .then((worldDataRequestResponse) => {
@@ -45,7 +45,7 @@
                 return JSON.parse(worldDataRaw);
             })
     };
-    
+
     var icons = {};
     icons.waypoint = L.icon({
         iconUrl: generateIconURL("waypoint"),
@@ -101,7 +101,7 @@
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
-    
+
     var unproject = function(coord) {
         return map.unproject(coord, map.getMaxZoom());
     }
@@ -113,8 +113,8 @@
         crs: L.CRS.Simple
     }).setView([0, 0], 0);
 
-    var southWest = unproject([0, 32768]);
-    var northEast = unproject([32768, 0]);
+    var southWest = unproject([0, 40000]);
+    var northEast = unproject([40000, 0]);
     var maxBounds = new L.LatLngBounds(southWest, northEast);
 
     map.setMaxBounds(maxBounds);
@@ -319,7 +319,7 @@
                     } else if (layerGroup.type === "option") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-radio');
                         layerControlElement.type = "radio";
-                    }                  
+                    }
                     layerControlElement.name = layerGroup.name;
                     layerControlElement.id = layerWrapper.trackingId;
                     layerControlElement.value = layerWrapper.name;
@@ -329,7 +329,7 @@
                     layerWrapper.element = layerControlElement;
                     layerControlElement.addEventListener('change', (event) => {console.log('listening'); this._changeListener(event);});
                     groupElement.appendChild(layerControlElement);
-                    
+
                     var layerLabel = null;
                     if (layerWrapper.display === "iconOnly") {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
@@ -389,7 +389,7 @@
                     var layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     var applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
                     var layerOnMap = map.hasLayer(layerWrapper.layer);
-                    
+
                     if (applyLayer && !layerOnMap) {
                         // The layer should apply and is not on the map, add it
                         console.log('adding layer: ' + layerWrapper.name);
@@ -404,7 +404,7 @@
             });
         }
     });
-    
+
     L.control.improvedLayerControl = function(opts) {
         return new L.Control.ImprovedLayerControl(opts);
     }
@@ -538,9 +538,9 @@
         });
     }).catch(function (ex) {
         console.log("failed", ex);
-    }); 
-    
-    
+    });
+
+
     var prepReadme = function() {
         return fetch("../user_readme.md")
             .then((readmeRequestResponse) => {
