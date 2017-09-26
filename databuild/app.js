@@ -55,6 +55,11 @@ var worldZones = {
 
     // Path of Fire
     1210: { "name": "Crystal Oasis", "type": "Story", "zoneCategory": "PoF" },
+    1211: { "name": "Desert Highlands", "type": "Story", "zoneCategory": "PoF" },
+    1214: { "name": "Windswept Haven", "type": "Guild Hall", "zoneCategory": "PoF" },
+    1226: { "name": "The Desolation", "type": "Story", "zoneCategory": "PoF" },
+    1228: { "name": "Elon Riverlands", "type": "Story", "zoneCategory": "PoF" },
+    1248: { "name": "Domain of Vabbi", "type": "Story", "zoneCategory": "PoF" },
 };
 
 
@@ -100,11 +105,11 @@ var getMergedFloorData = function () {
             document.getElementById('builddata').textContent = JSON.stringify(slimdata, null, 0);
         });
 };
- 
+
 (function () {
     "use strict";
 
-    
+
     // Spit out world data
     getMergedFloorData();
 })();
