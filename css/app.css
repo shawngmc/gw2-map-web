@@ -54,6 +54,7 @@
     width: 70px;
     height: 40px;
     margin: 0px;
+    right: 0;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
@@ -63,23 +64,19 @@
     position: absolute;  
     width: 70px;
     height: 40px;
+    right: 0;
 }
 
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel > img {
     content: url(../images/layer_white.svg);
-    width: 70px;
-    height: 40px;
 }
 
 .layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel > img {
     content: url(../images/layer_tan.svg);
-    width: 70px;    height: 40px;
 }
 
 .layermanager-list-group-layerradio:disabled + .layermanager-list-iconlabel > img {
     content: url(../images/layer_transparent.svg);
-    width: 70px;
-    height: 40px;
 }
 
 
