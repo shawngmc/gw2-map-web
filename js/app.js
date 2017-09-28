@@ -318,6 +318,10 @@
             var createGroupElements = (layerGroup) => {
                 var groupElement = L.DomUtil.create('div', 'layermanager-list-group');
                 groupElement.appendChild(createTitle(layerGroup.groupName));
+                if (layerGroup.type === "layeroption") {
+                    groupElement.style = "margin-bottom: 25px";   
+                }
+
                 var topVal = null;
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
