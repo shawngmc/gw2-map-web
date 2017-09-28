@@ -50,18 +50,17 @@
 
 .layermanager-list-group-layerradio {
     opacity: 0;
-    position: relative;  
+    position: absolute;  
     width: 70px;
     height: 40px;
     margin: 0px;
-    top: -20px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
 }
 
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel {
-    position: relative;  
+    position: absolute;  
     width: 70px;
     height: 40px;
 }

@@ -321,6 +321,7 @@
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
                     var layerControlElement = null;
+                    var topVal = null;
                     if (layerGroup.type === "checkbox") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
                         layerControlElement.type = "checkbox";
@@ -330,6 +331,12 @@
                     } else if (layerGroup.type === "layeroption") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-layerradio');
                         layerControlElement.type = "radio";
+                        if (topVal === null) {
+                            topVal = 20;
+                        } else {
+                            topVal = topVal + 20;
+                        }
+                        layerControlElement.style = "top: " + topVal + "px";
                     }
                     layerControlElement.name = layerGroup.name;
                     layerControlElement.id = layerWrapper.trackingId;
