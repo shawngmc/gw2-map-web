@@ -172,23 +172,31 @@
     var layers = [
         {
             "groupName": "Imagery",
-            "type": "option",
+            "type": "layeroption",
             "layers": [
                 {
                     "name": "Upper Level",
+                    "display": "iconOnly",
+                    "icon": 'images/layer_white.svg',
                     "layer": createWebImageryLayer(2)
                 },
                 {
                     "name": "Surface",
+                    "display": "iconOnly",
+                    "icon": 'images/layer_white.svg',
                     "layer": createWebImageryLayer(1),
                     "defaultState": true
                 },
                 {
                     "name": "Underground",
+                    "display": "iconOnly",
+                    "icon": 'images/layer_white.svg',
                     "layer": createWebImageryLayer(0)
                 },
                 {
                     "name": "Depths",
+                    "display": "iconOnly",
+                    "icon": 'images/layer_white.svg',
                     "layer": createWebImageryLayer(3)
                 }
             ]
@@ -318,6 +326,9 @@
                         layerControlElement.type = "checkbox";
                     } else if (layerGroup.type === "option") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-radio');
+                        layerControlElement.type = "radio";
+                    } else if (layerGroup.type === "layeroption") {
+                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-layerradio');
                         layerControlElement.type = "radio";
                     }
                     layerControlElement.name = layerGroup.name;
