@@ -25,7 +25,8 @@
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
-  padding: 5px;
+  margin: 0px;
+  padding: 0px;
   overflow: hidden;
   border: none;
   -webkit-border-radius: 5px;
@@ -54,7 +55,7 @@
     width: 70px;
     height: 40px;
     margin: 0px;
-    right: -10px;
+    right: 0px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
@@ -64,7 +65,7 @@
     position: absolute;  
     width: 70px;
     height: 40px;
-    right: -10px;
+    right: 0px;
 }
 
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel > img {
