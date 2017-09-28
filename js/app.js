@@ -177,26 +177,26 @@
                 {
                     "name": "Upper Level",
                     "display": "iconOnly",
-                    "icon": 'images/layer_white.svg',
+                    "icon": '../images/layer_white.svg',
                     "layer": createWebImageryLayer(2)
                 },
                 {
                     "name": "Surface",
                     "display": "iconOnly",
-                    "icon": 'images/layer_white.svg',
+                    "icon": '../images/layer_white.svg',
                     "layer": createWebImageryLayer(1),
                     "defaultState": true
                 },
                 {
                     "name": "Underground",
                     "display": "iconOnly",
-                    "icon": 'images/layer_white.svg',
+                    "icon": '../images/layer_white.svg',
                     "layer": createWebImageryLayer(0)
                 },
                 {
                     "name": "Depths",
                     "display": "iconOnly",
-                    "icon": 'images/layer_white.svg',
+                    "icon": '../images/layer_white.svg',
                     "layer": createWebImageryLayer(3)
                 }
             ]
