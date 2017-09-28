@@ -316,7 +316,7 @@
             }
 
             var createGroupElements = (layerGroup) => {
-                var groupElement = L.DomUtil.create('div', className + '-list-group');
+                var groupElement = L.DomUtil.create('div', 'layermanager-list-group');
                 groupElement.appendChild(createTitle(layerGroup.groupName));
                 var topVal = null;
                 _.forEach(layerGroup.layers, (layerWrapper) => {

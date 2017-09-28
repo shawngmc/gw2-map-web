@@ -74,11 +74,14 @@
     height: 40px;
 }
 
+.layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel {
+    z-index: 1000;
+}
+
 .layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel > img {
     content: url(../images/layer_tan.svg);
     width: 70px;
     height: 40px;
-    z-index: 1000;
 }
 
 .layermanager-list-group-layerradio:disabled + .layermanager-list-iconlabel > img {
@@ -87,7 +90,9 @@
     height: 40px;
 }
 
-
+.layermanager-list-group {
+    display: block;
+}
 
 .layermanager-list-group-checkbox {
     opacity: 0;
