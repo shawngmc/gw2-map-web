@@ -61,19 +61,19 @@
 
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel > img {
     content: url(../images/layer_white.svg);
-    width: 100px;
+    width: 60px;
     height: auto;
 }
 
 .layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel > img {
     content: url(../images/layer_tan.svg);
-    width: 100px;
+    width: 60px;
     height: auto;
 }
 
 .layermanager-list-group-layerradio:disabled + .layermanager-list-iconlabel > img {
     content: url(../images/layer_transparent.svg);
-    width: 100px;
+    width: 60px;
     height: auto;
 }
 
