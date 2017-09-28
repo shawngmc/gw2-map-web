@@ -318,10 +318,10 @@
             var createGroupElements = (layerGroup) => {
                 var groupElement = L.DomUtil.create('div', className + '-list-group');
                 groupElement.appendChild(createTitle(layerGroup.groupName));
+                var topVal = null;
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
                     var layerControlElement = null;
-                    var topVal = null;
                     if (layerGroup.type === "checkbox") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
                         layerControlElement.type = "checkbox";
@@ -358,6 +358,9 @@
                         iconElement.width = 32;
                         iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
+                        if (topVal !== null) {
+                            iconElement.style = "top: " + topVal + "px";
+                        }
                         layerLabel.appendChild(iconElement);
                     } else {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-textlabel');
