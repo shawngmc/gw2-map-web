@@ -60,15 +60,15 @@
 }
 
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel > img {
-    content: url(./images/layer_white.svg);
+    content: url(../images/layer_white.svg);
 }
 
 .layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel > img {
-    content: url(./images/layer_tan.svg);
+    content: url(../images/layer_tan.svg);
 }
 
 .layermanager-list-group-layerradio:disabled + .layermanager-list-iconlabel > img {
-    content: url(./images/layer_transparent.svg);
+    content: url(../images/layer_transparent.svg);
 }
 
 
