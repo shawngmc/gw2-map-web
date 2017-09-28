@@ -50,31 +50,35 @@
 
 .layermanager-list-group-layerradio {
     opacity: 0;
-    position: absolute;   
-    width: 32px;
-    height: 20px;
+    position: absolute;  
+    width: 70px;
+    height: 40px;
     margin: 0px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
 }
 
+.layermanager-list-group-layerradio + .layermanager-list-iconlabel {
+    width: 70px;
+    height: 40px;
+}
+
 .layermanager-list-group-layerradio + .layermanager-list-iconlabel > img {
     content: url(../images/layer_white.svg);
-    width: 60px;
-    height: auto;
+    width: 70px;
+    height: 40px;
 }
 
 .layermanager-list-group-layerradio:checked + .layermanager-list-iconlabel > img {
     content: url(../images/layer_tan.svg);
-    width: 60px;
-    height: auto;
+    width: 70px;    height: 40px;
 }
 
 .layermanager-list-group-layerradio:disabled + .layermanager-list-iconlabel > img {
     content: url(../images/layer_transparent.svg);
-    width: 60px;
-    height: auto;
+    width: 70px;
+    height: 40px;
 }
 
 
