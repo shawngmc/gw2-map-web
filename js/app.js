@@ -7,10 +7,6 @@
     }
 
     new Clipboard('.chatlink');
-
-    var generateIconURL = function (type, subtype) {
-        return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
-    };
     
     var generateIconV2URL = function (type, subtype) {
         return 'images/gw2/v2/' + type + (subtype !== undefined ? "-" + subtype : "") + ".svg";
@@ -28,9 +24,11 @@
         var popupContents = '';
         popupContents += '<span>Task: ' + objDesc + '<br>';
         if (objChatLink !== undefined && objChatLink !== null) {
-            popupContents += '<i class="fa fa-clipboard chatlink" aria-hidden="true" data-clipboard-text=' + objChatLink + ' title="Copy Chat Link to Clipboard"></i>&nbsp;';
+            popupContents += '<i class="fa fa-clipboard chatlink popuplink" aria-hidden="true" data-clipboard-text=' + objChatLink + ' title="Copy Chat Link to Clipboard"></i>&nbsp;';
         }
-        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/3p/yt_icon_rgb.svg" height="32" width="44" title="Search on Youtube" /></a><a href="' + links.google + '" target="_blank"><img src="images/3p/google_icon.svg" height="32" width="32" title="Search on Google" /></a></span>';
+        popupContents += '<a href="' + links.youtube + '" target="_blank"><i class="fa fa-youtube-play popuplink" style="text-color:rgb(255, 0, 0)" aria-hidden="true" title="Search on YouTube"></i></a>&nbsp;';
+        popupContents += '<a href="' + links.google + '" target="_blank"><i class="fa fa-google popuplink" style="text-color:rgb(66, 133, 244)" aria-hidden="true" title="Search on Google"></i></a>&nbsp;';
+        popupContents += '</span>';
         span.innerHTML = popupContents;
         return span;
     };
