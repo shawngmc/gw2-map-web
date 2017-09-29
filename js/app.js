@@ -645,8 +645,9 @@
             dripping: true,
             centered: true,
             queue: true,
-            width: width,
-            height: height
+            width: element.offsetWidth,
+            height: element.offsetHeight,
+            root: element
         };
         bsBackground = new Brushstroke(optionsBackground);
     
@@ -660,5 +661,5 @@
         
     }
 
-    //paintElementArea(document.getElementsByClassName('leaflet-smart-layer-control')[0], 8, '#A0522D');
+    paintElementArea(document.getElementsByClassName('leaflet-smart-layer-control')[0], 8, '#A0522D');
 })();
