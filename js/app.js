@@ -530,7 +530,7 @@
                 }
             });
 
-            // Process Skill / Hero Challenges
+            // Process Skill / Hero Challenges 
             marker = null;
             _.forEach(gameMap.skill_challenges, (skillChallenge) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
