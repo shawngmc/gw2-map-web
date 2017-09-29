@@ -36,8 +36,6 @@
   text-align: center;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  background: url(../images/splash.svg),
-  background-size: auto auto;
 }
 
 .layermanager-list-group-layerradio {

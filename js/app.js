@@ -1,4 +1,4 @@
-/*globals L _ fetch console showdown Clipboard*/
+/*globals L _ fetch console showdown Clipboard Brushstroke*/
 (function () {
     "use strict";
 
@@ -616,4 +616,49 @@
             })
     };
     prepReadme();
+    
+    
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+    }
+    
+    var paintElementArea = function(element, paintMargin, color) {
+    
+        var width = window.innerWidth || document.body.clientWidth;
+        var height = window.innerHeight || document.body.clientHeight;
+        var optionsBackground, bsBackground;
+        
+        // Random curves for background
+    
+        optionsBackground = {
+            animation: 'points',
+            points: 100,
+            inkAmount: 15,
+            tension: 0.4,
+            size: 14,
+            frames: 5,
+            frameAnimation: false,
+            color: color,
+            splashing: false,
+            dripping: true,
+            centered: true,
+            queue: true,
+            width: width,
+            height: height
+        };
+        bsBackground = new Brushstroke(optionsBackground);
+    
+        var position = element.offsetLeft + paintMargin;
+        while (position < element.offsetLeft + element.offsetWidth) {
+            bsBackground.draw({
+                points: [position + getRandomIntInclusive(-3, 3), (paintMargin + getRandomIntInclusive(-3, 3)), position + getRandomIntInclusive(-3, 3), element.offsetHeight - (paintMargin + getRandomIntInclusive(-3, 3))]
+            });
+            position = position + 2;
+        }
+        
+    }
+
+    paintElementArea(document.getElementsByClassName('leaflet-smart-layer-control')[0], 8, '#A0522D');
 })();
