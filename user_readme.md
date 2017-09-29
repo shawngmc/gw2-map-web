@@ -14,4 +14,6 @@
 * My wife, for putting up with me developing this when we want to play and playing when she wants to use it, as well as being the best first-line software tester I could ask for
 * Arena.net for making such solid APIs
 * Raerre for helping test, asking about features, and building layer SVG icons
+* Brandon for the SVG icon rebuild
+* ThatShaman for the temporary high-res PoF Imagery
 * Marmy and Axe for helping test
