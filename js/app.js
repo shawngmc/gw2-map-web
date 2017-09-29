@@ -24,9 +24,9 @@
         var popupContents = '';
         popupContents += '<span>Task: ' + objDesc + '<br>';
         if (objChatLink !== undefined && objChatLink !== null) {
-            popupContents += '<input type="text" value="' + objChatLink +'" class="linkarea" readonly><i class="fa fa-clipboard chatlink" aria-hidden="true" data-clipboard-text=" + objChatLink + "></i>';
+            popupContents += '<i class="fa fa-clipboard chatlink" aria-hidden="true" data-clipboard-text=' + objChatLink + ' title="Copy Chat Link to Clipboard"></i>&nbsp;';
         }
-        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="16" width="22" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="16" width="16" /></a></span>';
+        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="16" width="22" title="Search on Youtube" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="16" width="16" title="Search on Google" /></a></span>';
         span.innerHTML = popupContents;
         return span;
     };
