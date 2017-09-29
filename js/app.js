@@ -322,7 +322,7 @@
                     groupElement.style = "margin-bottom: 25px";   
                 }
 
-                var topVal = null;
+                var layerIdx = null;
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
                     var layerControlElement = null;
@@ -335,12 +335,12 @@
                     } else if (layerGroup.type === "layeroption") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-layerradio');
                         layerControlElement.type = "radio";
-                        if (topVal === null) {
-                            topVal = 20;
+                        if (layerIdx === null) {
+                            layerIdx = 0;
                         } else {
-                            topVal = topVal + 20;
+                            layerIdx = layerIdx + 1;
                         }
-                        layerControlElement.style = "top: " + topVal + "px";
+                        layerControlElement.style = "top: " + (layerIdx + 1) * 20 + "px;z-index:" + layerIdx;
                     }
                     layerControlElement.name = layerGroup.name;
                     layerControlElement.id = layerWrapper.trackingId;
@@ -362,8 +362,8 @@
                         iconElement.width = 32;
                         iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
-                        if (topVal !== null) {
-                            iconElement.style = "top: " + topVal + "px";
+                        if (layerIdx !== null) {
+                            iconElement.style = "top: " + (layerIdx + 1) * 20 + "px;z-index:" + layerIdx;
                         }
                         layerLabel.appendChild(iconElement);
                     } else {
