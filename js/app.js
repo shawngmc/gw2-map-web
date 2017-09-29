@@ -11,6 +11,10 @@
     var generateIconURL = function (type, subtype) {
         return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
     };
+    
+    var generateIconV2URL = function (type, subtype) {
+        return 'images/gw2/v2/' + type + (subtype !== undefined ? "-" + subtype : "") + ".svg";
+    };
 
     var generatePopupWithSearchIcons = function (objDesc, objType, objChatLink) {
         var span = document.createElement("span");
@@ -50,61 +54,61 @@
 
     var icons = {};
     icons.waypoint = L.icon({
-        iconUrl: generateIconURL("waypoint"),
+        iconUrl: generateIconV2URL("waypoint"),
         iconSize: [24, 24],
         iconAnchor: [12, 12],
         popupAnchor: [-3, -3]
     });
     icons.landmark = L.icon({
-        iconUrl: generateIconURL("landmark"),
+        iconUrl: generateIconV2URL("poi"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.vista = L.icon({
-        iconUrl: generateIconURL("vista"),
+        iconUrl: generateIconV2URL("vista"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.masterytyria = L.icon({
-        iconUrl: generateIconURL("mastery", "core"),
+        iconUrl: generateIconV2URL("mastery", "core"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.masterymaguuma = L.icon({
-        iconUrl: generateIconURL("mastery", "maguuma"),
+        iconUrl: generateIconV2URL("mastery", "hot"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.masterycrystal = L.icon({
-        iconUrl: generateIconURL("mastery", "crystal"),
+        iconUrl: generateIconV2URL("mastery", "pof"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.masterygeneric = L.icon({
-        iconUrl: generateIconURL("mastery", "unknown"),
+        iconUrl: generateIconV2URL("mastery", "generic"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.skillcore = L.icon({
-        iconUrl: generateIconURL("hero_point", "core"),
+        iconUrl: generateIconV2URL("heropoint", "1x"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.skillmaguuma = L.icon({
-        iconUrl: generateIconURL("hero_point", "advanced"),
+        iconUrl: generateIconV2URL("heropoint", "10x"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
     icons.task = L.icon({
-        iconUrl: generateIconURL("task"),
+        iconUrl: generateIconV2URL("task"),
         iconSize: [20, 20],
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
@@ -173,7 +177,7 @@
         marker: false,
         buildTip: (text, val) => {
             var layerOpts = val.layer.options;
-            return "<a href=\"#\"><img src=\"" + generateIconURL(layerOpts.type, layerOpts.subtype) + "\" height=16 width=16 />" + text + "</a>";
+            return "<a href=\"#\"><img src=\"" + generateIconV2URL(layerOpts.type, layerOpts.subtype) + "\" height=16 width=16 />" + text + "</a>";
         }
     });
     map.addControl(controlSearch);
@@ -217,7 +221,7 @@
                 {
                     "name": "Waypoints",
                     "layer": waypointLayer,
-                    "icon": generateIconURL("waypoint"),
+                    "icon": generateIconV2URL("waypoint"),
                     "display": "iconOnly",
                     "minZoom": 2,
                     "defaultState": true
@@ -225,7 +229,7 @@
                 {
                     "name": "Vistas",
                     "layer": vistaLayer,
-                    "icon": generateIconURL("vista"),
+                    "icon": generateIconV2URL("vista"),
                     "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
@@ -233,7 +237,7 @@
                 {
                     "name": "Landmarks",
                     "layer": landmarkLayer,
-                    "icon": generateIconURL("landmark"),
+                    "icon": generateIconV2URL("poi"),
                     "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
@@ -241,7 +245,7 @@
                 {
                     "name": "Mastery Points",
                     "layer": masteryLayer,
-                    "icon": generateIconURL("mastery", "core"),
+                    "icon": generateIconV2URL("mastery", "generic"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
@@ -249,7 +253,7 @@
                 {
                     "name": "Hero Challenges",
                     "layer": heroLayer,
-                    "icon": generateIconURL("hero_point", "core"),
+                    "icon": generateIconV2URL("heropoint", "1x"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
@@ -257,15 +261,15 @@
                 {
                     "name": "Tasks",
                     "layer": taskLayer,
-                    "icon": generateIconURL("task"),
+                    "icon": generateIconV2URL("task"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
                 },
                 {
-                    "name": "Zones",
+                    "name": "Labels",
                     "layer": zoneLayer,
-                    "icon": generateIconURL("zone"),
+                    "icon": generateIconV2URL("labels"),
                     "display": "iconOnly",
                     "defaultState": false
                 }
