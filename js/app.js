@@ -131,6 +131,7 @@
         return imageryLayer;
     }
 
+
     var baseMaps = {};
     var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
     // Force in Upper Level, Surface, Underground, Depths order :)
@@ -441,6 +442,17 @@
     // Load World Data
     getWorldData().then(function (worldData) {
         _.forOwn(worldData, function (gameMap) {
+
+            // Temporary PoF Layers - Thanks to ThatShaman
+            var overrideMaps = ["Crystal Oasis", "Desert Highlands", "Elon Riverlands", "The Desolation", "Domain of Vabbi"];
+            if (_(overrideMaps).indexOf(gameMap.name) !== -1) {
+                var imageUrl = "images/" + gameMap.name.toLowerCase().replace(/\s/g, '') + ".jpg";
+                var baseBounds = gameMap.continent_rect;
+                var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                L.imageOverlay(imageUrl, bounds).addTo(map);
+            }
+
+
             var marker = null;
             // Process POIs (Landmarks, Vistas, Waypoints)
             _.forEach(gameMap.points_of_interest, (poi) => {
