@@ -605,7 +605,7 @@
                 var readmeDialog = L.control.dialog({
                         initOpen: false
                     })
-                  .setContent("a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>a<BR>")//"<p>" + html + "</p>")
+                  .setContent("<p>" + html + "</p>")
                   .addTo(map);
 
                 L.easyButton("&quest;", function(btn, map){
