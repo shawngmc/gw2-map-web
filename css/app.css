@@ -26,8 +26,7 @@
   -moz-box-sizing: content-box;
   box-sizing: content-box;
   margin: 5px;
-  padding: 0px;
-  overflow: hidden;
+  padding: 10px;
   border: none;
   -webkit-border-radius: 5px;
   border-radius: 5px;
