@@ -30,7 +30,7 @@
         if (objChatLink !== undefined && objChatLink !== null) {
             popupContents += '<i class="fa fa-clipboard chatlink" aria-hidden="true" data-clipboard-text=' + objChatLink + ' title="Copy Chat Link to Clipboard"></i>&nbsp;';
         }
-        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/3p/yt_icon_rgb.svg" height="32" width="44" title="Search on Youtube" /></a><a href="' + links.google + '" target="_blank"><img src="images/3p//google_icon.svg" height="16" width="16" title="Search on Google" /></a></span>';
+        popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/3p/yt_icon_rgb.svg" height="32" width="44" title="Search on Youtube" /></a><a href="' + links.google + '" target="_blank"><img src="images/3p/google_icon.svg" height="16" width="16" title="Search on Google" /></a></span>';
         span.innerHTML = popupContents;
         return span;
     };
