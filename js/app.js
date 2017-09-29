@@ -77,6 +77,12 @@
         iconAnchor: [10, 10],
         popupAnchor: [-3, -3]
     });
+    icons.masterycrystal = L.icon({
+        iconUrl: generateIconURL("mastery", "crystal"),
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+        popupAnchor: [-3, -3]
+    });
     icons.masterygeneric = L.icon({
         iconUrl: generateIconURL("mastery", "unknown"),
         iconSize: [20, 20],
@@ -504,6 +510,14 @@
                         subtype: "maguuma"
                     });
                     masteryLayer.addLayer(marker);
+                } else if (gameMap.customData.zoneCategory === "PoF") {
+                    marker = L.marker(unproject(masteryPoint.coord), {
+                        title: "Mastery Point (Crystal Desert)",
+                        icon: icons.masterycrystal,
+                        type: "mastery",
+                        subtype: "crystal"
+                    });
+                    masteryLayer.addLayer(marker);
                 } else {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (???)",
@@ -527,7 +541,7 @@
                         subtype: "core"
                     });
                     heroLayer.addLayer(marker);
-                } else if (gameMap.customData.zoneCategory === "HoT") {
+                } else if (gameMap.customData.zoneCategory === "HoT" || gameMap.customData.zoneCategory === "PoF") {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (10x)",
                         icon: icons.skillmaguuma,
