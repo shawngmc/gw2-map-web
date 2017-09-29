@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>PISSHEART</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M24.9543207,18.6240263 C27.2063311,15.9378737 28.1843096,12.8144949 28.0011584,11.0132606 C27.8180072,9.21202629 26.8089175,6.64826258 23.232195,6.08864745 C20.8568016,5.71699265 18.4498649,6.51396104 16.0113852,8.47955265 C13.5729054,6.51396104 11.1659688,5.71699265 8.79057534,6.08864745 C5.21385283,6.64826258 4.20476321,9.21202629 4.021612,11.0132606 C3.83846078,12.8144949 4.81643922,15.9378737 7.06844969,18.6240263 C8.56352693,20.4073243 11.5351754,23.1993155 15.9833951,27 C20.487595,23.1993155 23.4592434,20.4073243 24.9543207,18.6240263 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="PISSHEART">
+            <g id="Combined-Shape">
+                <use stroke="#905F0E" stroke-width="6" fill="#5E5A58" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <use stroke="#FAC84E" stroke-width="3" xlink:href="#path-1"></use>
+            </g>
+        </g>
+    </g>
+</svg>

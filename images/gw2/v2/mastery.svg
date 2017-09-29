@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>SpikeyDingus</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="16 27.0599995 19.3742453 24.1581726 24.1206306 25.8313099 22.0579525 21.254555 29 22.2042335 23.0404283 18.0983053 25.951993 13.8242225 20.9464003 14.977655 21.9073561 9.4425304 18.2597522 12.1672379 16 4 13.7402478 12.1672379 10.0926439 9.4425304 11.0535997 14.977655 6.04800698 13.8242225 8.95957169 18.0983053 3 22.2042335 9.94204749 21.254555 7.87936943 25.8313099 12.6257547 24.1581726"></polygon>
+        <filter x="-23.1%" y="-26.0%" width="146.2%" height="152.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-3" cx="16" cy="19" r="6"></circle>
+        <filter x="-100.0%" y="-100.0%" width="300.0%" height="300.0%" filterUnits="objectBoundingBox" id="filter-4">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="0" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 1   0 0 0 0 1   0 0 0 0 1  0 0 0 1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="SpikeyDingus">
+            <g id="Group" transform="translate(0.000000, 2.000000)">
+                <polygon id="Combined-Shape" fill="#A90606" points="16 29.6139617 20.1529172 25.8873966 25.9946222 28.036062 23.4559415 22.1585318 32 23.3781217 24.6651425 18.1052335 29.479376 11.6163987 22.3186465 14.0976524 23.5013613 6.98937081 18.7812334 10.4884769 16 0 13.2187666 10.4884769 8.49863867 6.98937081 9.68135347 14.0976524 2.52062398 11.6163987 7.33485746 18.1052335 0 23.3781217 8.54405845 22.1585318 6.00537776 28.036062 11.8470828 25.8873966"></polygon>
+                <g id="Combined-Shape">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill-opacity="0.1" fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <g id="Oval">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                    <use fill="" fill-rule="evenodd" xlink:href="#path-3"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

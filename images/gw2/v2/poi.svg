@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>squrdingus</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="100%" id="radialGradient-1">
+            <stop stop-color="#F08119" offset="0%"></stop>
+            <stop stop-color="#000000" offset="100%"></stop>
+        </radialGradient>
+        <linearGradient x1="50%" y1="21.3190246%" x2="0%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#FDF6E2" offset="0%"></stop>
+            <stop stop-color="#FFCE59" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-3" x="8" y="8" width="16" height="16"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="squrdingus">
+            <g id="Rectangle">
+                <use fill="url(#radialGradient-1)" fill-rule="evenodd" xlink:href="#path-3"></use>
+                <rect stroke="#AA7D4F" stroke-width="1" x="7.5" y="7.5" width="17" height="17"></rect>
+                <rect stroke="url(#linearGradient-2)" stroke-width="4" x="10" y="10" width="12" height="12"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

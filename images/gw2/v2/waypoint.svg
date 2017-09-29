@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+    <title>waydingus</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="3 16.4350288 16.4350288 3 29.8700577 16.4350288 16.4350288 29.8700577"></polygon>
+        <radialGradient cx="50%" cy="55.3619701%" fx="50%" fy="55.3619701%" r="32.7476534%" id="radialGradient-2">
+            <stop stop-color="#FFFFFF" offset="0%"></stop>
+            <stop stop-color="#74F7FF" offset="59.6918846%"></stop>
+            <stop stop-color="#1BC6D8" offset="77.0388233%"></stop>
+            <stop stop-color="#186463" offset="100%"></stop>
+        </radialGradient>
+        <polygon id="path-3" points="7 16.4350288 16.4350288 7 25.8700577 16.4350288 16.4350288 25.8700577"></polygon>
+        <linearGradient x1="50%" y1="0%" x2="40.82669%" y2="41.0427093%" id="linearGradient-4">
+            <stop stop-color="#D8BF99" offset="0%"></stop>
+            <stop stop-color="#967550" offset="100%"></stop>
+        </linearGradient>
+        <path d="M3,16.4350288 L16.4350288,3 L29.8700577,16.4350288 L16.4350288,29.8700577 L3,16.4350288 Z M7,20.4350288 L16.4350288,29.8700577 L25.8700577,20.4350288 L16.4350288,11 L7,20.4350288 Z" id="path-5"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="waydingus">
+            <g id="Group"></g>
+            <g id="Rectangle-2">
+                <use fill="#BEA27D" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <path stroke-opacity="0.847797781" stroke="#000000" stroke-width="1" d="M3.70710678,16.4350288 L16.4350288,29.1629509 L29.1629509,16.4350288 L16.4350288,3.70710678 L3.70710678,16.4350288 Z"></path>
+            </g>
+            <g id="Rectangle-2">
+                <use fill="url(#radialGradient-2)" fill-rule="evenodd" xlink:href="#path-3"></use>
+                <path stroke="#000000" stroke-width="1" d="M7.70710678,16.4350288 L16.4350288,25.1629509 L25.1629509,16.4350288 L16.4350288,7.70710678 L7.70710678,16.4350288 Z"></path>
+            </g>
+            <g id="Combined-Shape">
+                <use fill="url(#linearGradient-4)" fill-rule="evenodd" xlink:href="#path-5"></use>
+                <path stroke-opacity="0.768087636" stroke="#000000" stroke-width="1" d="M3.70710678,16.4350288 L16.4350288,29.1629509 L29.1629509,16.4350288 L16.4350288,3.70710678 L3.70710678,16.4350288 Z M6.29289322,20.4350288 L16.4350288,10.2928932 L26.5771645,20.4350288 L16.4350288,30.5771645 L6.29289322,20.4350288 Z"></path>
+            </g>
+        </g>
+    </g>
+</svg>
