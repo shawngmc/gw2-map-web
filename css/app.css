@@ -36,16 +36,7 @@
   text-align: center;
   -o-text-overflow: ellipsis;
   text-overflow: ellipsis;
-  background: -webkit-radial-gradient(100% -20%, farthest-corner, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
-  background: -moz-radial-gradient(100% -20%, farthest-corner, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
-  background: radial-gradient(farthest-corner at 100% -20%, rgba(64,64,64,1) 0, rgba(86,86,86,0.86) 74%, rgba(0,0,0,0.01) 97%, rgba(0,0,0,0.01) 100%);
-  background-repeat: no-repeat;
-  background-position: 15% 50%;
-  -webkit-background-origin: padding-box;
-  background-origin: padding-box;
-  -webkit-background-clip: border-box;
-  background-clip: border-box;
-  -webkit-background-size: auto auto;
+  background: url(../images/splash.svg),
   background-size: auto auto;
 }
 
