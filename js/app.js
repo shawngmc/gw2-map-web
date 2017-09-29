@@ -1,10 +1,12 @@
-/*globals L _ fetch console showdown*/
+/*globals L _ fetch console showdown Clipboard*/
 (function () {
     "use strict";
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
     }
+
+    new Clipboard('.chatlink');
 
     var generateIconURL = function (type, subtype) {
         return 'images/gw2/manual/' + type + (subtype !== undefined ? "_" + subtype : "") + ".png";
@@ -22,7 +24,7 @@
         var popupContents = '';
         popupContents += '<span>Task: ' + objDesc + '<br>';
         if (objChatLink !== undefined && objChatLink !== null) {
-            popupContents += '<input type="text" value="' + objChatLink +'" class="linkarea" readonly><i class="fa fa-clipboard" aria-hidden="true" onClick=></i>';
+            popupContents += '<input type="text" value="' + objChatLink +'" class="linkarea" readonly><i class="fa fa-clipboard chatlink" aria-hidden="true" data-clipboard-text=" + objChatLink + "></i>';
         }
         popupContents += '<a href="' + links.youtube + '" target="_blank"><img src="images/yt_icon_rgb.png" height="16" width="22" /></a><a href="' + links.google + '" target="_blank"><img src="images/google_icon.png" height="16" width="16" /></a></span>';
         span.innerHTML = popupContents;
@@ -530,7 +532,7 @@
                 }
             });
 
-            // Process Skill / Hero Challenges 
+            // Process Skill / Hero Challenges
             marker = null;
             _.forEach(gameMap.skill_challenges, (skillChallenge) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
