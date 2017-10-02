@@ -606,7 +606,7 @@
                 var html = converter.makeHtml(readmeMarkdown);
                 document.getElementById("modal-body").innerHTML = "<p>" + html + "</p>";
                 L.easyButton("&quest;", function(btn, map){
-                    $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
+                    document.getElementById('helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
                 }).addTo(map);
             })
     };
