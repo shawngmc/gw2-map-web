@@ -596,16 +596,6 @@
         console.log("failed", ex);
     });
 
-    var modalOptions = {
-          closeTimeout: 500,
-          focus: true,
-          escapeClose: true
-    }
-    var modal = new RModal(
-        document.getElementById('modal'), modalOptions
-    );
-    window.modal = modal;
-
     var prepReadme = function() {
         return fetch("../user_readme.md")
             .then((readmeRequestResponse) => {
