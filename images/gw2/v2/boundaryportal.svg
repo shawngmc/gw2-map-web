@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="master-artboard" viewBox="0 0 128 128" version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" style="enable-background:new 0 0 1400 980;" width="128px" height="128px"><defs><radialGradient id="gradient-0" gradientUnits="objectBoundingBox" cx="0.5158496499061584" cy="0.5077815055847168" r="0.5" gradientTransform="matrix(-0.33762698388869694, -0.4135988150038159, 0.6876831003694406, -0.5613663065438175, 0.32497195300745574, 0.987482623961192)">
+                <stop offset="0" style="stop-color: #ba439a"/>
+                <stop offset="1" style="stop-color: rgb(211, 76, 175); stop-opacity: 1;"/>
+              </radialGradient><radialGradient id="gradient-1" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" style="stop-color: #ba439a"/>
+                <stop offset="1" style="stop-color: rgb(234, 59, 237);"/>
+              </radialGradient><radialGradient id="gradient-2" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5" gradientTransform="matrix(1.0000011616971989, -2.513691343963842e-8, -1.1517147093659252e-8, 1.0000001263524103, -5.735077964353491e-7, 1.2729295575941713e-8)">
+                <stop offset="0" style="stop-color: #ee33ee"/>
+                <stop offset="1" style="stop-color: rgb(123, 10, 123);"/>
+              </radialGradient><radialGradient id="gradient-3" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" style="stop-color: rgb(0, 0, 0);"/>
+                <stop offset="1" style="stop-color: #ad0ead"/>
+              </radialGradient><radialGradient id="gradient-4" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" style="stop-color: rgb(77, 77, 77);"/>
+                <stop offset="1" style="stop-color: rgb(85, 146, 237);"/>
+              </radialGradient><radialGradient id="gradient-5" gradientUnits="objectBoundingBox" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0" style="stop-color: rgb(68, 102, 153);"/>
+                <stop offset="1" style="stop-color: #6b581d"/>
+              </radialGradient></defs><rect id="ee-background" x="0" y="0" width="128" height="128" style="fill: white; fill-opacity: 0; pointer-events: none;" transform="matrix(1, 0, 0, 1, -24, -5)"/><g transform="matrix(1.0007473230361938, 0, 0, 1.0007473230361938, -588.4888305664062, -37.409092840822524)"><g id="g-5" transform="matrix(1, 0, 0, 1, 0, 0)">
+	<g id="g-6">
+		<path class="st0" d="M652,46c27.6,0,50,22.4,50,50s-22.4,50-50,50s-50-22.4-50-50S624.4,46,652,46z" style="fill: url('#gradient-4');"/>
+	</g>
+</g></g></svg>
