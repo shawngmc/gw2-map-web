@@ -1,4 +1,5 @@
 /*globals L _ fetch console showdown Clipboard Brushstroke RModal*/
+/*eslint-env jquery */
 (function () {
     "use strict";
 
@@ -615,7 +616,7 @@
                 var html = converter.makeHtml(readmeMarkdown);
                 document.getElementById("modal-body").innerHTML = "<p>" + html + "</p>";
                 L.easyButton("&quest;", function(btn, map){
-                    modal.open();
+                    $('#helpModal').modal();
                 }).addTo(map);
             })
     };
