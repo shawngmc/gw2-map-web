@@ -455,13 +455,14 @@
         _.forOwn(worldData, function (gameMap) {
 
             // Temporary PoF Layers - Thanks to ThatShaman
-            /*var overrideMaps = ["Crystal Oasis", "Desert Highlands", "Elon Riverlands", "The Desolation", "Domain of Vabbi"];
+            //var overrideMaps = ["Crystal Oasis", "Desert Highlands", "Elon Riverlands", "The Desolation", "Domain of Vabbi"]; // removed domain of vabbi as it's working fully
+            var overrideMaps = ["Crystal Oasis", "Desert Highlands", "Elon Riverlands", "The Desolation"];
             if (_(overrideMaps).indexOf(gameMap.name) !== -1) {
                 var imageUrl = "images/" + gameMap.name.toLowerCase().replace(/\s/g, '') + ".jpg";
                 var baseBounds = gameMap.continent_rect;
                 var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
                 L.imageOverlay(imageUrl, bounds).addTo(map);
-            }*/
+            }
 
 
             var marker = null;
