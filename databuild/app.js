@@ -336,15 +336,16 @@ var getMergedFloorData = function () {
             
                         // Add in portals
                         gameMap.customData.portals = [];
+                        console.log(region.name + ": " + gameMap.continent_rect)
                         _.forEach(gateways.interborders, function(interborder) {
-                            if (checkPointInZone(gameMap.continentRect, interborder[0])) {
+                            if (checkPointInZone(gameMap.continent_rect, interborder[0])) {
                                 var portal = {};
                                 portal.from = interborder[0];
                                 portal.to = interborder[1];
                                 portal.type = 'zoneborder';
                                 gameMap.customData.portals.push(portal);
                             }
-                            if (checkPointInZone(gameMap.continentRect, interborder[1])) {
+                            if (checkPointInZone(gameMap.continent_rect, interborder[1])) {
                                 var portal = {};
                                 portal.from = interborder[1];
                                 portal.to = interborder[0];
@@ -353,14 +354,14 @@ var getMergedFloorData = function () {
                             }
                         });
                         _.forEach(gateways.interzones, function(interzone) {
-                            if (checkPointInZone(gameMap.continentRect, interzone[0])) {
+                            if (checkPointInZone(gameMap.continent_rect, interzone[0])) {
                                 var portal = {};
                                 portal.from = interzone[0];
                                 portal.to = interzone[1];
                                 portal.type = 'asuragate';
                                 gameMap.customData.portals.push(portal);
                             }
-                            if (checkPointInZone(gameMap.continentRect, interzone[1])) {
+                            if (checkPointInZone(gameMap.continent_rect, interzone[1])) {
                                 var portal = {};
                                 portal.from = interzone[1];
                                 portal.to = interzone[0];
