@@ -5,7 +5,7 @@
 
     let logger = Logging.colorConsole({level: 'warning'});
     if (DEBUG) {
-        logger.setLevel('debug');
+        logger.setLevel('info');
     }
 
     if ('serviceWorker' in navigator) {
