@@ -18,6 +18,13 @@
 
     new Clipboard('.chatlink');
 
+    const LABEL_FONT_AVG_RATIO = .6;
+    let LABEL_FONT_HEIGHT = 18; // Default Value
+    {
+        var stylesheets = document.styleSheets;
+        console.log(styleSheets);
+    }
+
     /**
      * This is an attempt to encapsulate the zoom awareness functionality into it's own class.
      * 
@@ -673,11 +680,14 @@
 
             // Add zone label
             const labelPos = unproject(gameMap.label_coord);
+            /*const FONT_AVG_RATIO = .6;
+            const FONT_HEIGHT 
+            labelPos[0] = labelPos[0] - (gameMap.name * )*/
             var divIcon = L.divIcon({
                 html: gameMap.name,
                 className: "zone-label"
             });
-            marker = new L.marker(labelPos, {icon: divIcon, offset: [-20, -20]});
+            marker = new L.marker(labelPos, {icon: divIcon});
             zoneLayer.addLayer(marker);
         });
     }).catch(ex => {
