@@ -278,10 +278,12 @@
 
     L.Control.ImprovedLayerControl = L.Control.extend({
         _zoomListener(event) {
+            logger.info('Map zoom event detected...');
             this._zoom = map.getZoom();
             this._update();
         },
         _changeListener(event) {
+            logger.info('Layer selection change detected...');
             this._updateLayerVisibility();
         },
         _map: null,
@@ -444,9 +446,6 @@
     L.control.improvedLayerControl = opts => new L.Control.ImprovedLayerControl(opts)
     L.control.improvedLayerControl({ "layerData" : layers }).addTo(map);
 
-
-    // L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
-
     // Load World Data
     getWorldData().then(worldData => {
         _.forOwn(worldData, gameMap => {
@@ -478,7 +477,7 @@
                     marker.bindPopup(generatePopupWithSearchIcons(`${gameMap.name} Vista`, "vista", poi.chat_link));
                     vistaLayer.addLayer(marker);
                 } else {
-                    logger.warn(`unknown poi type: ${poi.type}`);
+                    logger.warning(`unknown poi type: ${poi.type}`);
                 }
             });
 
@@ -517,7 +516,7 @@
                         subtype: "unknown"
                     });
                     masteryLayer.addLayer(marker);
-                    logger.warn(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
+                    logger.warning(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -548,7 +547,7 @@
                         subtype: "core"
                     });
                     heroLayer.addLayer(marker);
-                    logger.warn(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
+                    logger.warning(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -579,7 +578,7 @@
             zoneLayer.addLayer(zonerect);
         });
     }).catch(ex => {
-        logger.error("failed", ex);
+        logger.error("Failed to read map data: ", ex);
     });
 
     const prepReadme = () => fetch("../user_readme.md")
@@ -593,6 +592,7 @@
             L.easyButton("&quest;", (btn, map) => {
                 $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
             }).addTo(map);
+            logger.info('Help/About loaded and prepared...');
         });
     prepReadme();
 
