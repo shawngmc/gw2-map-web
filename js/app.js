@@ -3,9 +3,11 @@
 ((() => {
     let DEBUG = true;
 
-    let logger = Logging.colorConsole({level: 'warning'});
+    let logger = Logging.colorConsole();
     if (DEBUG) {
         logger.setLevel('debug');
+    } else {
+        logger.setLevel('warning');
     }
 
     if ('serviceWorker' in navigator) {
