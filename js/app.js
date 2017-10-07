@@ -1,6 +1,19 @@
 /*globals L _ fetch console showdown Clipboard Brushstroke RModal*/
 /*eslint-env jquery */
 ((() => {
+    let DEBUG = true;
+
+    let logger = null;
+    if (DEBUG) {
+        logger = Logging.colorConsole();
+    }
+
+    const debugPrint = (level, message) => {
+        if (logger !== null) {
+            logger.log(level, message);
+        }
+    }
+
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
     }
