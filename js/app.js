@@ -7,13 +7,7 @@
     if (DEBUG) {
         logger = Logging.colorConsole();
     }
-
-    const debugPrint = (level, message) => {
-        if (logger !== null) {
-            logger.log(level, message);
-        }
-    }
-    debugPrint('info', 'test');
+    logger.info('test');
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
