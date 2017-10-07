@@ -13,6 +13,7 @@
             logger.log(level, message);
         }
     }
+    debugPrint('info', 'test');
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
