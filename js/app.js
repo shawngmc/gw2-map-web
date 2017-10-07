@@ -21,8 +21,9 @@
     const LABEL_FONT_AVG_RATIO = .6;
     let LABEL_FONT_HEIGHT = 18; // Default Value
     {
-        var stylesheets = document.styleSheets;
-        console.log(styleSheets);
+        const styleSheets = this.document.styleSheets;
+        let appCSS = _.find(styleSheets, (o) => {return o.href.endsWith("/css/app.css")});
+        console.log(appCSS);
     }
 
     /**
