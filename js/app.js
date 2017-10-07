@@ -1,16 +1,16 @@
-/*globals L _ fetch console showdown Clipboard Brushstroke RModal*/
+/*globals L _ fetch console showdown Clipboard Brushstroke Logging*/
 /*eslint-env jquery */
 ((() => {
     let DEBUG = true;
 
-    let logger = null;
+    let logger = Logging.colorConsole({level: 'warning'});
     if (DEBUG) {
-        logger = Logging.colorConsole();
+        logger.setLevel('debug');
     }
-    logger.info('test');
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
+      logger.info('Service worker registered...');
     }
 
     new Clipboard('.chatlink');
@@ -293,11 +293,11 @@
             this._initLayout();
 
             this._map = map;
-            map.on('zoomend', (event) => {console.log('listening'); this._zoomListener(event);});
+            map.on('zoomend', (event) => {this._zoomListener(event);});
             return this._container;
         },
         onRemove(map) {
-            map.off('zoomend', (event) => {console.log('listening'); this._zoomListener(event);});
+            map.off('zoomend', (event) => {this._zoomListener(event);});
             this._map = null;
         },
         _update() {
@@ -361,7 +361,7 @@
                         layerControlElement.checked = true;
                     }
                     layerWrapper.element = layerControlElement;
-                    layerControlElement.addEventListener('change', (event) => {console.log('listening'); this._changeListener(event);});
+                    layerControlElement.addEventListener('change', (event) => {this._changeListener(event);});
                     groupElement.appendChild(layerControlElement);
 
                     let layerLabel = null;
@@ -420,7 +420,6 @@
             });
         },
         _updateLayerVisibility() {
-            console.log('Updating layer visibility...');
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     const layerBlockRule = this._getLayerBlockRule(layerWrapper);
@@ -429,11 +428,11 @@
 
                     if (applyLayer && !layerOnMap) {
                         // The layer should apply and is not on the map, add it
-                        console.log(`adding layer: ${layerWrapper.name}`);
+                        logger.info(`Adding layer: ${layerWrapper.name}`);
                         map.addLayer(layerWrapper.layer);
                     } else if (!applyLayer && layerOnMap) {
-                        // The layer shoulf not apply to the map, but is already on there, remove it
-                        console.log(`removing layer: ${layerWrapper.name}`);
+                        // The layer should not apply to the map, but is already on there, remove it
+                        logger.info(`Removing layer: ${layerWrapper.name}`);
                         map.removeLayer(layerWrapper.layer);
                     }
                     // Otherwise, no action is necessary
@@ -479,7 +478,7 @@
                     marker.bindPopup(generatePopupWithSearchIcons(`${gameMap.name} Vista`, "vista", poi.chat_link));
                     vistaLayer.addLayer(marker);
                 } else {
-                    console.log(`unknown poi type: ${poi.type}`);
+                    logger.warn(`unknown poi type: ${poi.type}`);
                 }
             });
 
@@ -518,7 +517,7 @@
                         subtype: "unknown"
                     });
                     masteryLayer.addLayer(marker);
-                    console.log(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
+                    logger.warn(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -549,7 +548,7 @@
                         subtype: "core"
                     });
                     heroLayer.addLayer(marker);
-                    console.log(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
+                    logger.warn(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -580,7 +579,7 @@
             zoneLayer.addLayer(zonerect);
         });
     }).catch(ex => {
-        console.log("failed", ex);
+        logger.error("failed", ex);
     });
 
     const prepReadme = () => fetch("../user_readme.md")
