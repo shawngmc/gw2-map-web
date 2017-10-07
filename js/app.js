@@ -1,57 +1,50 @@
 /*globals L _ fetch console showdown Clipboard Brushstroke RModal*/
 /*eslint-env jquery */
-(function () {
-    "use strict";
-
+((() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
     }
 
     new Clipboard('.chatlink');
-    
-    var generateIconV2URL = function (type, subtype) {
-        return 'images/gw2/v2/' + type + (subtype !== undefined ? "-" + subtype : "") + ".svg";
-    };
 
-    var generatePopupWithSearchIcons = function (objDesc, objType, objChatLink) {
-        var span = document.createElement("span");
-        var links = {};
-        links.youtube = "https://www.youtube.com/results?search_query=gw2+" + objDesc.replace(" ", "+");
-        links.google = "https://www.google.com/search?q=gw2+" + objDesc.replace(" ", "+");
+    const generateIconV2URL = (type, subtype) => `images/gw2/v2/${type}${subtype !== undefined ? "-" + subtype : ""}.svg`;
+
+    const generatePopupWithSearchIcons = (objDesc, objType, objChatLink) => {
+        const span = document.createElement("span");
+        const links = {};
+        links.youtube = `https://www.youtube.com/results?search_query=gw2+${objDesc.replace(" ", "+")}`;
+        links.google = `https://www.google.com/search?q=gw2+${objDesc.replace(" ", "+")}`;
         if (objType !== undefined) {
-            links.youtube = links.youtube + "+" + objType.replace(" ", "+");
-            links.google = links.google + "+" + objType.replace(" ", "+");
+            links.youtube = `${links.youtube}+${objType.replace(" ", "+")}`;
+            links.google = `${links.google}+${objType.replace(" ", "+")}`;
         }
-        var popupContents = '';
-        popupContents += '<span>Task: ' + objDesc + '<br>';
+        let popupContents = '';
+        popupContents += `<span>Task: ${objDesc}<br>`;
         if (objChatLink !== undefined && objChatLink !== null) {
-            popupContents += '<i class="fa fa-clipboard chatlink popuplink" aria-hidden="true" data-clipboard-text=' + objChatLink + ' title="Copy Chat Link to Clipboard"></i>&nbsp;';
+            popupContents += `<i class="fa fa-clipboard chatlink popuplink" aria-hidden="true" data-clipboard-text=${objChatLink} title="Copy Chat Link to Clipboard"></i>&nbsp;`;
         }
-        popupContents += '<a href="' + links.youtube + '" target="_blank"><i class="fa fa-youtube-play popuplink" style="color:rgb(255, 0, 0)" aria-hidden="true" title="Search on YouTube"></i></a>&nbsp;';
-        popupContents += '<a href="' + links.google + '" target="_blank"><i class="fa fa-google popuplink" style="color:rgb(66, 133, 244)" aria-hidden="true" title="Search on Google"></i></a>&nbsp;';
+        popupContents += `<a href="${links.youtube}" target="_blank"><i class="fa fa-youtube-play popuplink" style="color:rgb(255, 0, 0)" aria-hidden="true" title="Search on YouTube"></i></a>&nbsp;`;
+        popupContents += `<a href="${links.google}" target="_blank"><i class="fa fa-google popuplink" style="color:rgb(66, 133, 244)" aria-hidden="true" title="Search on Google"></i></a>&nbsp;`;
         popupContents += '</span>';
         span.innerHTML = popupContents;
         return span;
     };
 
-    var uuidv4 = function() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    const uuidv4 = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0;
+        const v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
-      });
-    }
+    });
 
-    var getWorldData = function() {
-        return fetch("../data/zonedata.json")
-            .then((worldDataRequestResponse) => {
-                return worldDataRequestResponse.text();
-            })
-            .then((worldDataRaw) => {
-                return JSON.parse(worldDataRaw);
-            })
-    };
+    const getWorldData = () => fetch("../data/zonedata.json")
+        .then((worldDataRequestResponse) => {
+            return worldDataRequestResponse.text();
+        })
+        .then((worldDataRaw) => {
+            return JSON.parse(worldDataRaw);
+        });
 
-    var icons = {};
+    const icons = {};
     icons.waypoint = L.icon({
         iconUrl: generateIconV2URL("waypoint"),
         iconSize: [24, 24],
@@ -113,9 +106,7 @@
         popupAnchor: [-3, -3]
     });
 
-    var unproject = function(coord) {
-        return map.unproject(coord, map.getMaxZoom());
-    }
+    const unproject = coord => map.unproject(coord, map.getMaxZoom());
 
     var map;
     map = L.map("map", {
@@ -125,15 +116,15 @@
         preferCanvas: true
     }).setView([0, 0], 0);
 
-    var southWest = unproject([0, 40000]);
-    var northEast = unproject([40000, 0]);
-    var maxBounds = new L.LatLngBounds(southWest, northEast);
+    const southWest = unproject([0, 40000]);
+    const northEast = unproject([40000, 0]);
+    const maxBounds = new L.LatLngBounds(southWest, northEast);
 
     map.setMaxBounds(maxBounds);
 
-    var createWebImageryLayer = function(floorId) {
-        var baseLayerURL = "https://tiles{s}.guildwars2.com/1/" + floorId + "/{z}/{x}/{y}.jpg";
-        var imageryLayer = L.tileLayer(baseLayerURL, {
+    const createWebImageryLayer = floorId => {
+        const baseLayerURL = `https://tiles{s}.guildwars2.com/1/${floorId}/{z}/{x}/{y}.jpg`;
+        const imageryLayer = L.tileLayer(baseLayerURL, {
             minZoom: 0,
             maxZoom: 7,
             bounds: maxBounds,
@@ -141,26 +132,26 @@
             subdomains: [1, 2, 3, 4]
         });
         return imageryLayer;
-    }
+    };
 
 
-    var baseMaps = {};
-    var floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
+    const baseMaps = {};
+    const floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
     // Force in Upper Level, Surface, Underground, Depths order :)
     _.forEach([2, 1, 0, 3], (floorId) => {
-        var layer = createWebImageryLayer(floorId);
+        const layer = createWebImageryLayer(floorId);
         baseMaps[floorNames[floorId]] = layer;
     });
     map.addLayer(baseMaps.Surface);
 
-    var vistaLayer = new L.LayerGroup();
-    var landmarkLayer = new L.LayerGroup();
-    var waypointLayer = new L.LayerGroup();
-    var masteryLayer = new L.LayerGroup();
-    var zoneLayer = new L.LayerGroup();
-    var taskLayer = new L.LayerGroup();
-    var heroLayer = new L.LayerGroup();
-    var markersLayer = new L.LayerGroup([
+    const vistaLayer = new L.LayerGroup();
+    const landmarkLayer = new L.LayerGroup();
+    const waypointLayer = new L.LayerGroup();
+    const masteryLayer = new L.LayerGroup();
+    const zoneLayer = new L.LayerGroup();
+    const taskLayer = new L.LayerGroup();
+    const heroLayer = new L.LayerGroup();
+    const markersLayer = new L.LayerGroup([
         waypointLayer,
         landmarkLayer,
         masteryLayer,
@@ -169,20 +160,20 @@
         heroLayer
     ]);
 
-    var controlSearch = new L.Control.Search({
+    const controlSearch = new L.Control.Search({
         position: 'topleft',
         layer: markersLayer,
         initial: false,
         zoom: 7,
         marker: false,
         buildTip: (text, val) => {
-            var layerOpts = val.layer.options;
-            return "<a href=\"#\"><img src=\"" + generateIconV2URL(layerOpts.type, layerOpts.subtype) + "\" height=16 width=16 />" + text + "</a>";
+            const layerOpts = val.layer.options;
+            return `<a href="#"><img src="${generateIconV2URL(layerOpts.type, layerOpts.subtype)}" height=16 width=16 />${text}</a>`;
         }
     });
     map.addControl(controlSearch);
 
-    var layers = [
+    const layers = [
         {
             "groupName": "Imagery",
             "type": "layeroption",
@@ -278,36 +269,36 @@
     ];
 
     L.Control.ImprovedLayerControl = L.Control.extend({
-        _zoomListener: function(event) {
+        _zoomListener(event) {
             this._zoom = map.getZoom();
             this._update();
         },
-        _changeListener: function(event) {
+        _changeListener(event) {
             this._updateLayerVisibility();
         },
         _map: null,
         _zoom: null,
-        initialize: function(options) {
+        initialize(options) {
           this._layerData = options.layerData;
         },
-        onAdd: function(map) {
+        onAdd(map) {
             this._initLayout();
 
             this._map = map;
             map.on('zoomend', (event) => {console.log('listening'); this._zoomListener(event);});
             return this._container;
         },
-        onRemove: function(map) {
+        onRemove(map) {
             map.off('zoomend', (event) => {console.log('listening'); this._zoomListener(event);});
             this._map = null;
         },
-        _update: function() {
+        _update() {
             this._updateLayerVisibility();
             this._updateLayout();
         },
-        _initLayout: function() {
-            var className = 'leaflet-smart-layer-control';
-            var container = this._container = L.DomUtil.create('div', className);// + ' leaflet-bar leaflet-control leaflet-control-custom');
+        _initLayout() {
+            const className = 'leaflet-smart-layer-control';
+            const container = this._container = L.DomUtil.create('div', className);// + ' leaflet-bar leaflet-control leaflet-control-custom');
 
             // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
             container.setAttribute('aria-haspopup', true);
@@ -319,26 +310,26 @@
                 L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
             }
 
-            var form = this._form = L.DomUtil.create('form', className + '-list');
+            const form = this._form = L.DomUtil.create('form', `${className}-list`);
             container.appendChild(form);
 
-            var createTitle = (name) => {
-                var titleDiv = L.DomUtil.create('div', 'layermanager-list-group-title');
+            const createTitle = (name) => {
+                const titleDiv = L.DomUtil.create('div', 'layermanager-list-group-title');
                 titleDiv.textContent = name;
                 return titleDiv;
-            }
+            };
 
-            var createGroupElements = (layerGroup) => {
-                var groupElement = L.DomUtil.create('div', 'layermanager-list-group');
+            const createGroupElements = (layerGroup) => {
+                const groupElement = L.DomUtil.create('div', 'layermanager-list-group');
                 groupElement.appendChild(createTitle(layerGroup.groupName));
                 if (layerGroup.type === "layeroption") {
                     groupElement.style = "margin-bottom: 25px";   
                 }
 
-                var layerIdx = null;
+                let layerIdx = null;
                 _.forEach(layerGroup.layers, (layerWrapper) => {
                     layerWrapper.trackingId = uuidv4();
-                    var layerControlElement = null;
+                    let layerControlElement = null;
                     if (layerGroup.type === "checkbox") {
                         layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
                         layerControlElement.type = "checkbox";
@@ -353,7 +344,7 @@
                         } else {
                             layerIdx = layerIdx + 1;
                         }
-                        layerControlElement.style = "top: " + (layerIdx + 1) * 20 + "px;z-index:" + layerIdx;
+                        layerControlElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
                     }
                     layerControlElement.name = layerGroup.name;
                     layerControlElement.id = layerWrapper.trackingId;
@@ -365,18 +356,18 @@
                     layerControlElement.addEventListener('change', (event) => {console.log('listening'); this._changeListener(event);});
                     groupElement.appendChild(layerControlElement);
 
-                    var layerLabel = null;
+                    let layerLabel = null;
                     if (layerWrapper.display === "iconOnly") {
                         layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
                         layerLabel.htmlFor = layerWrapper.trackingId;
-                        var iconElement = L.DomUtil.create('img');
+                        const iconElement = L.DomUtil.create('img');
                         iconElement.src = layerWrapper.icon;
                         iconElement.height = 32;
                         iconElement.width = 32;
                         iconElement.title = layerWrapper.name;
                         iconElement.alt = layerWrapper.name;
                         if (layerIdx !== null) {
-                            iconElement.style = "top: " + (layerIdx + 1) * 20 + "px;z-index:" + layerIdx;
+                            iconElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
                         }
                         layerLabel.appendChild(iconElement);
                     } else {
@@ -397,7 +388,7 @@
 
             this._zoomListener();
         },
-        _getLayerBlockRule: function(layer) {
+        _getLayerBlockRule(layer) {
             if (layer.minZoom !== undefined && layer.minZoom > this._zoom) {
                 return "Zoom in to use."
             } else if (layer.maxZoom !== undefined && layer.maxZoom < this._zoom) {
@@ -406,35 +397,35 @@
                 return null;
             }
         },
-        _updateLayout: function() {
+        _updateLayout() {
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerBlockRule = this._getLayerBlockRule(layerWrapper);
+                    const layerBlockRule = this._getLayerBlockRule(layerWrapper);
                     layerWrapper.element.disabled = (layerBlockRule !== null);
-                    var titleString = layerWrapper.name;
+                    let titleString = layerWrapper.name;
                     if (layerBlockRule !== null) {
-                        titleString = titleString + ": Disabled -1 " + layerBlockRule;
+                        titleString = `${titleString}: Disabled -1 ${layerBlockRule}`;
                     }
                     layerWrapper.element.title = titleString;
                     layerWrapper.label.title = titleString;
                 });
             });
         },
-        _updateLayerVisibility: function() {
+        _updateLayerVisibility() {
             console.log('Updating layer visibility...');
             _.forEach(this._layerData, (layerGroup) => {
                 _.forEach(layerGroup.layers, (layerWrapper) => {
-                    var layerBlockRule = this._getLayerBlockRule(layerWrapper);
-                    var applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
-                    var layerOnMap = map.hasLayer(layerWrapper.layer);
+                    const layerBlockRule = this._getLayerBlockRule(layerWrapper);
+                    const applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
+                    const layerOnMap = map.hasLayer(layerWrapper.layer);
 
                     if (applyLayer && !layerOnMap) {
                         // The layer should apply and is not on the map, add it
-                        console.log('adding layer: ' + layerWrapper.name);
+                        console.log(`adding layer: ${layerWrapper.name}`);
                         map.addLayer(layerWrapper.layer);
                     } else if (!applyLayer && layerOnMap) {
                         // The layer shoulf not apply to the map, but is already on there, remove it
-                        console.log('removing layer: ' + layerWrapper.name);
+                        console.log(`removing layer: ${layerWrapper.name}`);
                         map.removeLayer(layerWrapper.layer);
                     }
                     // Otherwise, no action is necessary
@@ -443,18 +434,16 @@
         }
     });
 
-    L.control.improvedLayerControl = function(opts) {
-        return new L.Control.ImprovedLayerControl(opts);
-    }
+    L.control.improvedLayerControl = opts => new L.Control.ImprovedLayerControl(opts)
     L.control.improvedLayerControl({ "layerData" : layers }).addTo(map);
 
 
-   // L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+    // L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
     // Load World Data
-    getWorldData().then(function (worldData) {
-        _.forOwn(worldData, function (gameMap) {
-            var marker = null;
+    getWorldData().then(worldData => {
+        _.forOwn(worldData, gameMap => {
+            let marker = null;
             // Process POIs (Landmarks, Vistas, Waypoints)
             _.forEach(gameMap.points_of_interest, (poi) => {
                 if (poi.type === "waypoint") {
@@ -479,10 +468,10 @@
                         icon: icons.vista,
                         type: poi.type
                     });
-                    marker.bindPopup(generatePopupWithSearchIcons(gameMap.name + " Vista", "vista", poi.chat_link));
+                    marker.bindPopup(generatePopupWithSearchIcons(`${gameMap.name} Vista`, "vista", poi.chat_link));
                     vistaLayer.addLayer(marker);
                 } else {
-                    console.log("unknown poi type: " + poi.type);
+                    console.log(`unknown poi type: ${poi.type}`);
                 }
             });
 
@@ -521,7 +510,7 @@
                         subtype: "unknown"
                     });
                     masteryLayer.addLayer(marker);
-                    console.log("unknown mastery region: " + gameMap.customData.region.name + "; displaying generic...");
+                    console.log(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -552,7 +541,7 @@
                         subtype: "core"
                     });
                     heroLayer.addLayer(marker);
-                    console.log("unknown skill challenge region: " + gameMap.customData.region.name + "; displaying generic...");
+                    console.log(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
             });
 
@@ -560,7 +549,7 @@
             marker = null;
             _.forEach(gameMap.tasks, (task) => {
                 marker = L.marker(unproject(task.coord), {
-                    title: "Task: " + task.objective,
+                    title: `Task: ${task.objective}`,
                     icon: icons.task,
                     type: "task"
                 });
@@ -568,10 +557,10 @@
                 taskLayer.addLayer(marker);
             });
 
-            var baseBounds = gameMap.continent_rect;
-            var bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+            const baseBounds = gameMap.continent_rect;
+            const bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
 
-            var zonerect = L.rectangle(bounds, {
+            const zonerect = L.rectangle(bounds, {
                 color: gameMap.customData.assignedColor,
                 weight: 1,
                 feature: {
@@ -582,42 +571,33 @@
             });
             zoneLayer.addLayer(zonerect);
         });
-    }).catch(function (ex) {
+    }).catch(ex => {
         console.log("failed", ex);
     });
 
-    var prepReadme = function() {
-        return fetch("../user_readme.md")
-            .then((readmeRequestResponse) => {
-                return readmeRequestResponse.text();
-            })
-            .then((readmeMarkdown) => {
-                var converter = new showdown.Converter();
-                var html = converter.makeHtml(readmeMarkdown);
-                document.getElementById("modal-body").innerHTML = "<p>" + html + "</p>";
-                L.easyButton("&quest;", function(btn, map){
-                    $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
-                }).addTo(map);
-            })
-    };
+    const prepReadme = () => fetch("../user_readme.md")
+        .then((readmeRequestResponse) => {
+            return readmeRequestResponse.text();
+        })
+        .then((readmeMarkdown) => {
+            const converter = new showdown.Converter();
+            const html = converter.makeHtml(readmeMarkdown);
+            document.getElementById("modal-body").innerHTML = `<p>${html}</p>`;
+            L.easyButton("&quest;", (btn, map) => {
+                $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
+            }).addTo(map);
+        });
     prepReadme();
-    
-    
+
+
     function getRandomIntInclusive(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
     }
-    
-    var paintElementArea = function(element, paintMargin, color) {
-    
-        var width = window.innerWidth || document.body.clientWidth;
-        var height = window.innerHeight || document.body.clientHeight;
-        var optionsBackground, bsBackground;
-        
-        // Random curves for background
-    
-        optionsBackground = {
+
+    const paintElementArea = (element, paintMargin, color) => {
+        let optionsBackground = {
             animation: 'points',
             points: 100,
             inkAmount: 15,
@@ -625,7 +605,7 @@
             size: 14,
             frames: 5,
             frameAnimation: false,
-            color: color,
+            color,
             splashing: false,
             dripping: true,
             centered: true,
@@ -634,17 +614,16 @@
             height: element.offsetHeight,
             root: element
         };
-        bsBackground = new Brushstroke(optionsBackground);
-    
-        var position = element.offsetLeft + paintMargin;
+        let bsBackground = new Brushstroke(optionsBackground);
+
+        let position = element.offsetLeft + paintMargin;
         while (position < element.offsetLeft + element.offsetWidth) {
             bsBackground.draw({
                 points: [position + getRandomIntInclusive(-3, 3), (paintMargin + getRandomIntInclusive(-3, 3)), position + getRandomIntInclusive(-3, 3), element.offsetHeight - (paintMargin + getRandomIntInclusive(-3, 3))]
             });
             position = position + 2;
         }
-        
-    }
+    };
 
     paintElementArea(document.getElementsByClassName('leaflet-smart-layer-control')[0], 8, '#A0522D');
-})();
+}))();
