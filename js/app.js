@@ -565,6 +565,7 @@
                 taskLayer.addLayer(marker);
             });
 
+            // Process zone definitions
             const baseBounds = gameMap.continent_rect;
             const bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
 
@@ -578,6 +579,13 @@
                 }
             });
             zoneLayer.addLayer(zonerect);
+
+            // Add zone label
+            const labelPos = unproject(gameMap.label_coord);
+            marker = new L.marker(labelPos, {opacity: 0.1});
+            marker.bindTooltop(gameMap.name, {permanent: true, className: "zone-label", offset: [0, 0]});
+            zoneLayer.addLayer(marker);
+
         });
     }).catch(ex => {
         logger.error("Failed to read map data: ", ex);
@@ -594,8 +602,11 @@
             L.easyButton("&quest;", (btn, map) => {
                 $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
             }).addTo(map);
-            logger.debug('Help/About loaded and prepared...');
-        });
+            logger.debug('Readme loaded and prepared...');
+        })
+        .catch(ex => {
+            logger.error("Failed to read readme data: ", ex);
+        });;
     prepReadme();
 
 

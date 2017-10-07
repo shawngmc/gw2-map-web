@@ -136,3 +136,10 @@
 .popuplink {
     font-size: 32px;
 }
+
+.zone-label {
+  font: normal 16px/1 "Menomonia", Times, serif;
+  text-shadow: 1px 1px 1px rgba(0,0,0,1);
+  font-style:italic;
+  color: rgba(213, 181, 121);
+}
