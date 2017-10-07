@@ -18,6 +18,93 @@
 
     new Clipboard('.chatlink');
 
+    /**
+     * This is an attempt to encapsulate the zoom awareness functionality into it's own class.
+     * 
+     * The lifecycle is:
+     * - A layer is created
+     * - The LayerZoomMonitor is created
+     * - Any user control for the layer affects the enabled value - via enable() or disable()
+     * - Any zoom event goes to the registered event listener, which gets the new zoom
+     * - On any event that would change the layer's status, we determine what the visibility should be and add/remove as necessary
+     * 
+     */
+    class LayerZoomMonitor {
+        constructor(layer, name, minZoom, maxZoom, map, enabled, layerModifier) {
+          this.layer = layer
+          this.name = name;
+          this.minZoom = minZoom;
+          this.maxZoom = maxZoom;
+          this.map = map;
+          this.enabled = enabled;
+          this.layerModifier = layerModifier;
+
+          this.map.on('zoomend', (event) => {this._zoomListener(event);});
+          this._zoom = this.map.getZoom();
+          this.updateLayerState();
+        }
+
+        enable() {
+            this.enabled = true;
+            this.updateLayerState();
+        }
+        disable() {
+            this.enabled = false;
+            this.updateLayerState();
+        }
+
+        isLayerEnabled() {
+            return this.enabled;
+        }
+
+        isLayerBlocked() {
+            return this.getBlockRule() === null;
+        }
+
+        isLayerOnMap() {
+            return map.hasLayer(this.layer);
+        }
+
+        getBlockRule() {
+            if (this.minZoom && this.minZoom > this._zoom) {
+                return "Zoom in to use."
+            } else if (this.maxZoom && this.maxZoom < this._zoom) {
+                return "Zoom out to use."
+            } else {
+                return null;
+            }
+        }
+
+        updateLayerState() {
+            if (this.isLayerOnMap()) {
+                if (!this.isLayerEnabled() || this.isLayerBlocked()) {
+                    // The layer should not apply to the map, but is already on there, remove it
+                    map.removeLayer(this.layer);
+                    logger.debug(`Removed layer: ${this.name}`);
+                }
+            } else {
+                if (this.isLayerEnabled() && !this.isLayerBlocked()) {
+                    // The layer should apply but is not on the map, add it
+                    map.addLayer(this.layer);
+                    logger.debug(`Added layer: ${this.name}`);
+                    this.layerModifier(this._zoom);
+                }
+            }
+        }
+
+        _zoomlistener() {
+            return (event) => {
+                logger.debug(`Map zoom event detected in manager for layer ${this.name}...`);
+                this._zoom = this.map.getZoom();
+                this.updateLayerState();
+            };
+        }
+      }
+      
+
+
+
+
     const generateIconV2URL = (type, subtype) => `images/gw2/v2/${type}${subtype !== undefined ? "-" + subtype : ""}.svg`;
 
     const generatePopupWithSearchIcons = (objDesc, objType, objChatLink) => {
@@ -590,7 +677,7 @@
                 html: gameMap.name,
                 className: "zone-label"
             });
-            marker = new L.marker(labelPos, {icon: divIcon});
+            marker = new L.marker(labelPos, {icon: divIcon, offset: [-20, -20]});
             zoneLayer.addLayer(marker);
         });
     }).catch(ex => {
