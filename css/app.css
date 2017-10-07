@@ -138,12 +138,11 @@
 }
 
 .zone-label {
-  font: normal 16px/1 "Menomonia", Times, serif;
-  text-shadow: 1px 1px 1px rgba(0,0,0,1);
+  font: normal 18px/1 "Menomonia", Times, serif;
+  text-shadow: 2px 2px 2px rgba(0,0,0,1);
   font-style: italic;
   font-weight: normal;
   color: rgba(213, 181, 121, 1);
   background-color: rgba(0,0,0,0);
-  border: 0px;
   white-space:nowrap;
 }
