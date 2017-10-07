@@ -582,8 +582,15 @@
 
             // Add zone label
             const labelPos = unproject(gameMap.label_coord);
-            marker = new L.marker(labelPos, {opacity: 0.1});
-            marker.bindTooltip(gameMap.name, {permanent: true, className: "zone-label", offset: [0, 0]});
+            var divIcon = L.divIcon({
+                html: gameMap.name,
+                className: "zone-label"
+            });
+            marker = new L.marker(labelPos, {icon: divIcon});
+
+            //marker = new L.marker(labelPos, {opacity: 0.1});
+            //marker.bindTooltip(gameMap.name, {permanent: true, className: "zone-label", offset: [0, 0]});
+
             zoneLayer.addLayer(marker);
 
         });

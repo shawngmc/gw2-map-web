@@ -144,4 +144,6 @@
   font-weight: normal;
   color: rgba(213, 181, 121, 1);
   background-color: rgba(0,0,0,0);
+  border: 0px;
+  white-space:nowrap;
 }
