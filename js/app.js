@@ -2,6 +2,7 @@
 /*eslint-env jquery */
 ((() => {
     let DEBUG = true;
+    let DEBUG_ZONEBOXES = false;
 
     let logger = Logging.colorConsole();
     if (DEBUG) {
@@ -272,7 +273,9 @@
                     "layer": zoneLayer,
                     "icon": generateIconV2URL("labels"),
                     "display": "iconOnly",
-                    "defaultState": false
+                    "minZoom": 2,
+                    "maxZoom": 5,
+                    "defaultState": true
                 }
             ]
         }
@@ -565,20 +568,21 @@
                 taskLayer.addLayer(marker);
             });
 
-            // Process zone definitions
-            const baseBounds = gameMap.continent_rect;
-            const bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
-
-            const zonerect = L.rectangle(bounds, {
-                color: gameMap.customData.assignedColor,
-                weight: 1,
-                feature: {
-                    properties: {
-                    name: gameMap.customData.name
+            // Debug - zone boxes
+            if (DEBUG_ZONEBOXES) {
+                const baseBounds = gameMap.continent_rect;
+                const bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                const zonerect = L.rectangle(bounds, {
+                    color: gameMap.customData.assignedColor,
+                    weight: 1,
+                    feature: {
+                        properties: {
+                        name: gameMap.customData.name
+                        }
                     }
-                }
-            });
-            zoneLayer.addLayer(zonerect);
+                });
+                zoneLayer.addLayer(zonerect);
+            }
 
             // Add zone label
             const labelPos = unproject(gameMap.label_coord);
@@ -587,12 +591,7 @@
                 className: "zone-label"
             });
             marker = new L.marker(labelPos, {icon: divIcon});
-
-            //marker = new L.marker(labelPos, {opacity: 0.1});
-            //marker.bindTooltip(gameMap.name, {permanent: true, className: "zone-label", offset: [0, 0]});
-
             zoneLayer.addLayer(marker);
-
         });
     }).catch(ex => {
         logger.error("Failed to read map data: ", ex);
