@@ -5,12 +5,12 @@
 
     let logger = Logging.colorConsole({level: 'warning'});
     if (DEBUG) {
-        logger.setLevel('info');
+        logger.setLevel('debug');
     }
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./js/mapdata-service-worker.js');
-      logger.info('Service worker registered...');
+      logger.debug('Service worker registered...');
     }
 
     new Clipboard('.chatlink');
@@ -278,12 +278,12 @@
 
     L.Control.ImprovedLayerControl = L.Control.extend({
         _zoomListener(event) {
-            logger.info('Map zoom event detected...');
+            logger.debug('Map zoom event detected...');
             this._zoom = map.getZoom();
             this._update();
         },
         _changeListener(event) {
-            logger.info('Layer selection change detected...');
+            logger.debug('Layer selection change detected...');
             this._updateLayerVisibility();
         },
         _map: null,
@@ -430,11 +430,11 @@
 
                     if (applyLayer && !layerOnMap) {
                         // The layer should apply and is not on the map, add it
-                        logger.info(`Adding layer: ${layerWrapper.name}`);
+                        logger.debug(`Adding layer: ${layerWrapper.name}`);
                         map.addLayer(layerWrapper.layer);
                     } else if (!applyLayer && layerOnMap) {
                         // The layer should not apply to the map, but is already on there, remove it
-                        logger.info(`Removing layer: ${layerWrapper.name}`);
+                        logger.debug(`Removing layer: ${layerWrapper.name}`);
                         map.removeLayer(layerWrapper.layer);
                     }
                     // Otherwise, no action is necessary
@@ -592,7 +592,7 @@
             L.easyButton("&quest;", (btn, map) => {
                 $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
             }).addTo(map);
-            logger.info('Help/About loaded and prepared...');
+            logger.debug('Help/About loaded and prepared...');
         });
     prepReadme();
 
