@@ -591,7 +591,6 @@
                         type: "mastery",
                         subtype: "core"
                     });
-                    masteryLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "HoT") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Maguuma)",
@@ -599,7 +598,6 @@
                         type: "mastery",
                         subtype: "maguuma"
                     });
-                    masteryLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "PoF") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Crystal Desert)",
@@ -607,7 +605,6 @@
                         type: "mastery",
                         subtype: "crystal"
                     });
-                    masteryLayer.addLayer(marker);
                 } else {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (???)",
@@ -615,9 +612,9 @@
                         type: "mastery",
                         subtype: "unknown"
                     });
-                    masteryLayer.addLayer(marker);
                     logger.warning(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
+                masteryLayer.addLayer(marker);
             });
 
             // Process Skill / Hero Challenges
@@ -630,7 +627,6 @@
                         type: "hero_point",
                         subtype: "core"
                     });
-                    heroLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "HoT" || gameMap.customData.zoneCategory === "PoF") {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (10x)",
@@ -638,7 +634,6 @@
                         type: "hero_point",
                         subtype: "advanced"
                     });
-                    heroLayer.addLayer(marker);
                 } else {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (???)",
@@ -646,9 +641,9 @@
                         type: "hero_point",
                         subtype: "core"
                     });
-                    heroLayer.addLayer(marker);
                     logger.warning(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
+                heroLayer.addLayer(marker);
             });
 
             // Process Hearts / Tasks
