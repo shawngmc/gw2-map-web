@@ -1,4 +1,5 @@
 {
+    "short_name": "GW2 World Map",
     "name": "Itomeshi's GW2 World Map",
     "icons": [
         {
@@ -12,6 +13,7 @@
             "type": "image/png"
         }
     ],
+    "start_url": "/",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
     "display": "standalone"
