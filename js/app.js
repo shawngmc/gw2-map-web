@@ -112,8 +112,8 @@
 
 
 
-
-    const generateIconV2URL = (type, subtype) => `images/gw2/v2/${type}${subtype !== undefined ? "-" + subtype : ""}.svg`;
+    var iconMap = {};
+    const generateIconURL = (type, subtype) => `images/gw2/v2/${type}${subtype !== undefined ? "-" + subtype : ""}.svg`;
 
     const generatePopupWithSearchIcons = (objDesc, objType, objChatLink) => {
         const span = document.createElement("span");
@@ -150,67 +150,26 @@
             return JSON.parse(worldDataRaw);
         });
 
-    const icons = {};
-    icons.waypoint = L.icon({
-        iconUrl: generateIconV2URL("waypoint"),
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-        popupAnchor: [-3, -3]
-    });
-    icons.landmark = L.icon({
-        iconUrl: generateIconV2URL("poi"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.vista = L.icon({
-        iconUrl: generateIconV2URL("vista"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterytyria = L.icon({
-        iconUrl: generateIconV2URL("mastery", "core"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterymaguuma = L.icon({
-        iconUrl: generateIconV2URL("mastery", "hot"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterycrystal = L.icon({
-        iconUrl: generateIconV2URL("mastery", "pof"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterygeneric = L.icon({
-        iconUrl: generateIconV2URL("mastery", "generic"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.skillcore = L.icon({
-        iconUrl: generateIconV2URL("heropoint", "1x"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.skillmaguuma = L.icon({
-        iconUrl: generateIconV2URL("heropoint", "10x"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.task = L.icon({
-        iconUrl: generateIconV2URL("task"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
+
+    const generateMapIcon = (type, subtype) => {
+        return L.icon({
+            iconUrl: generateIconURL(type, subtype),
+            iconSize: (type === "waypoint") ? [24, 24] :[20, 20],
+            iconAnchor: [10, 10],
+            popupAnchor: [-3, -3]
+        });
+    }
+
+    const getMapIcon = (type, subtype) => {
+        let lookSubtype = subtype ? subtype : "BASE";
+        if (iconMap[type] === undefined) {
+            iconMap[type] = {};
+        }
+        if (iconMap[type][lookSubtype] === undefined) {
+            iconMap[type][lookSubtype] = generateMapIcon(type, subtype);
+        }
+        return iconMap[type][lookSubtype];
+    }
 
     const unproject = coord => map.unproject(coord, map.getMaxZoom());
 
@@ -274,7 +233,7 @@
         marker: false,
         buildTip: (text, val) => {
             const layerOpts = val.layer.options;
-            return `<a href="#"><img src="${generateIconV2URL(layerOpts.type, layerOpts.subtype)}" height=16 width=16 />${text}</a>`;
+            return `<a href="#"><img src="${generateIconURL(layerOpts.type, layerOpts.subtype)}" height=16 width=16 />${text}</a>`;
         }
     });
     map.addControl(controlSearch);
@@ -318,7 +277,7 @@
                 {
                     "name": "Waypoints",
                     "layer": waypointLayer,
-                    "icon": generateIconV2URL("waypoint"),
+                    "icon": generateIconURL("waypoint"),
                     "display": "iconOnly",
                     "minZoom": 2,
                     "defaultState": true
@@ -326,7 +285,7 @@
                 {
                     "name": "Vistas",
                     "layer": vistaLayer,
-                    "icon": generateIconV2URL("vista"),
+                    "icon": generateIconURL("vista"),
                     "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
@@ -334,7 +293,7 @@
                 {
                     "name": "Landmarks",
                     "layer": landmarkLayer,
-                    "icon": generateIconV2URL("poi"),
+                    "icon": generateIconURL("poi"),
                     "display": "iconOnly",
                     "minZoom": 3,
                     "defaultState": true
@@ -342,7 +301,7 @@
                 {
                     "name": "Mastery Points",
                     "layer": masteryLayer,
-                    "icon": generateIconV2URL("mastery", "generic"),
+                    "icon": generateIconURL("mastery", "generic"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
@@ -350,7 +309,7 @@
                 {
                     "name": "Hero Challenges",
                     "layer": heroLayer,
-                    "icon": generateIconV2URL("heropoint", "1x"),
+                    "icon": generateIconURL("heropoint", "1x"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
@@ -358,7 +317,7 @@
                 {
                     "name": "Tasks",
                     "layer": taskLayer,
-                    "icon": generateIconV2URL("task"),
+                    "icon": generateIconURL("task"),
                     "display": "iconOnly",
                     "minZoom": 4,
                     "defaultState": false
@@ -366,7 +325,7 @@
                 {
                     "name": "Labels",
                     "layer": zoneLayer,
-                    "icon": generateIconV2URL("labels"),
+                    "icon": generateIconURL("labels"),
                     "display": "iconOnly",
                     "minZoom": 2,
                     "maxZoom": 5,
@@ -555,7 +514,7 @@
                 if (poi.type === "waypoint") {
                     marker = L.marker(unproject(poi.coord), {
                         title: poi.name,
-                        icon: icons.waypoint,
+                        icon: getMapIcon("waypoint"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint", poi.chat_link));
@@ -563,7 +522,7 @@
                 } else if (poi.type === "landmark") {
                     marker = L.marker(unproject(poi.coord), {
                         title: poi.name,
-                        icon: icons.landmark,
+                        icon: getMapIcon("poi"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi", poi.chat_link));
@@ -571,7 +530,7 @@
                 } else if (poi.type === "vista") {
                     marker = L.marker(unproject(poi.coord), {
                         title: "Vista",
-                        icon: icons.vista,
+                        icon: getMapIcon("vista"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(`${gameMap.name} Vista`, "vista", poi.chat_link));
@@ -587,28 +546,28 @@
                 if (gameMap.customData.zoneCategory === "GW2") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Tyria)",
-                        icon: icons.masterytyria,
+                        icon: getMapIcon("mastery", "core"),
                         type: "mastery",
                         subtype: "core"
                     });
                 } else if (gameMap.customData.zoneCategory === "HoT") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Maguuma)",
-                        icon: icons.masterymaguuma,
+                        icon: getMapIcon("mastery", "hot"),
                         type: "mastery",
                         subtype: "maguuma"
                     });
                 } else if (gameMap.customData.zoneCategory === "PoF") {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (Crystal Desert)",
-                        icon: icons.masterycrystal,
+                        icon: getMapIcon("mastery", "pof"),
                         type: "mastery",
                         subtype: "crystal"
                     });
                 } else {
                     marker = L.marker(unproject(masteryPoint.coord), {
                         title: "Mastery Point (???)",
-                        icon: icons.masterygeneric,
+                        icon: getMapIcon("mastery", "generic"),
                         type: "mastery",
                         subtype: "unknown"
                     });
@@ -623,21 +582,21 @@
                 if (gameMap.customData.zoneCategory === "GW2") {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (1x)",
-                        icon: icons.skillcore,
+                        icon: getMapIcon("heropoint", "1x"),
                         type: "hero_point",
                         subtype: "core"
                     });
                 } else if (gameMap.customData.zoneCategory === "HoT" || gameMap.customData.zoneCategory === "PoF") {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (10x)",
-                        icon: icons.skillmaguuma,
+                        icon: getMapIcon("heropoint", "10x"),
                         type: "hero_point",
                         subtype: "advanced"
                     });
                 } else {
                     marker = L.marker(unproject(skillChallenge.coord), {
                         title: "Hero Challenge (???)",
-                        icon: icons.skillcore,
+                        icon: getMapIcon("heropoint", "1x"),
                         type: "hero_point",
                         subtype: "core"
                     });
@@ -651,7 +610,7 @@
             _.forEach(gameMap.tasks, (task) => {
                 marker = L.marker(unproject(task.coord), {
                     title: `Task: ${task.objective}`,
-                    icon: icons.task,
+                    icon: getMapIcon("task"),
                     type: "task"
                 });
                 marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
