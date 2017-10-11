@@ -1,6 +1,6 @@
 /*globals L _ fetch console showdown Clipboard Brushstroke Logging*/
 /*eslint-env jquery */
-((() => {
+(() => {
     let DEBUG = true;
     let DEBUG_ZONEBOXES = false;
 
@@ -12,8 +12,8 @@
     }
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./js/mapdata-service-worker.js');
-      logger.debug('Service worker registered...');
+        navigator.serviceWorker.register('./js/mapdata-service-worker.js');
+        logger.debug('Service worker registered...');
     }
 
     new Clipboard('.chatlink');
@@ -22,7 +22,9 @@
     let LABEL_FONT_HEIGHT = 18; // Default Value
     {
         const styleSheets = this.document.styleSheets;
-        let appCSS = _.find(styleSheets, (o) => {return o.href.endsWith("/css/app.css")});
+        let appCSS = _.find(styleSheets, (o) => {
+            return o.href.endsWith("/css/app.css")
+        });
         console.log(appCSS);
     }
 
@@ -39,17 +41,19 @@
      */
     class LayerZoomMonitor {
         constructor(layer, name, minZoom, maxZoom, map, enabled, layerModifier) {
-          this.layer = layer
-          this.name = name;
-          this.minZoom = minZoom;
-          this.maxZoom = maxZoom;
-          this.map = map;
-          this.enabled = enabled;
-          this.layerModifier = layerModifier;
+            this.layer = layer
+            this.name = name;
+            this.minZoom = minZoom;
+            this.maxZoom = maxZoom;
+            this.map = map;
+            this.enabled = enabled;
+            this.layerModifier = layerModifier;
 
-          this.map.on('zoomend', (event) => {this._zoomListener(event);});
-          this._zoom = this.map.getZoom();
-          this.updateLayerState();
+            this.map.on('zoomend', (event) => {
+                this._zoomListener(event);
+            });
+            this._zoom = this.map.getZoom();
+            this.updateLayerState();
         }
 
         enable() {
@@ -107,13 +111,396 @@
                 this.updateLayerState();
             };
         }
-      }
-      
+    }
 
+    let utilsInstance = null;
+    class Utils {
+        constructor() {
+            this.iconMap = {};
+        }
 
+        generateIconURL(type, subtype) {
+            return `images/gw2/v2/${type}${subtype ? "-" + subtype : ""}.svg`;
+        }
 
+        generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
 
-    const generateIconV2URL = (type, subtype) => `images/gw2/v2/${type}${subtype !== undefined ? "-" + subtype : ""}.svg`;
+        generateMapIcon(type, subtype) {
+            return L.icon({
+                iconUrl: this.generateIconURL(type, subtype),
+                iconSize: [20, 20],
+                iconAnchor: [10, 10],
+                popupAnchor: [-3, -3]
+            });
+        }
+
+        getMapIcon(type, subtype) {
+            let lookSubtype = subtype ? subtype : "BASE";
+            if (this.iconMap[type] === undefined) {
+                this.iconMap[type] = {};
+            }
+            if (this.iconMap[type][lookSubtype] === undefined) {
+                this.iconMap[type][lookSubtype] = this.generateMapIcon(type, subtype);
+            }
+            return this.iconMap[type][lookSubtype];
+        }
+        
+        createWebImageryLayer(floorId, maxBounds) {
+            const baseLayerURL = `https://tiles{s}.guildwars2.com/1/${floorId}/{z}/{x}/{y}.jpg`;
+            const imageryLayer = L.tileLayer(baseLayerURL, {
+                minZoom: 0,
+                maxZoom: 7,
+                bounds: maxBounds,
+                attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
+                subdomains: [1, 2, 3, 4]
+            });
+            return imageryLayer;
+        };
+    }
+    utilsInstance = new Utils();
+
+    let geoInstance = null;
+    class Geo {
+        constructor() {
+            if (!geoInstance) {
+                geoInstance = this;
+                this.build();
+            }
+            return geoInstance;
+        }
+        
+        build() {
+            this.buildMapDisplay();
+            this.buildLayers();
+            this.buildSearchUI();
+            this.buildLayerUI();
+        }
+
+        buildMapDisplay() {
+            this.map = L.map("map", {
+                minZoom: 1,
+                maxZoom: 7,
+                crs: L.CRS.Simple,
+                preferCanvas: true
+            }).setView([0, 0], 0);
+            
+            const southWest = this.unproject([0, 40000]);
+            const northEast = this.unproject([40000, 0]);
+            this.maxBounds = new L.LatLngBounds(southWest, northEast);
+            this.map.setMaxBounds(this.maxBounds);
+        }
+
+        buildLayers() {
+            const baseMaps = {};
+            const floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
+            // Force in Upper Level, Surface, Underground, Depths order :)
+            _.forEach([2, 1, 0, 3], (floorId) => {
+                const layer = utilsInstance.createWebImageryLayer(floorId, this.maxBounds);
+                baseMaps[floorNames[floorId]] = layer;
+            });
+            this.map.addLayer(baseMaps.Surface);
+        
+            const vistaLayer = new L.LayerGroup();
+            const landmarkLayer = new L.LayerGroup();
+            const waypointLayer = new L.LayerGroup();
+            const masteryLayer = new L.LayerGroup();
+            const zoneLayer = new L.LayerGroup();
+            const taskLayer = new L.LayerGroup();
+            const heroLayer = new L.LayerGroup();
+            this.markersLayer = new L.LayerGroup([
+                waypointLayer,
+                landmarkLayer,
+                masteryLayer,
+                vistaLayer,
+                taskLayer,
+                heroLayer
+            ]);
+        
+        
+            this.layers = [{
+                    "groupName": "Imagery",
+                    "type": "layeroption",
+                    "layers": [{
+                            "name": "Upper Level",
+                            "icon": '../images/layer_white.svg',
+                            "layer": utilsInstance.createWebImageryLayer(2)
+                        },
+                        {
+                            "name": "Surface",
+                            "icon": '../images/layer_white.svg',
+                            "layer": utilsInstance.createWebImageryLayer(1),
+                            "defaultState": true
+                        },
+                        {
+                            "name": "Underground",
+                            "icon": '../images/layer_white.svg',
+                            "layer": utilsInstance.createWebImageryLayer(0)
+                        },
+                        {
+                            "name": "Depths",
+                            "icon": '../images/layer_white.svg',
+                            "layer": utilsInstance.createWebImageryLayer(3)
+                        }
+                    ]
+                },
+                {
+                    "groupName": "Features",
+                    "type": "checkbox",
+                    "layers": [{
+                            "name": "Waypoints",
+                            "layer": waypointLayer,
+                            "icon": utilsInstance.generateIconURL("waypoint"),
+                            "minZoom": 2,
+                            "defaultState": true
+                        },
+                        {
+                            "name": "Vistas",
+                            "layer": vistaLayer,
+                            "icon": utilsInstance.generateIconURL("vista"),
+                            "minZoom": 3,
+                            "defaultState": true
+                        },
+                        {
+                            "name": "Landmarks",
+                            "layer": landmarkLayer,
+                            "icon": utilsInstance.generateIconURL("poi"),
+                            "minZoom": 3,
+                            "defaultState": true
+                        },
+                        {
+                            "name": "Mastery Points",
+                            "layer": masteryLayer,
+                            "icon": utilsInstance.generateIconURL("mastery", "generic"),
+                            "minZoom": 4,
+                            "defaultState": false
+                        },
+                        {
+                            "name": "Hero Challenges",
+                            "layer": heroLayer,
+                            "icon": utilsInstance.generateIconURL("heropoint", "1x"),
+                            "minZoom": 4,
+                            "defaultState": false
+                        },
+                        {
+                            "name": "Tasks",
+                            "layer": taskLayer,
+                            "icon": utilsInstance.generateIconURL("task"),
+                            "minZoom": 4,
+                            "defaultState": false
+                        },
+                        {
+                            "name": "Labels",
+                            "layer": zoneLayer,
+                            "icon": utilsInstance.generateIconURL("labels"),
+                            "minZoom": 2,
+                            "maxZoom": 5,
+                            "defaultState": true
+                        }
+                    ]
+                }
+            ];
+        }
+
+        getFeatureLayer(name) {
+            // Get feature layer list
+            var featureLayers = _.filter(this.layers, {"groupName": "Features"});
+            // return _.filter on name
+            return _.filter(featureLayers, {"name": name}).layer;
+        }
+
+        buildSearchUI() {
+            const controlSearch = new L.Control.Search({
+                position: 'topleft',
+                layer: this.markersLayer,
+                initial: false,
+                zoom: 7,
+                marker: false,
+                buildTip: (text, val) => {
+                    const layerOpts = val.layer.options;
+                    return `<a href="#"><img src="${utilsInstance.generateIconURL(layerOpts.type, layerOpts.subtype)}" height=16 width=16 />${text}</a>`;
+                }
+            });
+            this.map.addControl(controlSearch);
+        }
+
+        buildLayerUI() {
+            L.Control.ImprovedLayerControl = L.Control.extend({
+                _zoomListener(event) {
+                    logger.debug('Map zoom event detected...');
+                    this._zoom = geoInstance.map.getZoom();
+                    this._update();
+                },
+                _changeListener(event) {
+                    logger.debug('Layer selection change detected...');
+                    this._updateLayerVisibility();
+                },
+                _zoom: null,
+                onAdd() {
+                    this._initLayout();
+        
+                    geoInstance.map.on('zoomend', (event) => {
+                        this._zoomListener(event);
+                    });
+                    return this._container;
+                },
+                onRemove() {
+                    geoInstance.map.off('zoomend', (event) => {
+                        this._zoomListener(event);
+                    });
+                },
+                _update() {
+                    this._updateLayerVisibility();
+                    this._updateLayout();
+                },
+                _initLayout() {
+                    const className = 'leaflet-smart-layer-control';
+                    const container = this._container = L.DomUtil.create('div', className); // + ' leaflet-bar leaflet-control leaflet-control-custom');
+        
+                    // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
+                    container.setAttribute('aria-haspopup', true);
+        
+                    if (L.Browser.touch) {
+                        L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
+                    } else {
+                        L.DomEvent.disableClickPropagation(container);
+                        L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
+                    }
+        
+                    const form = this._form = L.DomUtil.create('form', `${className}-list`);
+                    container.appendChild(form);
+        
+                    const createTitle = (name) => {
+                        const titleDiv = L.DomUtil.create('div', 'layermanager-list-group-title');
+                        titleDiv.textContent = name;
+                        return titleDiv;
+                    };
+        
+                    const createGroupElements = (layerGroup) => {
+                        const groupElement = L.DomUtil.create('div', 'layermanager-list-group');
+                        groupElement.appendChild(createTitle(layerGroup.groupName));
+                        if (layerGroup.type === "layeroption") {
+                            groupElement.style = "margin-bottom: 25px";
+                        }
+        
+                        let layerIdx = null;
+                        _.forEach(layerGroup.layers, (layerWrapper) => {
+                            layerWrapper.trackingId = utilsInstance.generateUUID();
+                            let layerControlElement = null;
+                            if (layerGroup.type === "checkbox") {
+                                layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
+                                layerControlElement.type = "checkbox";
+                            } else if (layerGroup.type === "option") {
+                                layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-radio');
+                                layerControlElement.type = "radio";
+                            } else if (layerGroup.type === "layeroption") {
+                                layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-layerradio');
+                                layerControlElement.type = "radio";
+                                if (layerIdx === null) {
+                                    layerIdx = 0;
+                                } else {
+                                    layerIdx = layerIdx + 1;
+                                }
+                                layerControlElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
+                            }
+                            layerControlElement.name = layerGroup.name;
+                            layerControlElement.id = layerWrapper.trackingId;
+                            layerControlElement.value = layerWrapper.name;
+                            if (layerWrapper.defaultState === true) {
+                                layerControlElement.checked = true;
+                            }
+                            layerWrapper.element = layerControlElement;
+                            layerControlElement.addEventListener('change', (event) => {
+                                this._changeListener(event);
+                            });
+                            groupElement.appendChild(layerControlElement);
+        
+                            let layerLabel = null;
+                            if (layerWrapper.display === "iconOnly") {
+                                layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
+                                layerLabel.htmlFor = layerWrapper.trackingId;
+                                const iconElement = L.DomUtil.create('img');
+                                iconElement.src = layerWrapper.icon;
+                                iconElement.height = 32;
+                                iconElement.width = 32;
+                                iconElement.title = layerWrapper.name;
+                                iconElement.alt = layerWrapper.name;
+                                if (layerIdx !== null) {
+                                    iconElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
+                                }
+                                layerLabel.appendChild(iconElement);
+                            }
+                            layerWrapper.label = layerLabel;
+                            groupElement.appendChild(layerLabel);
+                            groupElement.appendChild(L.DomUtil.create('br'));
+                        });
+                        return groupElement;
+                    };
+        
+                    _.forEach(this.layers, (layerGroup) => {
+                        form.appendChild(createGroupElements(layerGroup));
+                    });
+        
+                    this._zoomListener();
+                },
+                _getLayerBlockRule(layer) {
+                    if (layer.minZoom !== undefined && layer.minZoom > this._zoom) {
+                        return "Zoom in to use."
+                    } else if (layer.maxZoom !== undefined && layer.maxZoom < this._zoom) {
+                        return "Zoom out to use."
+                    } else {
+                        return null;
+                    }
+                },
+                _updateLayout() {
+                    _.forEach(this.layers, (layerGroup) => {
+                        _.forEach(layerGroup.layers, (layerWrapper) => {
+                            const layerBlockRule = this._getLayerBlockRule(layerWrapper);
+                            layerWrapper.element.disabled = (layerBlockRule !== null);
+                            let titleString = layerWrapper.name;
+                            if (layerBlockRule !== null) {
+                                titleString = `${titleString}: Disabled -1 ${layerBlockRule}`;
+                            }
+                            layerWrapper.element.title = titleString;
+                            layerWrapper.label.title = titleString;
+                        });
+                    });
+                },
+                _updateLayerVisibility() {
+                    _.forEach(this.layers, (layerGroup) => {
+                        _.forEach(layerGroup.layers, (layerWrapper) => {
+                            const layerBlockRule = this._getLayerBlockRule(layerWrapper);
+                            const applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
+                            const layerOnMap = this.map.hasLayer(layerWrapper.layer);
+        
+                            if (applyLayer && !layerOnMap) {
+                                // The layer should apply and is not on the map, add it
+                                logger.debug(`Adding layer: ${layerWrapper.name}`);
+                                this.map.addLayer(layerWrapper.layer);
+                            } else if (!applyLayer && layerOnMap) {
+                                // The layer should not apply to the map, but is already on there, remove it
+                                logger.debug(`Removing layer: ${layerWrapper.name}`);
+                                this.map.removeLayer(layerWrapper.layer);
+                            }
+                            // Otherwise, no action is necessary
+                        });
+                    });
+                }
+            });
+        
+            new L.Control.ImprovedLayerControl().addTo(this.map);
+        }
+
+        unproject(coord) {
+            return this.map.unproject(coord, this.map.getMaxZoom());
+        }
+    }
+    geoInstance = new Geo();
 
     const generatePopupWithSearchIcons = (objDesc, objType, objChatLink) => {
         const span = document.createElement("span");
@@ -136,12 +523,6 @@
         return span;
     };
 
-    const uuidv4 = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        const r = Math.random() * 16 | 0;
-        const v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-
     const getWorldData = () => fetch("../data/zonedata.json")
         .then((worldDataRequestResponse) => {
             return worldDataRequestResponse.text();
@@ -150,401 +531,7 @@
             return JSON.parse(worldDataRaw);
         });
 
-    const icons = {};
-    icons.waypoint = L.icon({
-        iconUrl: generateIconV2URL("waypoint"),
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-        popupAnchor: [-3, -3]
-    });
-    icons.landmark = L.icon({
-        iconUrl: generateIconV2URL("poi"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.vista = L.icon({
-        iconUrl: generateIconV2URL("vista"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterytyria = L.icon({
-        iconUrl: generateIconV2URL("mastery", "core"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterymaguuma = L.icon({
-        iconUrl: generateIconV2URL("mastery", "hot"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterycrystal = L.icon({
-        iconUrl: generateIconV2URL("mastery", "pof"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.masterygeneric = L.icon({
-        iconUrl: generateIconV2URL("mastery", "generic"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.skillcore = L.icon({
-        iconUrl: generateIconV2URL("heropoint", "1x"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.skillmaguuma = L.icon({
-        iconUrl: generateIconV2URL("heropoint", "10x"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-    icons.task = L.icon({
-        iconUrl: generateIconV2URL("task"),
-        iconSize: [20, 20],
-        iconAnchor: [10, 10],
-        popupAnchor: [-3, -3]
-    });
-
-    const unproject = coord => map.unproject(coord, map.getMaxZoom());
-
-    var map;
-    map = L.map("map", {
-        minZoom: 1,
-        maxZoom: 7,
-        crs: L.CRS.Simple,
-        preferCanvas: true
-    }).setView([0, 0], 0);
-
-    const southWest = unproject([0, 40000]);
-    const northEast = unproject([40000, 0]);
-    const maxBounds = new L.LatLngBounds(southWest, northEast);
-
-    map.setMaxBounds(maxBounds);
-
-    const createWebImageryLayer = floorId => {
-        const baseLayerURL = `https://tiles{s}.guildwars2.com/1/${floorId}/{z}/{x}/{y}.jpg`;
-        const imageryLayer = L.tileLayer(baseLayerURL, {
-            minZoom: 0,
-            maxZoom: 7,
-            bounds: maxBounds,
-            attribution: 'Map data and imagery &copy; <a href="https://www.arena.net/" target="_blank">ArenaNet</a>',
-            subdomains: [1, 2, 3, 4]
-        });
-        return imageryLayer;
-    };
-
-
-    const baseMaps = {};
-    const floorNames = ["Underground", "Surface", "Upper Level", "Depths"];
-    // Force in Upper Level, Surface, Underground, Depths order :)
-    _.forEach([2, 1, 0, 3], (floorId) => {
-        const layer = createWebImageryLayer(floorId);
-        baseMaps[floorNames[floorId]] = layer;
-    });
-    map.addLayer(baseMaps.Surface);
-
-    const vistaLayer = new L.LayerGroup();
-    const landmarkLayer = new L.LayerGroup();
-    const waypointLayer = new L.LayerGroup();
-    const masteryLayer = new L.LayerGroup();
-    const zoneLayer = new L.LayerGroup();
-    const taskLayer = new L.LayerGroup();
-    const heroLayer = new L.LayerGroup();
-    const markersLayer = new L.LayerGroup([
-        waypointLayer,
-        landmarkLayer,
-        masteryLayer,
-        vistaLayer,
-        taskLayer,
-        heroLayer
-    ]);
-
-    const controlSearch = new L.Control.Search({
-        position: 'topleft',
-        layer: markersLayer,
-        initial: false,
-        zoom: 7,
-        marker: false,
-        buildTip: (text, val) => {
-            const layerOpts = val.layer.options;
-            return `<a href="#"><img src="${generateIconV2URL(layerOpts.type, layerOpts.subtype)}" height=16 width=16 />${text}</a>`;
-        }
-    });
-    map.addControl(controlSearch);
-
-    const layers = [
-        {
-            "groupName": "Imagery",
-            "type": "layeroption",
-            "layers": [
-                {
-                    "name": "Upper Level",
-                    "display": "iconOnly",
-                    "icon": '../images/layer_white.svg',
-                    "layer": createWebImageryLayer(2)
-                },
-                {
-                    "name": "Surface",
-                    "display": "iconOnly",
-                    "icon": '../images/layer_white.svg',
-                    "layer": createWebImageryLayer(1),
-                    "defaultState": true
-                },
-                {
-                    "name": "Underground",
-                    "display": "iconOnly",
-                    "icon": '../images/layer_white.svg',
-                    "layer": createWebImageryLayer(0)
-                },
-                {
-                    "name": "Depths",
-                    "display": "iconOnly",
-                    "icon": '../images/layer_white.svg',
-                    "layer": createWebImageryLayer(3)
-                }
-            ]
-        },
-        {
-            "groupName": "Features",
-            "type": "checkbox",
-            "layers": [
-                {
-                    "name": "Waypoints",
-                    "layer": waypointLayer,
-                    "icon": generateIconV2URL("waypoint"),
-                    "display": "iconOnly",
-                    "minZoom": 2,
-                    "defaultState": true
-                },
-                {
-                    "name": "Vistas",
-                    "layer": vistaLayer,
-                    "icon": generateIconV2URL("vista"),
-                    "display": "iconOnly",
-                    "minZoom": 3,
-                    "defaultState": true
-                },
-                {
-                    "name": "Landmarks",
-                    "layer": landmarkLayer,
-                    "icon": generateIconV2URL("poi"),
-                    "display": "iconOnly",
-                    "minZoom": 3,
-                    "defaultState": true
-                },
-                {
-                    "name": "Mastery Points",
-                    "layer": masteryLayer,
-                    "icon": generateIconV2URL("mastery", "generic"),
-                    "display": "iconOnly",
-                    "minZoom": 4,
-                    "defaultState": false
-                },
-                {
-                    "name": "Hero Challenges",
-                    "layer": heroLayer,
-                    "icon": generateIconV2URL("heropoint", "1x"),
-                    "display": "iconOnly",
-                    "minZoom": 4,
-                    "defaultState": false
-                },
-                {
-                    "name": "Tasks",
-                    "layer": taskLayer,
-                    "icon": generateIconV2URL("task"),
-                    "display": "iconOnly",
-                    "minZoom": 4,
-                    "defaultState": false
-                },
-                {
-                    "name": "Labels",
-                    "layer": zoneLayer,
-                    "icon": generateIconV2URL("labels"),
-                    "display": "iconOnly",
-                    "minZoom": 2,
-                    "maxZoom": 5,
-                    "defaultState": true
-                }
-            ]
-        }
-    ];
-
-    L.Control.ImprovedLayerControl = L.Control.extend({
-        _zoomListener(event) {
-            logger.debug('Map zoom event detected...');
-            this._zoom = map.getZoom();
-            this._update();
-        },
-        _changeListener(event) {
-            logger.debug('Layer selection change detected...');
-            this._updateLayerVisibility();
-        },
-        _map: null,
-        _zoom: null,
-        initialize(options) {
-          this._layerData = options.layerData;
-        },
-        onAdd(map) {
-            this._initLayout();
-
-            this._map = map;
-            map.on('zoomend', (event) => {this._zoomListener(event);});
-            return this._container;
-        },
-        onRemove(map) {
-            map.off('zoomend', (event) => {this._zoomListener(event);});
-            this._map = null;
-        },
-        _update() {
-            this._updateLayerVisibility();
-            this._updateLayout();
-        },
-        _initLayout() {
-            const className = 'leaflet-smart-layer-control';
-            const container = this._container = L.DomUtil.create('div', className);// + ' leaflet-bar leaflet-control leaflet-control-custom');
-
-            // Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
-            container.setAttribute('aria-haspopup', true);
-
-            if (L.Browser.touch) {
-                L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
-            } else {
-                L.DomEvent.disableClickPropagation(container);
-                L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
-            }
-
-            const form = this._form = L.DomUtil.create('form', `${className}-list`);
-            container.appendChild(form);
-
-            const createTitle = (name) => {
-                const titleDiv = L.DomUtil.create('div', 'layermanager-list-group-title');
-                titleDiv.textContent = name;
-                return titleDiv;
-            };
-
-            const createGroupElements = (layerGroup) => {
-                const groupElement = L.DomUtil.create('div', 'layermanager-list-group');
-                groupElement.appendChild(createTitle(layerGroup.groupName));
-                if (layerGroup.type === "layeroption") {
-                    groupElement.style = "margin-bottom: 25px";   
-                }
-
-                let layerIdx = null;
-                _.forEach(layerGroup.layers, (layerWrapper) => {
-                    layerWrapper.trackingId = uuidv4();
-                    let layerControlElement = null;
-                    if (layerGroup.type === "checkbox") {
-                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-checkbox');
-                        layerControlElement.type = "checkbox";
-                    } else if (layerGroup.type === "option") {
-                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-radio');
-                        layerControlElement.type = "radio";
-                    } else if (layerGroup.type === "layeroption") {
-                        layerControlElement = L.DomUtil.create('input', 'layermanager-list-group-layerradio');
-                        layerControlElement.type = "radio";
-                        if (layerIdx === null) {
-                            layerIdx = 0;
-                        } else {
-                            layerIdx = layerIdx + 1;
-                        }
-                        layerControlElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
-                    }
-                    layerControlElement.name = layerGroup.name;
-                    layerControlElement.id = layerWrapper.trackingId;
-                    layerControlElement.value = layerWrapper.name;
-                    if (layerWrapper.defaultState === true) {
-                        layerControlElement.checked = true;
-                    }
-                    layerWrapper.element = layerControlElement;
-                    layerControlElement.addEventListener('change', (event) => {this._changeListener(event);});
-                    groupElement.appendChild(layerControlElement);
-
-                    let layerLabel = null;
-                    if (layerWrapper.display === "iconOnly") {
-                        layerLabel = L.DomUtil.create('label', 'layermanager-list-iconlabel');
-                        layerLabel.htmlFor = layerWrapper.trackingId;
-                        const iconElement = L.DomUtil.create('img');
-                        iconElement.src = layerWrapper.icon;
-                        iconElement.height = 32;
-                        iconElement.width = 32;
-                        iconElement.title = layerWrapper.name;
-                        iconElement.alt = layerWrapper.name;
-                        if (layerIdx !== null) {
-                            iconElement.style = `top: ${(layerIdx + 1) * 20}px;z-index:${layerIdx}`;
-                        }
-                        layerLabel.appendChild(iconElement);
-                    } else {
-                        layerLabel = L.DomUtil.create('label', 'layermanager-list-textlabel');
-                        layerLabel.htmlFor = layerWrapper.trackingId;
-                        layerLabel.textContent = layerWrapper.name;
-                    }
-                    layerWrapper.label = layerLabel;
-                    groupElement.appendChild(layerLabel);
-                    groupElement.appendChild(L.DomUtil.create('br'));
-                });
-                return groupElement;
-            };
-
-            _.forEach(this._layerData, (layerGroup) => {
-                form.appendChild(createGroupElements(layerGroup));
-            });
-
-            this._zoomListener();
-        },
-        _getLayerBlockRule(layer) {
-            if (layer.minZoom !== undefined && layer.minZoom > this._zoom) {
-                return "Zoom in to use."
-            } else if (layer.maxZoom !== undefined && layer.maxZoom < this._zoom) {
-                return "Zoom out to use."
-            } else {
-                return null;
-            }
-        },
-        _updateLayout() {
-            _.forEach(this._layerData, (layerGroup) => {
-                _.forEach(layerGroup.layers, (layerWrapper) => {
-                    const layerBlockRule = this._getLayerBlockRule(layerWrapper);
-                    layerWrapper.element.disabled = (layerBlockRule !== null);
-                    let titleString = layerWrapper.name;
-                    if (layerBlockRule !== null) {
-                        titleString = `${titleString}: Disabled -1 ${layerBlockRule}`;
-                    }
-                    layerWrapper.element.title = titleString;
-                    layerWrapper.label.title = titleString;
-                });
-            });
-        },
-        _updateLayerVisibility() {
-            _.forEach(this._layerData, (layerGroup) => {
-                _.forEach(layerGroup.layers, (layerWrapper) => {
-                    const layerBlockRule = this._getLayerBlockRule(layerWrapper);
-                    const applyLayer = (layerWrapper.element.checked && layerBlockRule === null);
-                    const layerOnMap = map.hasLayer(layerWrapper.layer);
-
-                    if (applyLayer && !layerOnMap) {
-                        // The layer should apply and is not on the map, add it
-                        logger.debug(`Adding layer: ${layerWrapper.name}`);
-                        map.addLayer(layerWrapper.layer);
-                    } else if (!applyLayer && layerOnMap) {
-                        // The layer should not apply to the map, but is already on there, remove it
-                        logger.debug(`Removing layer: ${layerWrapper.name}`);
-                        map.removeLayer(layerWrapper.layer);
-                    }
-                    // Otherwise, no action is necessary
-                });
-            });
-        }
-    });
-
-    L.control.improvedLayerControl = opts => new L.Control.ImprovedLayerControl(opts)
-    L.control.improvedLayerControl({ "layerData" : layers }).addTo(map);
+    
 
     // Load World Data
     getWorldData().then(worldData => {
@@ -553,29 +540,29 @@
             // Process POIs (Landmarks, Vistas, Waypoints)
             _.forEach(gameMap.points_of_interest, (poi) => {
                 if (poi.type === "waypoint") {
-                    marker = L.marker(unproject(poi.coord), {
+                    marker = L.marker(geoInstance.unproject(poi.coord), {
                         title: poi.name,
-                        icon: icons.waypoint,
+                        icon: utilsInstance.getMapIcon("waypoint"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(poi.name, "waypoint", poi.chat_link));
-                    waypointLayer.addLayer(marker);
+                    geoInstance.getFeatureLayer("Waypoints").addLayer(marker);
                 } else if (poi.type === "landmark") {
-                    marker = L.marker(unproject(poi.coord), {
+                    marker = L.marker(geoInstance.unproject(poi.coord), {
                         title: poi.name,
-                        icon: icons.landmark,
+                        icon: utilsInstance.getMapIcon("poi"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(poi.name, "poi", poi.chat_link));
-                    landmarkLayer.addLayer(marker);
+                    geoInstance.getFeatureLayer("Landmarks").addLayer(marker);
                 } else if (poi.type === "vista") {
-                    marker = L.marker(unproject(poi.coord), {
+                    marker = L.marker(geoInstance.unproject(poi.coord), {
                         title: "Vista",
-                        icon: icons.vista,
+                        icon: utilsInstance.getMapIcon("vista"),
                         type: poi.type
                     });
                     marker.bindPopup(generatePopupWithSearchIcons(`${gameMap.name} Vista`, "vista", poi.chat_link));
-                    vistaLayer.addLayer(marker);
+                    geoInstance.getFeatureLayer("Vistas").addLayer(marker);
                 } else {
                     logger.warning(`unknown poi type: ${poi.type}`);
                 }
@@ -585,102 +572,97 @@
             marker = null;
             _.forEach(gameMap.mastery_points, (masteryPoint) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
-                    marker = L.marker(unproject(masteryPoint.coord), {
+                    marker = L.marker(geoInstance.unproject(masteryPoint.coord), {
                         title: "Mastery Point (Tyria)",
-                        icon: icons.masterytyria,
+                        icon: utilsInstance.getMapIcon("mastery", "core"),
                         type: "mastery",
                         subtype: "core"
                     });
-                    masteryLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "HoT") {
-                    marker = L.marker(unproject(masteryPoint.coord), {
+                    marker = L.marker(geoInstance.unproject(masteryPoint.coord), {
                         title: "Mastery Point (Maguuma)",
-                        icon: icons.masterymaguuma,
+                        icon: utilsInstance.getMapIcon("mastery", "hot"),
                         type: "mastery",
                         subtype: "maguuma"
                     });
-                    masteryLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "PoF") {
-                    marker = L.marker(unproject(masteryPoint.coord), {
+                    marker = L.marker(geoInstance.unproject(masteryPoint.coord), {
                         title: "Mastery Point (Crystal Desert)",
-                        icon: icons.masterycrystal,
+                        icon: utilsInstance.getMapIcon("mastery", "pof"),
                         type: "mastery",
                         subtype: "crystal"
                     });
-                    masteryLayer.addLayer(marker);
                 } else {
-                    marker = L.marker(unproject(masteryPoint.coord), {
+                    marker = L.marker(geoInstance.unproject(masteryPoint.coord), {
                         title: "Mastery Point (???)",
-                        icon: icons.masterygeneric,
+                        icon: utilsInstance.getMapIcon("mastery", "generic"),
                         type: "mastery",
                         subtype: "unknown"
                     });
-                    masteryLayer.addLayer(marker);
                     logger.warning(`unknown mastery region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
+                geoInstance.getFeatureLayer("Mastery Points").addLayer(marker);
             });
 
             // Process Skill / Hero Challenges
             marker = null;
             _.forEach(gameMap.skill_challenges, (skillChallenge) => {
                 if (gameMap.customData.zoneCategory === "GW2") {
-                    marker = L.marker(unproject(skillChallenge.coord), {
+                    marker = L.marker(geoInstance.unproject(skillChallenge.coord), {
                         title: "Hero Challenge (1x)",
-                        icon: icons.skillcore,
+                        icon: utilsInstance.getMapIcon("heropoint", "1x"),
                         type: "hero_point",
                         subtype: "core"
                     });
-                    heroLayer.addLayer(marker);
                 } else if (gameMap.customData.zoneCategory === "HoT" || gameMap.customData.zoneCategory === "PoF") {
-                    marker = L.marker(unproject(skillChallenge.coord), {
+                    marker = L.marker(geoInstance.unproject(skillChallenge.coord), {
                         title: "Hero Challenge (10x)",
-                        icon: icons.skillmaguuma,
+                        icon: utilsInstance.getMapIcon("heropoint", "10x"),
                         type: "hero_point",
                         subtype: "advanced"
                     });
-                    heroLayer.addLayer(marker);
                 } else {
-                    marker = L.marker(unproject(skillChallenge.coord), {
+                    marker = L.marker(geoInstance.unproject(skillChallenge.coord), {
                         title: "Hero Challenge (???)",
-                        icon: icons.skillcore,
+                        icon: utilsInstance.getMapIcon("heropoint", "1x"),
                         type: "hero_point",
                         subtype: "core"
                     });
-                    heroLayer.addLayer(marker);
                     logger.warning(`unknown skill challenge region: ${gameMap.customData.region.name}; displaying generic...`);
                 }
+                geoInstance.getFeatureLayer("Hero Challenges").addLayer(marker);
             });
 
             // Process Hearts / Tasks
             marker = null;
             _.forEach(gameMap.tasks, (task) => {
-                marker = L.marker(unproject(task.coord), {
+                marker = L.marker(geoInstance.unproject(task.coord), {
                     title: `Task: ${task.objective}`,
-                    icon: icons.task,
+                    icon: utilsInstance.getMapIcon("task"),
                     type: "task"
                 });
                 marker.bindPopup(generatePopupWithSearchIcons(task.objective, "heart"));
-                taskLayer.addLayer(marker);
+                geoInstance.getFeatureLayer("Tasks").addLayer(marker);
             });
 
             // Debug - zone boxes
             if (DEBUG_ZONEBOXES) {
                 const baseBounds = gameMap.continent_rect;
-                const bounds = [unproject(baseBounds[0]), unproject(baseBounds[1])];
+                const bounds = [geoInstance.unproject(baseBounds[0]), geoInstance.unproject(baseBounds[1])];
                 const zonerect = L.rectangle(bounds, {
                     color: gameMap.customData.assignedColor,
                     weight: 1,
                     feature: {
                         properties: {
-                        name: gameMap.customData.name
+                            name: gameMap.customData.name
                         }
                     }
                 });
-                zoneLayer.addLayer(zonerect);
+                geoInstance.getFeatureLayer("Labels").addLayer(zonerect);
             }
 
             // Add zone label
-            const labelPos = unproject(gameMap.label_coord);
+            const labelPos = geoInstance.unproject(gameMap.label_coord);
             /*const FONT_AVG_RATIO = .6;
             const FONT_HEIGHT 
             labelPos[0] = labelPos[0] - (gameMap.name * )*/
@@ -688,12 +670,14 @@
                 html: gameMap.name,
                 className: "zone-label"
             });
-            marker = new L.marker(labelPos, {icon: divIcon});
-            zoneLayer.addLayer(marker);
+            marker = new L.marker(labelPos, {
+                icon: divIcon
+            });
+            geoInstance.getFeatureLayer("Labels").addLayer(marker);
         });
-    }).catch(ex => {
+    })/*.catch(ex => {
         logger.error("Failed to read map data: ", ex);
-    });
+    })*/;
 
     const prepReadme = () => fetch("../user_readme.md")
         .then((readmeRequestResponse) => {
@@ -704,20 +688,22 @@
             const html = converter.makeHtml(readmeMarkdown);
             document.getElementById("modal-body").innerHTML = `<p>${html}</p>`;
             L.easyButton("&quest;", (btn, map) => {
-                $('#helpModal').modal({ backdrop: false}); // Disable backdrop due to incompatibility
+                $('#helpModal').modal({
+                    backdrop: false
+                }); // Disable backdrop due to incompatibility
             }).addTo(map);
             logger.debug('Readme loaded and prepared...');
         })
-        .catch(ex => {
+        /*.catch(ex => {
             logger.error("Failed to read readme data: ", ex);
-        });;
+        })*/;
     prepReadme();
 
 
     function getRandomIntInclusive(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive 
     }
 
     const paintElementArea = (element, paintMargin, color) => {
@@ -750,4 +736,4 @@
     };
 
     paintElementArea(document.getElementsByClassName('leaflet-smart-layer-control')[0], 8, '#A0522D');
-}))();
+})();
