@@ -292,16 +292,6 @@ var gateways = {
 	]
 };
 
-
-
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-var getRandomColor = function () {
-    return "#" + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16) + getRandomInt(50, 255).toString(16);
-};
-
 var checkPointInZone = function (zoneRect, point) {
     return (zoneRect[0][0] <= point[0]) && (point[0] <= zoneRect[1][0])
         && (zoneRect[0][1] <= point[1]) && (point[1] <= zoneRect[1][1]);
